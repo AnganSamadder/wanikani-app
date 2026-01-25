@@ -1,0 +1,23 @@
+# XcodeGen generated project
+*.xcodeproj/
+
+# Xcode user data
+*.xcuserstate
+xcuserdata/
+
+# Build products
+build/
+DerivedData/
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Sisyphus internal state
+.sisyphus/boulder.json
