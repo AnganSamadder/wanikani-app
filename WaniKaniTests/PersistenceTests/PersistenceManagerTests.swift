@@ -39,24 +39,3 @@ final class PersistenceManagerTests: XCTestCase {
         XCTAssertNil(fetchedUser)
     }
 }
-
-extension User {
-    static func mock() -> User {
-        User(
-            id: "user-123",
-            username: "test_user",
-            level: 5,
-            profileURL: "https://www.wanikani.com/users/test_user",
-            startedAt: Date(),
-            subscription: Subscription(active: true, type: .recurring, maxLevelGranted: 60),
-            preferences: Preferences(
-                defaultVoiceActorID: 1,
-                lessonsAutoplayAudio: true,
-                lessonsBatchSize: 5,
-                lessonsPresentationOrder: "ascending_level_then_subject",
-                reviewsAutoplayAudio: true,
-                reviewsDisplaySRSIndicator: true
-            )
-        )
-    }
-}

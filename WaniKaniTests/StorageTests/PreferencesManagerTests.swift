@@ -87,7 +87,7 @@ final class PreferencesManagerTests: XCTestCase {
         
         sut.lastSyncDate = now
         
-        XCTAssertEqual(sut.lastSyncDate?.timeIntervalSince1970, now.timeIntervalSince1970, accuracy: 0.01)
+        XCTAssertEqual(sut.lastSyncDate!.timeIntervalSince1970, now.timeIntervalSince1970, accuracy: 0.01)
     }
     
     func test_selectedPrototypeMode_defaultValue() {
