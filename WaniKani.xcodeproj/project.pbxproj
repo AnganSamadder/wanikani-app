@@ -32,8 +32,10 @@
 		76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */; };
 		78398425C0451FE6FEDCE018 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */; };
 		78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */; };
+		7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
 		7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
+		801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
 		819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
 		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
@@ -53,6 +55,7 @@
 		B9A64D3716F7AF0EE1845FB9 /* SyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B4C75BCE9C9C0302C96C0 /* SyncManagerTests.swift */; };
 		C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
 		C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */; };
+		D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74A77B949EE394F618E548 /* ReviewsWebView.swift */; };
 		D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
 		D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
 		D9EBD0E1EE60A14930DD868D /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607E13A815A2DC983288E670 /* SyncManager.swift */; };
@@ -63,6 +66,7 @@
 		E49AE0068CD7A2923FBE6E81 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEDBCB2FC6681878AA3727C /* PersistenceManager.swift */; };
 		E9584A5100D6B5DB012225C5 /* WaniKaniWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B00BF23A16BD7F14025D53C /* WaniKaniWebView.swift */; };
 		EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */; };
+		EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */; };
 		F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */; };
 		FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */; };
 /* End PBXBuildFile section */
@@ -154,6 +158,7 @@
 		67C70EB45D9DC72EE315BACF /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
 		6D03213006B67AD555366DA6 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		6D18D45A3F2D34F65AE368FF /* WaniKaniUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WaniKaniUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E74A77B949EE394F618E548 /* ReviewsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsWebView.swift; sourceTree = "<group>"; };
 		6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceEnvelopeTests.swift; sourceTree = "<group>"; };
 		7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniCore.swift; sourceTree = "<group>"; };
 		72D0C05C1CDC9DBF70843F7A /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -168,7 +173,9 @@
 		8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesManagerTests.swift; sourceTree = "<group>"; };
 		8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTests.swift; sourceTree = "<group>"; };
 		8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPITests.swift; sourceTree = "<group>"; };
+		90F1057243CA8E1618D2D028 /* ForumsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumsWebView.swift; sourceTree = "<group>"; };
 		96A5A6CF7D092390B7FA1B0B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWebView.swift; sourceTree = "<group>"; };
 		973EF16359BE0063AECEA7DC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
@@ -201,6 +208,7 @@
 		E272CAE29890130A6B01A45F /* DashboardWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWebView.swift; sourceTree = "<group>"; };
 		E2E8010099C7DA06CF5EA30B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E69CF0A9847A539C639ED383 /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
+		EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsWebView.swift; sourceTree = "<group>"; };
 		F34F977074FFEE960651489B /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F5F223EC4D7E7C78DFE256EC /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		FAC41381EA87AD201ABCC54C /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -316,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				0CD2084883C67AE779ACE725 /* .gitkeep */,
+				90F1057243CA8E1618D2D028 /* ForumsWebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -399,6 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				72D0C05C1CDC9DBF70843F7A /* .gitkeep */,
+				6E74A77B949EE394F618E548 /* ReviewsWebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -416,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				6D03213006B67AD555366DA6 /* .gitkeep */,
+				96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -694,6 +705,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCF13B5098C58A0704F4CA2 /* .gitkeep */,
+				EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -907,10 +919,14 @@
 				2935384119DB6EEDF7BD3081 /* Config.swift in Sources */,
 				682C586E1FF929E8681B42AB /* ContentView.swift in Sources */,
 				24D573A79A4B3430B2439E1C /* DashboardWebView.swift in Sources */,
+				7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */,
 				C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */,
+				EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */,
 				765143DD9112B00AE8133588 /* LoginWebView.swift in Sources */,
 				37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */,
+				D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */,
 				6D0804B66F7904701261021E /* ScriptInjector.swift in Sources */,
+				801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */,
 				20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */,
 				E9584A5100D6B5DB012225C5 /* WaniKaniWebView.swift in Sources */,
 				5195D7B88DB57DA56644F93B /* WebViewContainer.swift in Sources */,
