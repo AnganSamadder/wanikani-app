@@ -29,8 +29,10 @@
 		914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */; };
 		982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
 		9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */; };
+		A06834D5DDE76EB8D75BF124 /* WaniKaniAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */; };
 		A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973EF16359BE0063AECEA7DC /* NetworkError.swift */; };
 		B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310F771771E7F6E44819753 /* UserTests.swift */; };
+		B3A7BC072BE1E468DA86140E /* WaniKaniAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1751183FAAD9475100813A /* WaniKaniAPI.swift */; };
 		B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C78E07F1058BCDB2C3AA285 /* User.swift */; };
 		C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
 		C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */; };
@@ -109,6 +111,7 @@
 		1606C362D6EAEB8493CE15F3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1BDB56473F31F9E09DA09173 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1C693731016C5AC9755F9310 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1E1751183FAAD9475100813A /* WaniKaniAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPI.swift; sourceTree = "<group>"; };
 		2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniApp.swift; sourceTree = "<group>"; };
 		2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceEnvelope.swift; sourceTree = "<group>"; };
 		30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniTests.swift; sourceTree = "<group>"; };
@@ -131,6 +134,7 @@
 		856397877A3829016CB792C4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITests.swift; sourceTree = "<group>"; };
 		8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTests.swift; sourceTree = "<group>"; };
+		8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPITests.swift; sourceTree = "<group>"; };
 		96A5A6CF7D092390B7FA1B0B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		973EF16359BE0063AECEA7DC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
@@ -143,11 +147,9 @@
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionNetworkClient.swift; sourceTree = "<group>"; };
 		C275E34B21E2EE26D71A1DCE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
-		C655996666E2ABFE0E0306BB /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		CCBC20D2510F4989CCAEDF18 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		CCF0C424620BCDB34D580ED2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D000CD07D4B7DB4BACA9B815 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
-		D226CC771EBA9B7517D5BB56 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D66456F805BFA9ADC73979BD /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D66490A5B113B3D53FA55488 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WaniKaniCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -298,7 +300,6 @@
 		3C15FB18A7ED82F5B8B690EE /* ModelsTests */ = {
 			isa = PBXGroup;
 			children = (
-				D226CC771EBA9B7517D5BB56 /* .gitkeep */,
 				FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */,
 				6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */,
 				62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */,
@@ -325,6 +326,7 @@
 				570F703A95AAA1F7263A1E8B /* NetworkClient.swift */,
 				973EF16359BE0063AECEA7DC /* NetworkError.swift */,
 				BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */,
+				1E1751183FAAD9475100813A /* WaniKaniAPI.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -423,6 +425,7 @@
 			children = (
 				0F8122827C3A885C8C17F397 /* .gitkeep */,
 				A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */,
+				8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */,
 			);
 			path = NetworkingTests;
 			sourceTree = "<group>";
@@ -542,7 +545,6 @@
 		D4C3A9770766D1F762DFC570 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C655996666E2ABFE0E0306BB /* .gitkeep */,
 				9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */,
 				2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */,
 				7884806C7B4A1872146CF102 /* Review.swift */,
@@ -774,6 +776,7 @@
 				864F6AA65474B7563D8475DB /* Summary.swift in Sources */,
 				FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */,
 				B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */,
+				B3A7BC072BE1E468DA86140E /* WaniKaniAPI.swift in Sources */,
 				EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -790,6 +793,7 @@
 				2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */,
 				4A7FBEEC533844D2E108B933 /* TestHelpers.swift in Sources */,
 				B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */,
+				A06834D5DDE76EB8D75BF124 /* WaniKaniAPITests.swift in Sources */,
 				C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
