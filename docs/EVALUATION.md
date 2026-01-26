@@ -68,3 +68,17 @@ Based on the technical requirements for **robust offline support**, **superior p
 While the **Hybrid** approach was considered as a compromise to speed up development, the resulting "uncanny valley" of UX and the lack of offline support for the core review loop make it an unacceptable choice for a professional product.
 
 **Final Verdict: Proceed with full Native development using SwiftUI and SwiftData.**
+
+## 6. Code Maintainability Audit
+
+### Statistics
+- **Total Lines of Swift Code**: ~3,500+ (Estimated)
+- **SwiftLint Violations**: High count of trailing whitespace and line length violations (requires auto-fix).
+
+### Structure Analysis
+- **Modularization**: The project demonstrates excellent separation of concerns. `WaniKaniCore` encapsulates all business logic, networking, and models, making it reusable across targets.
+- **Testing**: A comprehensive test suite (`WaniKaniTests`) covers core logic, though UI tests are minimal.
+- **Dependency Management**: `XcodeGen` usage ensures the project file remains conflict-free and manageable.
+
+### Conclusion
+The codebase follows a clean, modular architecture. While there are stylistic violations (easily fixable with `swiftlint --fix`), the structural integrity is sound. The Native prototype has the largest code footprint but offers the most robust foundation for future scaling.
