@@ -31,6 +31,20 @@ struct HybridRootView: View {
             }
             
             NavigationStack {
+                ForumsWebView()
+            }
+            .tabItem {
+                Label("Forums", systemImage: "bubble.left.and.bubble.right.fill")
+            }
+            
+            NavigationStack {
+                NativeStatisticsView()
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.circle.fill")
+            }
+            
+            NavigationStack {
                 // Reuse Native Settings
                 NativeSettingsView()
             }
