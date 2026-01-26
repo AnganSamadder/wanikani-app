@@ -6,339 +6,997 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */; };
+		0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */; };
+		1C625FF3618F55454B6F1317 /* WaniKaniUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */; };
+		20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
+		2935384119DB6EEDF7BD3081 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
+		2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */; };
+		37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF94381957891EDD09FB45 /* NativeRootView.swift */; };
+		38FE7DF64EE5AEFF5D8F6026 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB802A3658E4076386B8FB09 /* AppState.swift */; };
+		3E72212A702F5FA2700A1554 /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D000CD07D4B7DB4BACA9B815 /* Subject.swift */; };
+		47FAA2C53AD5F6CA2A295541 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4A7FBEEC533844D2E108B933 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */; };
+		580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCA18EB806BA0F637D203E /* SubjectTests.swift */; };
+		5AF8624906289788360C699C /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884806C7B4A1872146CF102 /* Review.swift */; };
+		682C586E1FF929E8681B42AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
+		78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */; };
+		7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
+		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
+		8FC4B97378BE262EF475B736 /* WaniKaniUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */; };
+		914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */; };
+		982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */; };
+		A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973EF16359BE0063AECEA7DC /* NetworkError.swift */; };
+		B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310F771771E7F6E44819753 /* UserTests.swift */; };
+		B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C78E07F1058BCDB2C3AA285 /* User.swift */; };
+		C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
+		C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */; };
+		D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
+		DEF9D30EA840667D4AB9A39E /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6310E23B9F214167F2C42502 /* Endpoint.swift */; };
+		E31943FA49E704690EF9E734 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F703A95AAA1F7263A1E8B /* NetworkClient.swift */; };
+		EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */; };
+		F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */; };
+		FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
-		52CD67672F26AE1D00C3FCA7 /* PBXContainerItemProxy */ = {
+		589F6FE114CAE78E55C01613 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 52CD67512F26AE1A00C3FCA7 /* Project object */;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 52CD67582F26AE1A00C3FCA7;
+			remoteGlobalIDString = A5535FF14D63EE871C207965;
 			remoteInfo = WaniKani;
 		};
-		52CD67712F26AE1D00C3FCA7 /* PBXContainerItemProxy */ = {
+		72CB920FD71559663D390F33 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 52CD67512F26AE1A00C3FCA7 /* Project object */;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 52CD67582F26AE1A00C3FCA7;
+			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
+			remoteInfo = WaniKaniCore;
+		};
+		D39A95C89454D0D1B4353B76 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
+			remoteInfo = WaniKaniCore;
+		};
+		F1CF3292561C93C4BE223D56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5535FF14D63EE871C207965;
 			remoteInfo = WaniKani;
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A6AFB3CCD05D152720AED1E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5507F01773418FD195E17D9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				47FAA2C53AD5F6CA2A295541 /* WaniKaniCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		52CD67592F26AE1A00C3FCA7 /* WaniKani.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaniKani.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		52CD67662F26AE1D00C3FCA7 /* WaniKaniTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaniKaniTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		52CD67702F26AE1D00C3FCA7 /* WaniKaniUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaniKaniUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		01B2E159B3A0259C434FB727 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		01DCA18EB806BA0F637D203E /* SubjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectTests.swift; sourceTree = "<group>"; };
+		0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WaniKaniTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CD2084883C67AE779ACE725 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		0F8122827C3A885C8C17F397 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		12C119B1D9FE921FF7AF6AF4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1606C362D6EAEB8493CE15F3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1BDB56473F31F9E09DA09173 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1C693731016C5AC9755F9310 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniApp.swift; sourceTree = "<group>"; };
+		2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceEnvelope.swift; sourceTree = "<group>"; };
+		30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniTests.swift; sourceTree = "<group>"; };
+		3310F771771E7F6E44819753 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
+		3C78E07F1058BCDB2C3AA285 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		42034E5769A63BFA5473A50D /* WaniKani.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKani.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FEF94381957891EDD09FB45 /* NativeRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRootView.swift; sourceTree = "<group>"; };
+		570F703A95AAA1F7263A1E8B /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTests.swift; sourceTree = "<group>"; };
+		6310E23B9F214167F2C42502 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		63F1C0955B34D11675A4B0C0 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		6D03213006B67AD555366DA6 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		6D18D45A3F2D34F65AE368FF /* WaniKaniUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WaniKaniUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceEnvelopeTests.swift; sourceTree = "<group>"; };
+		7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniCore.swift; sourceTree = "<group>"; };
+		72D0C05C1CDC9DBF70843F7A /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		74FD4B944BCEBF52AFEB051B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		7884806C7B4A1872146CF102 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		7BCF13B5098C58A0704F4CA2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		856397877A3829016CB792C4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITests.swift; sourceTree = "<group>"; };
+		8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTests.swift; sourceTree = "<group>"; };
+		96A5A6CF7D092390B7FA1B0B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		973EF16359BE0063AECEA7DC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
+		9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		9F92D2CDF38975E562BB033E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientTests.swift; sourceTree = "<group>"; };
+		AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRootView.swift; sourceTree = "<group>"; };
+		AEDF2E39A71B45AA05DDC71A /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		B5F953B9A2DADEDFBEE63D92 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionNetworkClient.swift; sourceTree = "<group>"; };
+		C275E34B21E2EE26D71A1DCE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		C655996666E2ABFE0E0306BB /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		CCBC20D2510F4989CCAEDF18 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		CCF0C424620BCDB34D580ED2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D000CD07D4B7DB4BACA9B815 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
+		D226CC771EBA9B7517D5BB56 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D66456F805BFA9ADC73979BD /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D66490A5B113B3D53FA55488 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WaniKaniCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB802A3658E4076386B8FB09 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		DD23812885E8248B886DB26D /* HybridRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridRootView.swift; sourceTree = "<group>"; };
+		DE5870BD49703DACC1F56DDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E1B80FD71F4CDCD40A290A7C /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		E22F116C016F18F85DF1AD99 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		E2E8010099C7DA06CF5EA30B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E69CF0A9847A539C639ED383 /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
+		F34F977074FFEE960651489B /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		F5F223EC4D7E7C78DFE256EC /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		FAC41381EA87AD201ABCC54C /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		52CD675B2F26AE1A00C3FCA7 /* WaniKani */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WaniKani;
-			sourceTree = "<group>";
-		};
-		52CD67692F26AE1D00C3FCA7 /* WaniKaniTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WaniKaniTests;
-			sourceTree = "<group>";
-		};
-		52CD67732F26AE1D00C3FCA7 /* WaniKaniUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WaniKaniUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		52CD67562F26AE1A00C3FCA7 /* Frameworks */ = {
+		81C36A0246774F6C9F05E256 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52CD67632F26AE1D00C3FCA7 /* Frameworks */ = {
+		EE3D821AAA1A43E7F39D41D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		52CD676D2F26AE1D00C3FCA7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		52CD67502F26AE1A00C3FCA7 = {
+		010726C78150D94CCC04265C /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				52CD675B2F26AE1A00C3FCA7 /* WaniKani */,
-				52CD67692F26AE1D00C3FCA7 /* WaniKaniTests */,
-				52CD67732F26AE1D00C3FCA7 /* WaniKaniUITests */,
-				52CD675A2F26AE1A00C3FCA7 /* Products */,
+				AEDF2E39A71B45AA05DDC71A /* .gitkeep */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		0B947DD541CE3AF4619E100F /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				63F1C0955B34D11675A4B0C0 /* .gitkeep */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		0D2215604ACA42F1398A2769 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		0DDAA28B9C28FE4ABFE1D6B4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1606C362D6EAEB8493CE15F3 /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1027BF43DF38741BF7C0FEA2 /* Forums */ = {
+			isa = PBXGroup;
+			children = (
+				2CF478D2A97550334B85BAA7 /* Views */,
+			);
+			path = Forums;
+			sourceTree = "<group>";
+		};
+		166F21B752CFBF9B09D88279 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				CCBC20D2510F4989CCAEDF18 /* .gitkeep */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		17C7B8F5CD7AB1CD6BB84D50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42034E5769A63BFA5473A50D /* WaniKani.app */,
+				DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */,
+				0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */,
+				6D18D45A3F2D34F65AE368FF /* WaniKaniUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		18400060126D139F944ADCB7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1C693731016C5AC9755F9310 /* .gitkeep */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		1B2443A32D7B9029CAA897EE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				1BDB56473F31F9E09DA09173 /* .gitkeep */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		2AA5EF2DD56734067167E729 /* Reviews */ = {
+			isa = PBXGroup;
+			children = (
+				424694D177D796785CE850D6 /* ViewModels */,
+				57C3D794981498715149F741 /* Views */,
+			);
+			path = Reviews;
+			sourceTree = "<group>";
+		};
+		2CF478D2A97550334B85BAA7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0CD2084883C67AE779ACE725 /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3507E7B6196F73E2229DAB4D = {
+			isa = PBXGroup;
+			children = (
+				76BEBB32C4CB89A0AA3A017F /* WaniKani */,
+				7AC07A6583FEC02E46179547 /* WaniKaniCore */,
+				B0E72D52CE03A6B8C8130E42 /* WaniKaniTests */,
+				D43030D0B9E85674767D4149 /* WaniKaniUITests */,
+				17C7B8F5CD7AB1CD6BB84D50 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		52CD675A2F26AE1A00C3FCA7 /* Products */ = {
+		36459F2ED24B385BB02A5127 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				52CD67592F26AE1A00C3FCA7 /* WaniKani.app */,
-				52CD67662F26AE1D00C3FCA7 /* WaniKaniTests.xctest */,
-				52CD67702F26AE1D00C3FCA7 /* WaniKaniUITests.xctest */,
+				856397877A3829016CB792C4 /* .gitkeep */,
 			);
-			name = Products;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3C15FB18A7ED82F5B8B690EE /* ModelsTests */ = {
+			isa = PBXGroup;
+			children = (
+				D226CC771EBA9B7517D5BB56 /* .gitkeep */,
+				FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */,
+				6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */,
+				62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */,
+				01DCA18EB806BA0F637D203E /* SubjectTests.swift */,
+				8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */,
+				3310F771771E7F6E44819753 /* UserTests.swift */,
+			);
+			path = ModelsTests;
+			sourceTree = "<group>";
+		};
+		424694D177D796785CE850D6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D66456F805BFA9ADC73979BD /* .gitkeep */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		4970387FD17768594824DA8E /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				CCF0C424620BCDB34D580ED2 /* .gitkeep */,
+				6310E23B9F214167F2C42502 /* Endpoint.swift */,
+				570F703A95AAA1F7263A1E8B /* NetworkClient.swift */,
+				973EF16359BE0063AECEA7DC /* NetworkError.swift */,
+				BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		537644C2306A9889B37BD9B5 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				E1B80FD71F4CDCD40A290A7C /* .gitkeep */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		555EAE71567B7299C4E8DD45 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DB802A3658E4076386B8FB09 /* AppState.swift */,
+				F34F977074FFEE960651489B /* Config.swift */,
+				DE5870BD49703DACC1F56DDE /* ContentView.swift */,
+				2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		57C3D794981498715149F741 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				72D0C05C1CDC9DBF70843F7A /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		597ADD35707B6E3B608AE145 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				8D440E46387DEA4275A95E54 /* ViewModels */,
+				CFEB4A37DC43FEB4DCCB8049 /* Views */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		67402D5BC520865C44119F98 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6D03213006B67AD555366DA6 /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76BEBB32C4CB89A0AA3A017F /* WaniKani */ = {
+			isa = PBXGroup;
+			children = (
+				E2E8010099C7DA06CF5EA30B /* Assets.xcassets */,
+				555EAE71567B7299C4E8DD45 /* App */,
+				B3B5C5746CE1FF6000E31183 /* Features */,
+				7BFA36F17F5930A969CC7C3C /* Prototypes */,
+				C91119EE0032E7CBE7E380A8 /* Shared */,
+			);
+			path = WaniKani;
+			sourceTree = "<group>";
+		};
+		7AC07A6583FEC02E46179547 /* WaniKaniCore */ = {
+			isa = PBXGroup;
+			children = (
+				E22F116C016F18F85DF1AD99 /* .gitkeep */,
+				7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */,
+				ACFD0B6D8DAEDB2B57C2E73F /* Managers */,
+				D4C3A9770766D1F762DFC570 /* Models */,
+				4970387FD17768594824DA8E /* Networking */,
+				537644C2306A9889B37BD9B5 /* Persistence */,
+				0B947DD541CE3AF4619E100F /* Security */,
+				166F21B752CFBF9B09D88279 /* Storage */,
+			);
+			path = WaniKaniCore;
+			sourceTree = "<group>";
+		};
+		7BFA36F17F5930A969CC7C3C /* Prototypes */ = {
+			isa = PBXGroup;
+			children = (
+				D04C4C205CF71A0DDDBFFE3D /* Hybrid */,
+				B9C4796CFC37D1678585F340 /* Native */,
+				F6FEB33AD093BA9DF53E3BF6 /* WebView */,
+			);
+			path = Prototypes;
+			sourceTree = "<group>";
+		};
+		7D982C337CE7DC19B5EC2333 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C275E34B21E2EE26D71A1DCE /* .gitkeep */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8AF3D1287C796A17361DC1F9 /* NetworkingTests */ = {
+			isa = PBXGroup;
+			children = (
+				0F8122827C3A885C8C17F397 /* .gitkeep */,
+				A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */,
+			);
+			path = NetworkingTests;
+			sourceTree = "<group>";
+		};
+		8D440E46387DEA4275A95E54 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				96A5A6CF7D092390B7FA1B0B /* .gitkeep */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9E05705BC34455C699B8890D /* PersistenceTests */ = {
+			isa = PBXGroup;
+			children = (
+				FAC41381EA87AD201ABCC54C /* .gitkeep */,
+			);
+			path = PersistenceTests;
+			sourceTree = "<group>";
+		};
+		AB051FECDF3630ABEE6FD78F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				01B2E159B3A0259C434FB727 /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AC493DD2F785E90EF5C95737 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				36459F2ED24B385BB02A5127 /* ViewModels */,
+				AB051FECDF3630ABEE6FD78F /* Views */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		ACFD0B6D8DAEDB2B57C2E73F /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				74FD4B944BCEBF52AFEB051B /* .gitkeep */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		B0E72D52CE03A6B8C8130E42 /* WaniKaniTests */ = {
+			isa = PBXGroup;
+			children = (
+				30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */,
+				0D2215604ACA42F1398A2769 /* Helpers */,
+				F5F23C20FDF753C9D0B46C60 /* ManagersTests */,
+				3C15FB18A7ED82F5B8B690EE /* ModelsTests */,
+				8AF3D1287C796A17361DC1F9 /* NetworkingTests */,
+				9E05705BC34455C699B8890D /* PersistenceTests */,
+				E01B6F239A1373E85DCC09C2 /* SecurityTests */,
+			);
+			path = WaniKaniTests;
+			sourceTree = "<group>";
+		};
+		B3B5C5746CE1FF6000E31183 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				AC493DD2F785E90EF5C95737 /* Authentication */,
+				597ADD35707B6E3B608AE145 /* Dashboard */,
+				1027BF43DF38741BF7C0FEA2 /* Forums */,
+				F6724C45EEEF0711348741F3 /* Lessons */,
+				2AA5EF2DD56734067167E729 /* Reviews */,
+				F6D6A90D3D959CDA015A763A /* Statistics */,
+				DDF7ADF7E3D320D799B3111F /* UserScripts */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		B9C4796CFC37D1678585F340 /* Native */ = {
+			isa = PBXGroup;
+			children = (
+				4FEF94381957891EDD09FB45 /* NativeRootView.swift */,
+			);
+			path = Native;
+			sourceTree = "<group>";
+		};
+		C91119EE0032E7CBE7E380A8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1B2443A32D7B9029CAA897EE /* Components */,
+				18400060126D139F944ADCB7 /* Extensions */,
+				010726C78150D94CCC04265C /* Theme */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		CFEB4A37DC43FEB4DCCB8049 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F5F223EC4D7E7C78DFE256EC /* .gitkeep */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D04C4C205CF71A0DDDBFFE3D /* Hybrid */ = {
+			isa = PBXGroup;
+			children = (
+				DD23812885E8248B886DB26D /* HybridRootView.swift */,
+			);
+			path = Hybrid;
+			sourceTree = "<group>";
+		};
+		D43030D0B9E85674767D4149 /* WaniKaniUITests */ = {
+			isa = PBXGroup;
+			children = (
+				87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */,
+				B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */,
+			);
+			path = WaniKaniUITests;
+			sourceTree = "<group>";
+		};
+		D4C3A9770766D1F762DFC570 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C655996666E2ABFE0E0306BB /* .gitkeep */,
+				9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */,
+				2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */,
+				7884806C7B4A1872146CF102 /* Review.swift */,
+				D000CD07D4B7DB4BACA9B815 /* Subject.swift */,
+				E69CF0A9847A539C639ED383 /* Summary.swift */,
+				3C78E07F1058BCDB2C3AA285 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DDF7ADF7E3D320D799B3111F /* UserScripts */ = {
+			isa = PBXGroup;
+			children = (
+				F98359CCFD882E8940566CFF /* ViewModels */,
+				0DDAA28B9C28FE4ABFE1D6B4 /* Views */,
+			);
+			path = UserScripts;
+			sourceTree = "<group>";
+		};
+		E01B6F239A1373E85DCC09C2 /* SecurityTests */ = {
+			isa = PBXGroup;
+			children = (
+				12C119B1D9FE921FF7AF6AF4 /* .gitkeep */,
+			);
+			path = SecurityTests;
+			sourceTree = "<group>";
+		};
+		E3FD28D62C45430C2229F475 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9F92D2CDF38975E562BB033E /* .gitkeep */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		F5F23C20FDF753C9D0B46C60 /* ManagersTests */ = {
+			isa = PBXGroup;
+			children = (
+				D66490A5B113B3D53FA55488 /* .gitkeep */,
+			);
+			path = ManagersTests;
+			sourceTree = "<group>";
+		};
+		F6724C45EEEF0711348741F3 /* Lessons */ = {
+			isa = PBXGroup;
+			children = (
+				E3FD28D62C45430C2229F475 /* ViewModels */,
+				FA134184D093B6E7FDFFD0A3 /* Views */,
+			);
+			path = Lessons;
+			sourceTree = "<group>";
+		};
+		F6D6A90D3D959CDA015A763A /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				7D982C337CE7DC19B5EC2333 /* ViewModels */,
+				67402D5BC520865C44119F98 /* Views */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		F6FEB33AD093BA9DF53E3BF6 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		F98359CCFD882E8940566CFF /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B5F953B9A2DADEDFBEE63D92 /* .gitkeep */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		FA134184D093B6E7FDFFD0A3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7BCF13B5098C58A0704F4CA2 /* .gitkeep */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		52CD67582F26AE1A00C3FCA7 /* WaniKani */ = {
+		9B8B1CA1E244D38CFC81EA0C /* WaniKaniTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52CD677A2F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKani" */;
+			buildConfigurationList = 477EABE015B017BA2FAADC5E /* Build configuration list for PBXNativeTarget "WaniKaniTests" */;
 			buildPhases = (
-				52CD67552F26AE1A00C3FCA7 /* Sources */,
-				52CD67562F26AE1A00C3FCA7 /* Frameworks */,
-				52CD67572F26AE1A00C3FCA7 /* Resources */,
+				2EABD0F367D9AAD0A8C09D8C /* Sources */,
+				81C36A0246774F6C9F05E256 /* Frameworks */,
+				E5507F01773418FD195E17D9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				52CD675B2F26AE1A00C3FCA7 /* WaniKani */,
-			);
-			name = WaniKani;
-			packageProductDependencies = (
-			);
-			productName = WaniKani;
-			productReference = 52CD67592F26AE1A00C3FCA7 /* WaniKani.app */;
-			productType = "com.apple.product-type.application";
-		};
-		52CD67652F26AE1D00C3FCA7 /* WaniKaniTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 52CD677D2F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKaniTests" */;
-			buildPhases = (
-				52CD67622F26AE1D00C3FCA7 /* Sources */,
-				52CD67632F26AE1D00C3FCA7 /* Frameworks */,
-				52CD67642F26AE1D00C3FCA7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				52CD67682F26AE1D00C3FCA7 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				52CD67692F26AE1D00C3FCA7 /* WaniKaniTests */,
+				9518A36B35A87F0A09B1B5E4 /* PBXTargetDependency */,
+				0F4D76CA465E9237CFFD346E /* PBXTargetDependency */,
 			);
 			name = WaniKaniTests;
 			packageProductDependencies = (
 			);
 			productName = WaniKaniTests;
-			productReference = 52CD67662F26AE1D00C3FCA7 /* WaniKaniTests.xctest */;
+			productReference = 0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		52CD676F2F26AE1D00C3FCA7 /* WaniKaniUITests */ = {
+		A5535FF14D63EE871C207965 /* WaniKani */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52CD67802F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKaniUITests" */;
+			buildConfigurationList = D26F3568B2A058A6CDEB83F2 /* Build configuration list for PBXNativeTarget "WaniKani" */;
 			buildPhases = (
-				52CD676C2F26AE1D00C3FCA7 /* Sources */,
-				52CD676D2F26AE1D00C3FCA7 /* Frameworks */,
-				52CD676E2F26AE1D00C3FCA7 /* Resources */,
+				D179F19242267CC0003B1391 /* Sources */,
+				41503276440C26F1709182BD /* Resources */,
+				EE3D821AAA1A43E7F39D41D2 /* Frameworks */,
+				A6AFB3CCD05D152720AED1E4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				52CD67722F26AE1D00C3FCA7 /* PBXTargetDependency */,
+				60CB5A59E359DCB8922050ED /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				52CD67732F26AE1D00C3FCA7 /* WaniKaniUITests */,
+			name = WaniKani;
+			packageProductDependencies = (
+			);
+			productName = WaniKani;
+			productReference = 42034E5769A63BFA5473A50D /* WaniKani.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EF4E54D87D45D7DF39FAC4E5 /* WaniKaniUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FDBA4652FAE708D670D541AC /* Build configuration list for PBXNativeTarget "WaniKaniUITests" */;
+			buildPhases = (
+				35252BD7AFA28E9C9DEE7028 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A171E822368AF09E6CA069C5 /* PBXTargetDependency */,
 			);
 			name = WaniKaniUITests;
 			packageProductDependencies = (
 			);
 			productName = WaniKaniUITests;
-			productReference = 52CD67702F26AE1D00C3FCA7 /* WaniKaniUITests.xctest */;
+			productReference = 6D18D45A3F2D34F65AE368FF /* WaniKaniUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF9F66A84F394C5E39166A3A /* Build configuration list for PBXNativeTarget "WaniKaniCore" */;
+			buildPhases = (
+				24921FA4CFAB1143387F9836 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WaniKaniCore;
+			packageProductDependencies = (
+			);
+			productName = WaniKaniCore;
+			productReference = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		52CD67512F26AE1A00C3FCA7 /* Project object */ = {
+		9527F3F7C43C8593E12ECAD8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					52CD67582F26AE1A00C3FCA7 = {
-						CreatedOnToolsVersion = 26.0.1;
+					A5535FF14D63EE871C207965 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
-					52CD67652F26AE1D00C3FCA7 = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 52CD67582F26AE1A00C3FCA7;
-					};
-					52CD676F2F26AE1D00C3FCA7 = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 52CD67582F26AE1A00C3FCA7;
+					EF4E54D87D45D7DF39FAC4E5 = {
+						TestTargetID = A5535FF14D63EE871C207965;
 					};
 				};
 			};
-			buildConfigurationList = 52CD67542F26AE1A00C3FCA7 /* Build configuration list for PBXProject "WaniKani" */;
+			buildConfigurationList = 688057F0B7FF0D94ABED8C49 /* Build configuration list for PBXProject "WaniKani" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 52CD67502F26AE1A00C3FCA7;
+			mainGroup = 3507E7B6196F73E2229DAB4D;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 52CD675A2F26AE1A00C3FCA7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				52CD67582F26AE1A00C3FCA7 /* WaniKani */,
-				52CD67652F26AE1D00C3FCA7 /* WaniKaniTests */,
-				52CD676F2F26AE1D00C3FCA7 /* WaniKaniUITests */,
+				A5535FF14D63EE871C207965 /* WaniKani */,
+				F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */,
+				9B8B1CA1E244D38CFC81EA0C /* WaniKaniTests */,
+				EF4E54D87D45D7DF39FAC4E5 /* WaniKaniUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		52CD67572F26AE1A00C3FCA7 /* Resources */ = {
+		41503276440C26F1709182BD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		52CD67642F26AE1D00C3FCA7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		52CD676E2F26AE1D00C3FCA7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		52CD67552F26AE1A00C3FCA7 /* Sources */ = {
+		24921FA4CFAB1143387F9836 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */,
+				DEF9D30EA840667D4AB9A39E /* Endpoint.swift in Sources */,
+				E31943FA49E704690EF9E734 /* NetworkClient.swift in Sources */,
+				A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */,
+				914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */,
+				5AF8624906289788360C699C /* Review.swift in Sources */,
+				3E72212A702F5FA2700A1554 /* Subject.swift in Sources */,
+				864F6AA65474B7563D8475DB /* Summary.swift in Sources */,
+				FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */,
+				B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */,
+				EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52CD67622F26AE1D00C3FCA7 /* Sources */ = {
+		2EABD0F367D9AAD0A8C09D8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */,
+				78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */,
+				F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */,
+				9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */,
+				580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */,
+				2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */,
+				4A7FBEEC533844D2E108B933 /* TestHelpers.swift in Sources */,
+				B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */,
+				C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52CD676C2F26AE1D00C3FCA7 /* Sources */ = {
+		35252BD7AFA28E9C9DEE7028 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FC4B97378BE262EF475B736 /* WaniKaniUITests.swift in Sources */,
+				1C625FF3618F55454B6F1317 /* WaniKaniUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D179F19242267CC0003B1391 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38FE7DF64EE5AEFF5D8F6026 /* AppState.swift in Sources */,
+				2935384119DB6EEDF7BD3081 /* Config.swift in Sources */,
+				682C586E1FF929E8681B42AB /* ContentView.swift in Sources */,
+				C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */,
+				37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */,
+				20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */,
+				7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		52CD67682F26AE1D00C3FCA7 /* PBXTargetDependency */ = {
+		0F4D76CA465E9237CFFD346E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 52CD67582F26AE1A00C3FCA7 /* WaniKani */;
-			targetProxy = 52CD67672F26AE1D00C3FCA7 /* PBXContainerItemProxy */;
+			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
+			targetProxy = 72CB920FD71559663D390F33 /* PBXContainerItemProxy */;
 		};
-		52CD67722F26AE1D00C3FCA7 /* PBXTargetDependency */ = {
+		60CB5A59E359DCB8922050ED /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 52CD67582F26AE1A00C3FCA7 /* WaniKani */;
-			targetProxy = 52CD67712F26AE1D00C3FCA7 /* PBXContainerItemProxy */;
+			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
+			targetProxy = D39A95C89454D0D1B4353B76 /* PBXContainerItemProxy */;
+		};
+		9518A36B35A87F0A09B1B5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5535FF14D63EE871C207965 /* WaniKani */;
+			targetProxy = 589F6FE114CAE78E55C01613 /* PBXContainerItemProxy */;
+		};
+		A171E822368AF09E6CA069C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5535FF14D63EE871C207965 /* WaniKani */;
+			targetProxy = F1CF3292561C93C4BE223D56 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		52CD67782F26AE1D00C3FCA7 /* Debug */ = {
+		60EABAA5754470B19D23D23C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WaniKani;
+			};
+			name = Release;
+		};
+		62C537E274F36941FE346F08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.core;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
-		52CD67792F26AE1D00C3FCA7 /* Release */ = {
+		6B8D8E24DA1070AD0ED7F556 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6C4BC62F058E4FE28BC3DE74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+			};
+			name = Release;
+		};
+		76B02164B5D39708A5E636B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WaniKani;
+			};
+			name = Debug;
+		};
+		7BA614326B4DA4EDD81BC36A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.core;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		B53EBF552FD4A2A03E9AA184 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+			};
+			name = Debug;
+		};
+		C535571D0190D0CB2A671298 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -366,11 +1024,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -378,243 +1034,153 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		52CD677B2F26AE1D00C3FCA7 /* Debug */ = {
+		EF068FC882E22E32671B5CAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F50449F9304501ACA022E65D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKani;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
-		};
-		52CD677C2F26AE1D00C3FCA7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKani;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Release;
-		};
-		52CD677E2F26AE1D00C3FCA7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKaniTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Debug;
-		};
-		52CD677F2F26AE1D00C3FCA7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKaniTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Release;
-		};
-		52CD67812F26AE1D00C3FCA7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKaniUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = WaniKani;
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Debug;
-		};
-		52CD67822F26AE1D00C3FCA7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 39YTAJZTZ6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.WaniKaniUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = WaniKani;
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		52CD67542F26AE1A00C3FCA7 /* Build configuration list for PBXProject "WaniKani" */ = {
+		477EABE015B017BA2FAADC5E /* Build configuration list for PBXNativeTarget "WaniKaniTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				52CD67782F26AE1D00C3FCA7 /* Debug */,
-				52CD67792F26AE1D00C3FCA7 /* Release */,
+				B53EBF552FD4A2A03E9AA184 /* Debug */,
+				6C4BC62F058E4FE28BC3DE74 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		52CD677A2F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKani" */ = {
+		688057F0B7FF0D94ABED8C49 /* Build configuration list for PBXProject "WaniKani" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				52CD677B2F26AE1D00C3FCA7 /* Debug */,
-				52CD677C2F26AE1D00C3FCA7 /* Release */,
+				EF068FC882E22E32671B5CAC /* Debug */,
+				C535571D0190D0CB2A671298 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		52CD677D2F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKaniTests" */ = {
+		AF9F66A84F394C5E39166A3A /* Build configuration list for PBXNativeTarget "WaniKaniCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				52CD677E2F26AE1D00C3FCA7 /* Debug */,
-				52CD677F2F26AE1D00C3FCA7 /* Release */,
+				62C537E274F36941FE346F08 /* Debug */,
+				7BA614326B4DA4EDD81BC36A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		52CD67802F26AE1D00C3FCA7 /* Build configuration list for PBXNativeTarget "WaniKaniUITests" */ = {
+		D26F3568B2A058A6CDEB83F2 /* Build configuration list for PBXNativeTarget "WaniKani" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				52CD67812F26AE1D00C3FCA7 /* Debug */,
-				52CD67822F26AE1D00C3FCA7 /* Release */,
+				F50449F9304501ACA022E65D /* Debug */,
+				6B8D8E24DA1070AD0ED7F556 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
+		};
+		FDBA4652FAE708D670D541AC /* Build configuration list for PBXNativeTarget "WaniKaniUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76B02164B5D39708A5E636B5 /* Debug */,
+				60EABAA5754470B19D23D23C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 52CD67512F26AE1A00C3FCA7 /* Project object */;
+	rootObject = 9527F3F7C43C8593E12ECAD8 /* Project object */;
 }
