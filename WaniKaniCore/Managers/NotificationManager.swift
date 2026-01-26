@@ -1,10 +1,25 @@
 import Foundation
 import UserNotifications
 
+public protocol NotificationCenterProtocol {
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
+    func getAuthorizationStatus() async -> UNAuthorizationStatus
+    func add(_ request: UNNotificationRequest) async throws
+    func removeAllPendingNotificationRequests()
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+    func pendingNotificationRequests() async -> [UNNotificationRequest]
+}
+
+extension UNUserNotificationCenter: NotificationCenterProtocol {
+    public func getAuthorizationStatus() async -> UNAuthorizationStatus {
+        await notificationSettings().authorizationStatus
+    }
+}
+
 public final class NotificationManager {
-    private let center: UNUserNotificationCenter
+    private let center: NotificationCenterProtocol
     
-    public init(center: UNUserNotificationCenter = .current()) {
+    public init(center: NotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.center = center
     }
     
@@ -15,7 +30,7 @@ public final class NotificationManager {
     }
     
     public func getAuthorizationStatus() async -> UNAuthorizationStatus {
-        await center.notificationSettings().authorizationStatus
+        await center.getAuthorizationStatus()
     }
     
     // MARK: - Scheduling

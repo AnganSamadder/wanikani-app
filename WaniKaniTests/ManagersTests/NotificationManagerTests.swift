@@ -127,7 +127,7 @@ final class NotificationManagerTests: XCTestCase {
     }
 }
 
-final class MockNotificationCenter: UNUserNotificationCenter {
+final class MockNotificationCenter: NotificationCenterProtocol {
     var requestAuthorizationCalled = false
     var authorizationResult = true
     var authorizationStatus: UNAuthorizationStatus = .notDetermined
@@ -137,49 +137,31 @@ final class MockNotificationCenter: UNUserNotificationCenter {
     var removedIdentifiers: [String] = []
     var pendingRequests: [UNNotificationRequest] = []
     
-    override func requestAuthorization(options: UNAuthorizationOptions = []) async throws -> Bool {
+    func requestAuthorization(options: UNAuthorizationOptions = []) async throws -> Bool {
         requestAuthorizationCalled = true
         return authorizationResult
     }
     
-    override func notificationSettings() async -> UNNotificationSettings {
-        let settings = MockNotificationSettings(authorizationStatus: authorizationStatus)
-        return settings
+    func getAuthorizationStatus() async -> UNAuthorizationStatus {
+        return authorizationStatus
     }
     
-    override func add(_ request: UNNotificationRequest) async throws {
+    func add(_ request: UNNotificationRequest) async throws {
         addedRequests.append(request)
     }
     
-    override func removeAllPendingNotificationRequests() {
+    func removeAllPendingNotificationRequests() {
         removeAllPendingRequestsCalled = true
         addedRequests.removeAll()
     }
     
-    override func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
         removePendingRequestsCalled = true
         removedIdentifiers = identifiers
         addedRequests.removeAll { identifiers.contains($0.identifier) }
     }
     
-    override func pendingNotificationRequests() async -> [UNNotificationRequest] {
+    func pendingNotificationRequests() async -> [UNNotificationRequest] {
         return pendingRequests
-    }
-}
-
-final class MockNotificationSettings: UNNotificationSettings {
-    private let _authorizationStatus: UNAuthorizationStatus
-    
-    init(authorizationStatus: UNAuthorizationStatus) {
-        self._authorizationStatus = authorizationStatus
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var authorizationStatus: UNAuthorizationStatus {
-        return _authorizationStatus
     }
 }
