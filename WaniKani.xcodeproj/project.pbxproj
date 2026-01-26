@@ -85,6 +85,7 @@
 		F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */; };
 		FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */; };
 		FE2744981808FDEB2A47F30F /* NativeReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6AE4A3A2E89B9A0C79B61C /* NativeReviewsViewModel.swift */; };
+		FF2EFB3ECA9F35BCA2FBCF11 /* HybridDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +152,7 @@
 		0B0525B3F1A77B7596C91114 /* NativeReviewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeReviewsView.swift; sourceTree = "<group>"; };
 		0C67F8B4B3A98CF1F6F85D9C /* SRSStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSStateMachine.swift; sourceTree = "<group>"; };
 		0CD2084883C67AE779ACE725 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridDashboardView.swift; sourceTree = "<group>"; };
 		0F8122827C3A885C8C17F397 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeStatisticsView.swift; sourceTree = "<group>"; };
 		12C119B1D9FE921FF7AF6AF4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 		D04C4C205CF71A0DDDBFFE3D /* Hybrid */ = {
 			isa = PBXGroup;
 			children = (
+				0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */,
 				DD23812885E8248B886DB26D /* HybridRootView.swift */,
 			);
 			path = Hybrid;
@@ -1022,6 +1025,7 @@
 				682C586E1FF929E8681B42AB /* ContentView.swift in Sources */,
 				24D573A79A4B3430B2439E1C /* DashboardWebView.swift in Sources */,
 				7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */,
+				FF2EFB3ECA9F35BCA2FBCF11 /* HybridDashboardView.swift in Sources */,
 				C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */,
 				EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */,
 				765143DD9112B00AE8133588 /* LoginWebView.swift in Sources */,
