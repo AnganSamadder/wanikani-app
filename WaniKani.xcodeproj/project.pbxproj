@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		095689B09DB40C4456C60B42 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB3E3E41301D3E58784D1F2 /* NotificationManagerTests.swift */; };
 		09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */; };
+		0EFC71C611995C0BAF0EF2DB /* OfflineSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */; };
 		0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */; };
 		13921F935FA247EF58950DF3 /* NativeStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */; };
 		19D2234BFD480A200DA50D97 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */; };
@@ -16,6 +17,7 @@
 		1DCFDC9BF11E889DCA47DD42 /* GreasyForkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF4BE28532933945EC0DE2 /* GreasyForkAPI.swift */; };
 		20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
 		24D573A79A4B3430B2439E1C /* DashboardWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E272CAE29890130A6B01A45F /* DashboardWebView.swift */; };
+		24F51CFA43823649A99C0CC1 /* NativeSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */; };
 		2935384119DB6EEDF7BD3081 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
 		2B3C205798811040D07EC4EB /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C70EB45D9DC72EE315BACF /* PersistenceModels.swift */; };
 		2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */; };
@@ -44,6 +46,7 @@
 		801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
 		819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
+		885F9B4AF9FC51548E2A172F /* NativeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */; };
 		8ADAB45B81156C6AFAE8C0EB /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
 		8C7B66638032D4FCF1177B21 /* NativeLessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */; };
 		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
@@ -156,6 +159,7 @@
 		1BDB56473F31F9E09DA09173 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1C693731016C5AC9755F9310 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1E1751183FAAD9475100813A /* WaniKaniAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPI.swift; sourceTree = "<group>"; };
+		2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncView.swift; sourceTree = "<group>"; };
 		2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniApp.swift; sourceTree = "<group>"; };
 		2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceEnvelope.swift; sourceTree = "<group>"; };
 		30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniTests.swift; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 		4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4FEF94381957891EDD09FB45 /* NativeRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRootView.swift; sourceTree = "<group>"; };
 		570F703A95AAA1F7263A1E8B /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsView.swift; sourceTree = "<group>"; };
 		607E13A815A2DC983288E670 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTests.swift; sourceTree = "<group>"; };
@@ -210,6 +215,7 @@
 		B2FB71ADC8F00B48D875926F /* LoginWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWebView.swift; sourceTree = "<group>"; };
 		B52C2545DB28896101F28C27 /* NativeDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDashboardViewModel.swift; sourceTree = "<group>"; };
 		B5F953B9A2DADEDFBEE63D92 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsViewModel.swift; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewModel.swift; sourceTree = "<group>"; };
 		BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouterTests.swift; sourceTree = "<group>"; };
@@ -640,6 +646,7 @@
 				FF384A10C11DAF66E74A0164 /* Dashboard */,
 				63013DC2D1913A0D560B3A79 /* Lessons */,
 				C884F1D72415F466ABD4128F /* Reviews */,
+				F8E65EE49965BA197A146A2A /* Settings */,
 				5ED0465C65141CEF7A67FE41 /* Statistics */,
 			);
 			path = Native;
@@ -768,6 +775,16 @@
 				AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		F8E65EE49965BA197A146A2A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */,
+				B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */,
+				2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		F98359CCFD882E8940566CFF /* ViewModels */ = {
@@ -1017,9 +1034,12 @@
 				4228AF94EA699C228F3F8313 /* NativeReviewsView.swift in Sources */,
 				FE2744981808FDEB2A47F30F /* NativeReviewsViewModel.swift in Sources */,
 				37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */,
+				885F9B4AF9FC51548E2A172F /* NativeSettingsView.swift in Sources */,
+				24F51CFA43823649A99C0CC1 /* NativeSettingsViewModel.swift in Sources */,
 				13921F935FA247EF58950DF3 /* NativeStatisticsView.swift in Sources */,
 				9800164761AD06A2F4815733 /* NativeStatisticsViewModel.swift in Sources */,
 				640DEA3887182A757F8D9058 /* OfflineHandler.swift in Sources */,
+				0EFC71C611995C0BAF0EF2DB /* OfflineSyncView.swift in Sources */,
 				D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */,
 				6D0804B66F7904701261021E /* ScriptInjector.swift in Sources */,
 				801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */,
