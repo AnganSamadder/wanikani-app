@@ -32,12 +32,14 @@
 		76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */; };
 		78398425C0451FE6FEDCE018 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */; };
 		78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */; };
+		7A05A034E5D3EF8995DEEC45 /* MarketplaceWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */; };
 		7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
 		7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
 		801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
 		819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
+		8ADAB45B81156C6AFAE8C0EB /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
 		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
 		8DBE80200DCCB9E77C124095 /* GreasyForkAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FA1C8094D8E0353CCA9D9 /* GreasyForkAPITests.swift */; };
 		8FC4B97378BE262EF475B736 /* WaniKaniUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */; };
@@ -166,6 +168,7 @@
 		79AD273EE40854880F59E7F2 /* PreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		7BCF13B5098C58A0704F4CA2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManagerTests.swift; sourceTree = "<group>"; };
+		84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceWebView.swift; sourceTree = "<group>"; };
 		856397877A3829016CB792C4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 		87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITests.swift; sourceTree = "<group>"; };
@@ -189,6 +192,7 @@
 		B2FB71ADC8F00B48D875926F /* LoginWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWebView.swift; sourceTree = "<group>"; };
 		B5F953B9A2DADEDFBEE63D92 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewModel.swift; sourceTree = "<group>"; };
 		BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouterTests.swift; sourceTree = "<group>"; };
 		BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionNetworkClient.swift; sourceTree = "<group>"; };
 		C1CF4BE28532933945EC0DE2 /* GreasyForkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreasyForkAPI.swift; sourceTree = "<group>"; };
@@ -264,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				1606C362D6EAEB8493CE15F3 /* .gitkeep */,
+				84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -697,6 +702,7 @@
 			isa = PBXGroup;
 			children = (
 				B5F953B9A2DADEDFBEE63D92 /* .gitkeep */,
+				BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -923,6 +929,8 @@
 				C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */,
 				EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */,
 				765143DD9112B00AE8133588 /* LoginWebView.swift in Sources */,
+				8ADAB45B81156C6AFAE8C0EB /* MarketplaceViewModel.swift in Sources */,
+				7A05A034E5D3EF8995DEEC45 /* MarketplaceWebView.swift in Sources */,
 				37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */,
 				D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */,
 				6D0804B66F7904701261021E /* ScriptInjector.swift in Sources */,
