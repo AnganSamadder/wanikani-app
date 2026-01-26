@@ -1,40 +1,42 @@
-//
-//  WebViewRootView.swift
-//  WaniKani
-//
-//  Created by Angan Samadder on 1/25/26.
-//
-
 import SwiftUI
 
 struct WebViewRootView: View {
-    @State private var isLoading = false
-    @State private var canGoBack = false
-    @State private var canGoForward = false
-    
-    private let initialURL = URL(string: "https://www.wanikani.com/login")!
-    
     var body: some View {
-        NavigationStack {
-            ZStack {
-                WebViewContainer(
-                    url: initialURL,
-                    isLoading: $isLoading,
-                    canGoBack: $canGoBack,
-                    canGoForward: $canGoForward
-                )
-                .ignoresSafeArea(edges: .bottom)
-                
-                if isLoading {
-                    ProgressView()
-                        .controlSize(.large)
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(8)
-                }
+        TabView {
+            NavigationStack {
+                DashboardWebView()
             }
-            .navigationTitle("WaniKani")
-            .navigationBarTitleDisplayMode(.inline)
+            .tabItem {
+                Label("Dashboard", systemImage: "house.fill")
+            }
+            
+            NavigationStack {
+                ReviewsWebView()
+            }
+            .tabItem {
+                Label("Reviews", systemImage: "checkmark.circle.fill")
+            }
+            
+            NavigationStack {
+                LessonsWebView()
+            }
+            .tabItem {
+                Label("Lessons", systemImage: "book.fill")
+            }
+            
+            NavigationStack {
+                ForumsWebView()
+            }
+            .tabItem {
+                Label("Forums", systemImage: "bubble.left.and.bubble.right.fill")
+            }
+            
+            NavigationStack {
+                StatisticsWebView(username: "me")
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.circle.fill")
+            }
         }
     }
 }
