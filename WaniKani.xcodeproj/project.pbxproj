@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		095689B09DB40C4456C60B42 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB3E3E41301D3E58784D1F2 /* NotificationManagerTests.swift */; };
 		09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */; };
 		0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */; };
+		19D2234BFD480A200DA50D97 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */; };
 		1C625FF3618F55454B6F1317 /* WaniKaniUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */; };
 		20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
 		2935384119DB6EEDF7BD3081 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
@@ -21,16 +23,21 @@
 		580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCA18EB806BA0F637D203E /* SubjectTests.swift */; };
 		5AF8624906289788360C699C /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884806C7B4A1872146CF102 /* Review.swift */; };
 		682C586E1FF929E8681B42AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
+		76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */; };
+		78398425C0451FE6FEDCE018 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */; };
 		78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */; };
 		7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
+		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
 		8FC4B97378BE262EF475B736 /* WaniKaniUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */; };
 		914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */; };
 		982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
 		9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */; };
 		A06834D5DDE76EB8D75BF124 /* WaniKaniAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */; };
 		A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973EF16359BE0063AECEA7DC /* NetworkError.swift */; };
+		AEBDD9890BA56619C79865C8 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EECBB26946967C5798AD6C /* KeychainWrapperTests.swift */; };
+		B0D4F8FAD0D3168FFC1DABE1 /* DeepLinkRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */; };
 		B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310F771771E7F6E44819753 /* UserTests.swift */; };
 		B3A7BC072BE1E468DA86140E /* WaniKaniAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1751183FAAD9475100813A /* WaniKaniAPI.swift */; };
 		B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C78E07F1058BCDB2C3AA285 /* User.swift */; };
@@ -39,6 +46,7 @@
 		D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
 		D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
 		DEF9D30EA840667D4AB9A39E /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6310E23B9F214167F2C42502 /* Endpoint.swift */; };
+		DFD59028B1CC0550E7FEA957 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD273EE40854880F59E7F2 /* PreferencesManager.swift */; };
 		E31943FA49E704690EF9E734 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F703A95AAA1F7263A1E8B /* NetworkClient.swift */; };
 		EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */; };
 		F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */; };
@@ -104,6 +112,7 @@
 /* Begin PBXFileReference section */
 		01B2E159B3A0259C434FB727 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		01DCA18EB806BA0F637D203E /* SubjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectTests.swift; sourceTree = "<group>"; };
+		07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WaniKaniTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CD2084883C67AE779ACE725 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		0F8122827C3A885C8C17F397 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -118,6 +127,7 @@
 		3310F771771E7F6E44819753 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		3C78E07F1058BCDB2C3AA285 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		42034E5769A63BFA5473A50D /* WaniKani.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKani.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4FEF94381957891EDD09FB45 /* NativeRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRootView.swift; sourceTree = "<group>"; };
 		570F703A95AAA1F7263A1E8B /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTests.swift; sourceTree = "<group>"; };
@@ -130,9 +140,12 @@
 		72D0C05C1CDC9DBF70843F7A /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		74FD4B944BCEBF52AFEB051B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		7884806C7B4A1872146CF102 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		79AD273EE40854880F59E7F2 /* PreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		7BCF13B5098C58A0704F4CA2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		856397877A3829016CB792C4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 		87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITests.swift; sourceTree = "<group>"; };
+		8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesManagerTests.swift; sourceTree = "<group>"; };
 		8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTests.swift; sourceTree = "<group>"; };
 		8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPITests.swift; sourceTree = "<group>"; };
 		96A5A6CF7D092390B7FA1B0B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -140,11 +153,13 @@
 		9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		9F92D2CDF38975E562BB033E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		9FB3E3E41301D3E58784D1F2 /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
 		A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientTests.swift; sourceTree = "<group>"; };
 		AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRootView.swift; sourceTree = "<group>"; };
 		AEDF2E39A71B45AA05DDC71A /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B5F953B9A2DADEDFBEE63D92 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouterTests.swift; sourceTree = "<group>"; };
 		BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionNetworkClient.swift; sourceTree = "<group>"; };
 		C275E34B21E2EE26D71A1DCE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		CCBC20D2510F4989CCAEDF18 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -152,6 +167,7 @@
 		D000CD07D4B7DB4BACA9B815 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
 		D66456F805BFA9ADC73979BD /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D66490A5B113B3D53FA55488 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D8EECBB26946967C5798AD6C /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
 		DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WaniKaniCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB802A3658E4076386B8FB09 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		DD23812885E8248B886DB26D /* HybridRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridRootView.swift; sourceTree = "<group>"; };
@@ -198,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				63F1C0955B34D11675A4B0C0 /* .gitkeep */,
+				07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */,
 			);
 			path = Security;
 			sourceTree = "<group>";
@@ -230,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				CCBC20D2510F4989CCAEDF18 /* .gitkeep */,
+				79AD273EE40854880F59E7F2 /* PreferencesManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -467,6 +485,8 @@
 			isa = PBXGroup;
 			children = (
 				74FD4B944BCEBF52AFEB051B /* .gitkeep */,
+				876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */,
+				4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -481,6 +501,7 @@
 				8AF3D1287C796A17361DC1F9 /* NetworkingTests */,
 				9E05705BC34455C699B8890D /* PersistenceTests */,
 				E01B6F239A1373E85DCC09C2 /* SecurityTests */,
+				B9AA0A10B4FE633A7D49AF35 /* StorageTests */,
 			);
 			path = WaniKaniTests;
 			sourceTree = "<group>";
@@ -497,6 +518,14 @@
 				DDF7ADF7E3D320D799B3111F /* UserScripts */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B9AA0A10B4FE633A7D49AF35 /* StorageTests */ = {
+			isa = PBXGroup;
+			children = (
+				8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */,
+			);
+			path = StorageTests;
 			sourceTree = "<group>";
 		};
 		B9C4796CFC37D1678585F340 /* Native */ = {
@@ -568,6 +597,7 @@
 			isa = PBXGroup;
 			children = (
 				12C119B1D9FE921FF7AF6AF4 /* .gitkeep */,
+				D8EECBB26946967C5798AD6C /* KeychainWrapperTests.swift */,
 			);
 			path = SecurityTests;
 			sourceTree = "<group>";
@@ -584,6 +614,8 @@
 			isa = PBXGroup;
 			children = (
 				D66490A5B113B3D53FA55488 /* .gitkeep */,
+				BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */,
+				9FB3E3E41301D3E58784D1F2 /* NotificationManagerTests.swift */,
 			);
 			path = ManagersTests;
 			sourceTree = "<group>";
@@ -767,9 +799,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */,
+				19D2234BFD480A200DA50D97 /* DeepLinkRouter.swift in Sources */,
 				DEF9D30EA840667D4AB9A39E /* Endpoint.swift in Sources */,
+				8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */,
 				E31943FA49E704690EF9E734 /* NetworkClient.swift in Sources */,
 				A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */,
+				78398425C0451FE6FEDCE018 /* NotificationManager.swift in Sources */,
+				DFD59028B1CC0550E7FEA957 /* PreferencesManager.swift in Sources */,
 				914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */,
 				5AF8624906289788360C699C /* Review.swift in Sources */,
 				3E72212A702F5FA2700A1554 /* Subject.swift in Sources */,
@@ -786,7 +822,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */,
+				B0D4F8FAD0D3168FFC1DABE1 /* DeepLinkRouterTests.swift in Sources */,
+				AEBDD9890BA56619C79865C8 /* KeychainWrapperTests.swift in Sources */,
 				78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */,
+				095689B09DB40C4456C60B42 /* NotificationManagerTests.swift in Sources */,
+				76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */,
 				F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */,
 				9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */,
 				580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */,
