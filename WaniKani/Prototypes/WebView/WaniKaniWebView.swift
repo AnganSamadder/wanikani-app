@@ -3,41 +3,58 @@ import WebKit
 
 struct WaniKaniWebView: UIViewControllerRepresentable {
     let url: URL
-    private let scriptInjector = ScriptInjector()
-    private let cssInjector = CSSInjector()
+    @StateObject private var scriptInjector = ScriptInjector()
+    @StateObject private var cssInjector = CSSInjector()
+    @StateObject private var offlineHandler = OfflineHandler()
     
     func makeUIViewController(context: Context) -> WebViewController {
         let vc = WebViewController()
         
-        // Force view load to initialize webView
-        let _ = vc.view
+        // Setup configuration with injectors
+        let config = vc.webView.configuration
+        let userContentController = scriptInjector.createUserContentController()
         
-        // Access existing configuration's userContentController
-        let existingController = vc.webView.configuration.userContentController
-        
-        // Create a controller from ScriptInjector to get the scripts
-        let scriptController = scriptInjector.createUserContentController()
-        
-        // Copy user scripts
-        for script in scriptController.userScripts {
-            existingController.addUserScript(script)
-        }
-        
-        // Add script message handler
-        // Remove first in case it was already added (defensive)
-        existingController.removeScriptMessageHandler(forName: "wanikaniApp")
-        existingController.add(ScriptMessageHandler(), name: "wanikaniApp")
-        
-        // CSS Injection
         if let cssScript = cssInjector.createDarkModeScript() {
-            existingController.addUserScript(cssScript)
+            userContentController.addUserScript(cssScript)
         }
+        
+        config.userContentController = userContentController
+        
+        vc.delegate = context.coordinator
         
         vc.load(url: url)
         return vc
     }
     
     func updateUIViewController(_ uiViewController: WebViewController, context: Context) {
-        // Update logic
+        // Check offline status
+        if !offlineHandler.isConnected {
+            offlineHandler.injectOfflineBanner(webView: uiViewController.webView)
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, WebViewControllerDelegate {
+        var parent: WaniKaniWebView
+        
+        init(_ parent: WaniKaniWebView) {
+            self.parent = parent
+        }
+        
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            if !parent.offlineHandler.isConnected {
+                parent.offlineHandler.injectOfflineBanner(webView: webView)
+            }
+        }
+        
+        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {}
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            if !parent.offlineHandler.isConnected {
+                parent.offlineHandler.injectOfflineBanner(webView: webView)
+            }
+        }
     }
 }

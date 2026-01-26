@@ -2,7 +2,7 @@ import WebKit
 import Foundation
 import WaniKaniCore // For PreferencesManager
 
-public class CSSInjector {
+public class CSSInjector: ObservableObject {
     private let preferences: PreferencesManager
     
     public init(preferences: PreferencesManager = PreferencesManager()) {

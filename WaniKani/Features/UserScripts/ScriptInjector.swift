@@ -2,7 +2,7 @@ import WebKit
 import Foundation
 import WaniKaniCore
 
-public class ScriptInjector {
+public class ScriptInjector: ObservableObject {
     private let preferences: PreferencesManager
     
     public init(preferences: PreferencesManager = PreferencesManager()) {
