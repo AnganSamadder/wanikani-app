@@ -1,8 +1,8 @@
 import SwiftUI
 import WaniKaniCore
 
-struct NativeLessonsView: View {
-    @StateObject private var viewModel = NativeLessonsViewModel()
+struct LessonsView: View {
+    @StateObject private var viewModel = LessonsViewModel(persistence: .shared)
     
     var body: some View {
         Group {

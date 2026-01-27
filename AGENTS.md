@@ -1,295 +1,197 @@
-# WaniKani iOS Project Documentation
+# WaniKani iOS - Professional Source of Truth
 
-This document serves as a comprehensive guide to the architecture, patterns, and conventions used in the WaniKani iOS project. It is intended for developers and AI agents working on the codebase to ensure consistency and maintainability across all three prototype implementations.
+This documentation is the **primary source of truth** for all AI agents and human developers working on the WaniKani iOS project. It defines the architecture, build system, coding conventions, and workflow expectations. All contributions must adhere to these standards.
 
-## 1. Project Architecture
+## 1. Project Philosophy & Overview
 
-The WaniKani project is designed with a unique architecture that allows for simultaneous development and testing of three different mobile application paradigms: **WebView-based**, **Fully Native**, and **Hybrid**.
+The WaniKani iOS app is a high-performance, native SwiftUI application designed to provide the best possible user experience for WaniKani learners. After a comprehensive evaluation of various architectural approaches, the project has transitioned to a **100% Native SwiftUI** implementation utilizing WaniKani API v2.
 
-### Target and Schemes
+### Core Objectives:
+- **Performance**: Zero-latency navigation and smooth animations.
+- **Reliability**: Robust offline support and predictable state management.
+- **Scalability**: A feature-modular architecture that allows for independent development.
+- **Modernity**: Leveraging Swift 6 features and strict concurrency checking.
 
-The project consists of a single primary application target, `WaniKani`. To support the three prototype modes, we use Xcode Schemes that set environment variables to tell the application which mode to boot into.
+---
 
-- **WaniKani-WebView**: Boots the app in WebView mode. It primarily serves as a wrapper for the WaniKani web interface, augmented with native enhancements and userscript support.
-- **WaniKani-Native**: Boots the app in Native mode. This mode uses SwiftUI for all UI components and communicates directly with the WaniKani API v2.
-- **WaniKani-Hybrid**: Boots the app in Hybrid mode. This mode combines native navigation and critical features with WebView-based content for complex interactive elements like lessons and reviews.
+## 2. Quick Start & Tooling
 
-### Prototype Mode Switching
+We use `xcodegen` to manage the Xcode project. **Never** modify `.xcodeproj` files directly; they are transient and can be regenerated at any time.
 
-The switching logic is handled at the very top of the application hierarchy. The `PROTOTYPE_MODE` environment variable is read by the `AppState` class, which then informs the `WaniKaniApp` which root view to instantiate.
+### Essential Commands (via Makefile)
 
-#### AppState.swift Implementation
+| Command | Action |
+|---------|--------|
+| `make generate` | Regenerates the Xcode project using `xcodegen`. Run this after adding/removing files. |
+| `make build` | Compiles the `WaniKani` scheme for the iPhone 16 simulator. |
+| `make test` | Runs all unit and UI tests. |
+| `make open` | Opens the generated project in Xcode. |
+| `make clean` | Cleans build artifacts and removes the generated `.xcodeproj`. |
+
+---
+
+## 3. Project Structure
+
+The codebase is organized into logical modules to promote separation of concerns and maintainability.
+
+### `WaniKani/` (Application Layer)
+- **`App/`**: Contains the application entry point (`WaniKaniApp.swift`), root navigation logic, and high-level configuration.
+- **`Features/`**: Feature-specific modules (e.g., `Dashboard`, `Lessons`, `Reviews`). Each feature folder should contain its own `Views` and `ViewModels`.
+- **`Shared/`**: UI components, extensions, and theme definitions shared across the application layer.
+
+### `WaniKaniCore/` (Business Logic Layer)
+This is a shared framework containing the "brains" of the application.
+- **`Networking/`**: API clients, endpoint definitions, and network error handling.
+- **`Models/`**: Codable entities representing WaniKani API resources.
+- **`Persistence/`**: Data storage logic (e.g., SwiftData or CoreData integration).
+- **`Security/`**: Keychain management, session handling, and authentication logic.
+- **`Managers/`**: Domain-specific managers (e.g., `SyncManager`, `NotificationManager`).
+
+---
+
+## 4. Architecture & Design Patterns
+
+### MVVM (Strict)
+We follow a strict MVVM pattern to separate UI logic from business logic.
+- **View**: Declarative SwiftUI views. Views should be passive and observe ViewModels.
+- **ViewModel**: Responsible for preparing data for the view and handling user interactions. ViewModels **must** be annotated with `@MainActor`.
+- **State Management**: Use `@StateObject` for ViewModel ownership and `@ObservedObject` for dependency injection.
+
+### Repository Pattern
+All data access must be abstracted via repositories.
+- **Protocols**: Always define a protocol for repositories (e.g., `SummaryRepositoryProtocol`).
+- **Implementation**: Real implementations reside in `WaniKaniCore`.
+- **Injection**: ViewModels should depend on protocols, not concrete implementations, to facilitate testing.
+
+---
+
+## 5. Swift 6 & Concurrency
+
+The project enforces **Strict Concurrency Checking**.
+
+- **Main Thread Safety**: All ViewModels and UI-related classes must be marked with `@MainActor`.
+- **Actors**: Use `actor` types for thread-safe state management in the core layer.
+- **Structured Concurrency**: Prefer `async/await` and `Task` over completion handlers or Combine where appropriate.
+- **Sendable**: Ensure all data models transferred between actors conform to `Sendable`.
 
 ```swift
-import SwiftUI
-
-class AppState: ObservableObject {
-    enum PrototypeMode: String {
-        case webview, native, hybrid
-    }
-    
-    var prototypeMode: PrototypeMode {
-        // Reads from ProcessInfo to determine the mode set by the active Xcode Scheme
-        let mode = ProcessInfo.processInfo.environment["PROTOTYPE_MODE"] ?? "webview"
-        return PrototypeMode(rawValue: mode) ?? .webview
-    }
-}
-```
-
-#### WaniKaniApp.swift Root Switching
-
-```swift
-@main
-struct WaniKaniApp: App {
-    @StateObject private var appState = AppState()
-    
-    var body: some Scene {
-        WindowGroup {
-            switch appState.prototypeMode {
-            case .webview:
-                WebViewRootView()
-            case .native:
-                NativeRootView()
-            case .hybrid:
-                HybridRootView()
-            }
-        }
-    }
-}
-```
-
-## 2. Prototype Comparison Table
-
-The following table outlines the key differences and technical implementations of each prototype mode.
-
-| Aspect | WebView | Native | Hybrid |
-|--------|---------|--------|--------|
-| **UI Rendering** | `WKWebView` (HTML/CSS) | Pure SwiftUI Components | Mixed (SwiftUI + `WKWebView`) |
-| **Data Source** | WaniKani Website Content | WaniKani API v2 + SwiftData | API for Native, Web for Views |
-| **Userscripts** | Full `WKUserScript` Support | Not Applicable | Partial Support in WebViews |
-| **Offline Support**| Limited (Browser Caching) | Full Offline Sync & Storage | Partial (Cached Native Data) |
-| **Navigation** | Web-based Navigation | Native `NavigationStack` | Native Shell + Web Content |
-| **Performance** | Higher Overhead | Maximum Fluidity | Balanced |
-
-## 3. WaniKani API v2
-
-The WaniKani API v2 is a RESTful interface that provides access to user data, study material, and progress statistics.
-
-### Base Configuration
-
-- **Base URL**: `https://api.wanikani.com/v2`
-- **Authentication**: Uses Bearer Token authentication. The API Key must be provided in the `Authorization` header.
-- **Required Header**: `Wanikani-Revision: 20170710`. This header is mandatory for all requests to ensure compatibility with a specific version of the API schema.
-
-### Rate Limiting
-
-The API implements rate limiting to ensure fair usage.
-- **Limit**: 60 requests per minute.
-- **Handling**: If the limit is exceeded, the API returns a `429 Too Many Requests` status code along with a `Retry-After` header indicating the number of seconds to wait before retrying.
-
-### Response Envelope Structure
-
-All API responses follow a consistent envelope structure, containing metadata about the request and the actual resource data.
-
-```json
-{
-  "object": "collection",
-  "url": "https://api.wanikani.com/v2/subjects",
-  "pages": {
-    "per_page": 500,
-    "next_url": "https://api.wanikani.com/v2/subjects?after_id=500",
-    "previous_url": null
-  },
-  "total_count": 9400,
-  "data_updated_at": "2023-10-27T15:45:00.000000Z",
-  "data": [
-    {
-      "id": 1,
-      "object": "radical",
-      "url": "https://api.wanikani.com/v2/subjects/1",
-      "data_updated_at": "2023-05-12T10:00:00.000000Z",
-      "data": {
-        "created_at": "2012-02-27T19:08:16.000000Z",
-        "level": 1,
-        "slug": "ground",
-        "characters": "一",
-        "meanings": [
-          {
-            "meaning": "Ground",
-            "primary": true,
-            "accepted_answer": true
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-### Pagination
-
-WaniKani API v2 uses cursor-based pagination. When fetching collections, if there are more results than the `per_page` limit, the `pages.next_url` field will contain the URI for the next set of results. Clients should follow these URLs until `next_url` is `null`.
-
-## 4. MVVM Pattern (Model-View-ViewModel)
-
-We strictly adhere to the MVVM pattern for all SwiftUI views to maintain a clean separation of concerns between UI logic and business logic.
-
-### Principles
-1. **Model**: Represents the data structures (mostly generated from API responses).
-2. **View**: Declarative SwiftUI code that renders based on the state of the ViewModel.
-3. **ViewModel**: An `ObservableObject` that holds the state, performs data fetching, and handles user interactions.
-
-### Code Example: Dashboard
-
-#### ViewModel
-```swift
+@MainActor
 class DashboardViewModel: ObservableObject {
-    @Published var summary: Summary?
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    
-    private let repository: WaniKaniRepository
-    
-    init(repository: WaniKaniRepository) {
+    private let repository: SummaryRepositoryProtocol
+    @Published private(set) var state: LoadingState<Summary> = .idle
+
+    init(repository: SummaryRepositoryProtocol) {
         self.repository = repository
     }
-    
-    @MainActor
-    func fetchSummary() async {
-        isLoading = true
+
+    func loadData() async {
+        state = .loading
         do {
-            self.summary = try await repository.getSummary()
+            let summary = try await repository.fetchSummary()
+            state = .success(summary)
         } catch {
-            self.errorMessage = error.localizedDescription
-        }
-        isLoading = false
-    }
-}
-```
-
-#### View
-```swift
-struct DashboardView: View {
-    @StateObject var viewModel: DashboardViewModel
-    
-    var body: some View {
-        List {
-            if let summary = viewModel.summary {
-                Section("Reviews") {
-                    Text("Available Now: \(summary.reviews.count)")
-                }
-            }
-        }
-        .overlay {
-            if viewModel.isLoading {
-                ProgressView()
-            }
-        }
-        .task {
-            await viewModel.fetchSummary()
+            state = .failure(error)
         }
     }
 }
 ```
 
-## 5. Repository Pattern
+---
 
-The Repository Pattern acts as a mediator between the ViewModel and the data sources (API, Local Database, Cache). It abstracts the details of where data comes from.
+## 6. Coding Standards & Style
 
-### Principles
-- **Abstraction**: ViewModels don't know if data is coming from the network or a local SwiftData store.
-- **Testability**: Makes it easy to swap real repositories with mock versions for unit testing.
-- **Centralization**: Logic for merging local and remote data stays in one place.
-
-### Code Example: Subject Repository
-
-```swift
-protocol SubjectRepository {
-    func getSubject(id: Int) async throws -> Subject
-    func getAllSubjects() async throws -> [Subject]
-}
-
-class WaniKaniSubjectRepository: SubjectRepository {
-    private let apiService: APIService
-    private let persistence: PersistenceProvider
-    
-    init(apiService: APIService, persistence: PersistenceProvider) {
-        self.apiService = apiService
-        self.persistence = persistence
-    }
-    
-    func getSubject(id: Int) async throws -> Subject {
-        // Check cache first
-        if let cached = try? persistence.fetchSubject(id: id) {
-            return cached
-        }
-        
-        // Fetch from API and save to cache
-        let subject = try await apiService.fetchSubject(id: id)
-        try? persistence.saveSubject(subject)
-        return subject
-    }
-    
-    func getAllSubjects() async throws -> [Subject] {
-        return try await apiService.fetchAllSubjects()
-    }
-}
-```
-
-## 6. Testing Conventions
-
-We follow Test-Driven Development (TDD) principles wherever possible to ensure high code quality and prevent regressions.
-
-### Unit Testing
-- **Location**: All unit tests reside in the `WaniKaniTests` target.
-- **Naming**: Test files should match the class being tested with a `Tests` suffix (e.g., `DashboardViewModelTests.swift`).
-- **Structure**: Use the Given-When-Then pattern for test cases.
-
-```swift
-func test_dashboardViewModel_fetchSummary_success() async {
-    // Given
-    let mockRepo = MockWaniKaniRepository()
-    let viewModel = DashboardViewModel(repository: mockRepo)
-    let expectedSummary = Summary.mock()
-    mockRepo.stubbedSummary = expectedSummary
-    
-    // When
-    await viewModel.fetchSummary()
-    
-    // Then
-    XCTAssertEqual(viewModel.summary, expectedSummary)
-    XCTAssertFalse(viewModel.isLoading)
-}
-```
-
-### Mocking
-Dependency injection is used throughout the app. We create protocols for all services and repositories, allowing us to inject `Mock` implementations during testing.
-
-## 7. Code Style
-
-### SwiftUI Conventions
-- Prefer `struct` over `class` for views.
-- Use `@StateObject` for ViewModels owned by the view, and `@ObservedObject` for those passed in.
-- Keep view bodies small. Extract subviews into separate computed properties or smaller components.
-
-### Naming
-- Follow standard Swift naming conventions (CamelCase for types, camelCase for variables/functions).
-- Boolean variables should be prefixed with `is`, `has`, or `should` (e.g., `isLoading`, `hasContent`).
+### General Style
+- **Naming**: `PascalCase` for types, `camelCase` for variables and functions.
+- **Clarity**: Favor descriptive names over brevity (e.g., `fetchCurrentAssignments()` instead of `getAss()`).
+- **Formatting**: Follow standard Swift guidelines. Use 4-space indentation.
 
 ### Error Handling
-- Use custom `Error` enums to represent domain-specific errors.
-- Prefer `async/await` with `do-catch` blocks over completion handlers.
-- Always provide user-friendly error messages when propagating errors to the UI.
+- **Domain Errors**: Use the `WaniKaniError` enum for app-specific errors.
+- **No Force Unwraps**: Avoid `!` unless absolutely necessary (e.g., in tests or for constants that are guaranteed to exist).
+- **Graceful Failure**: Always provide feedback to the user when an operation fails.
+
+### Documentation
+- Use DocC comments (`///`) for public APIs in `WaniKaniCore`.
+- Explain the "why" for complex logic, not just the "what".
+
+---
+
+## 7. Testing Strategy
+
+TDD (Test-Driven Development) is strongly encouraged.
+
+- **Unit Tests**: Every ViewModel and Repository must have corresponding unit tests.
+- **Mocks**: Use mock implementations of protocols for isolation.
+- **Naming Convention**: `test_[functionName]_[scenario]_[expectedOutcome]`.
+- **Coverage**: Aim for high coverage of business logic and edge cases.
 
 ```swift
-enum WaniKaniError: Error {
-    case unauthorized
-    case rateLimited(retryAfter: Int)
-    case networkError(Error)
-    case decodingError
+func test_fetchSummary_networkError_returnsFailure() async {
+    let mockRepo = MockSummaryRepository(shouldFail: true)
+    let sut = DashboardViewModel(repository: mockRepo)
+    
+    await sut.loadData()
+    
+    if case .failure = sut.state {
+        // Pass
+    } else {
+        XCTFail("Expected failure state")
+    }
 }
 ```
 
-## 8. Conclusion
+---
 
-By following these patterns and utilizing the multi-prototype architecture, we can rapidly iterate on the WaniKani user experience while maintaining a robust and scalable native foundation. This `AGENTS.md` file should be updated whenever significant architectural changes occur to keep the entire development team aligned.
+## 8. Git Workflow & Collaboration
+
+### Branching Strategy
+- **`main`**: The stable branch. Only merges from PRs are allowed.
+- **Feature Branches**: `feature/short-description`.
+- **Bug Fixes**: `fix/short-description`.
+
+### Commit Guidelines
+- **Atomic Commits**: Each commit should represent a single logical change.
+- **Style**: Match the repository's existing commit style (Semantic or Plain, as detected).
+- **Attribution**: Always include author attribution in automated commits.
+
+### Pull Requests
+- All changes must go through a PR.
+- PRs must pass CI (build and tests) before merging.
+- Include a clear summary of changes and any relevant screenshots for UI work.
+
+---
+
+## 9. Configuration & App Identity
+
+The project's identity and build settings are managed in `project.yml`.
+
+### Renaming the App
+To change the app name or bundle identifier:
+1. Open `project.yml`.
+2. Locate the `PRODUCT_BUNDLE_IDENTIFIER` under the `WaniKani` target settings.
+3. Update the value (e.g., `com.yourname.wanikani`).
+4. Run `make generate` to apply the changes to the Xcode project.
+
+---
+
+## 10. API v2 Reference
+
+- **Base URL**: `https://api.wanikani.com/v2`
+- **Revision Header**: `Wanikani-Revision: 20170710`
+- **Authentication**: Bearer token in `Authorization` header.
+- **Rate Limits**: 60 requests per minute. Handle `429 Too Many Requests` gracefully.
+- **Documentation**: Refer to the official [WaniKani API Docs](https://www.wanikani.com/api/v2) for endpoint specifics.
+
+---
+
+## 11. Guidelines for AI Agents
+
+When working as an agent on this repository:
+1. **Plan First**: Always create a todo list before executing complex tasks.
+2. **Respect the Structure**: Place new files in the appropriate `Features` or `Core` directories.
+3. **Verify**: Run `make build` and `make test` after any structural or logic changes.
+4. **Regenerate**: If you add or remove files, you **must** run `make generate`.
+5. **No Prototypes**: The prototypes (WebView, Hybrid) have been deprecated. Do not attempt to re-implement or reference them.
+
+---
+*End of Documentation*

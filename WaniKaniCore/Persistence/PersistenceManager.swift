@@ -1,11 +1,11 @@
 import SwiftData
 import Foundation
 
+@MainActor
 public final class PersistenceManager {
     public let container: ModelContainer
     public let context: ModelContext
     
-    @MainActor
     public static let shared = PersistenceManager()
     
     public init(inMemory: Bool = false) {

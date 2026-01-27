@@ -2,17 +2,20 @@ import SwiftUI
 import WaniKaniCore
 
 @MainActor
-class NativeSettingsViewModel: ObservableObject {
+class SettingsViewModel: ObservableObject {
     @Published var lastSyncDate: Date?
     @Published var isSyncing = false
     
     private let preferences: PreferencesManager
     private let syncManager: SyncManager
     
-    init(preferences: PreferencesManager = PreferencesManager()) {
+    init(persistence: PersistenceManager, preferences: PreferencesManager = PreferencesManager()) {
         self.preferences = preferences
         // Stub SyncManager
-        self.syncManager = SyncManager(api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""))
+        self.syncManager = SyncManager(
+            api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""),
+            persistence: persistence
+        )
         self.lastSyncDate = preferences.lastSyncDate
     }
     

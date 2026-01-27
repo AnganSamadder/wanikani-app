@@ -2,13 +2,13 @@ import SwiftUI
 import WaniKaniCore
 
 @MainActor
-class NativeStatisticsViewModel: ObservableObject {
+class StatisticsViewModel: ObservableObject {
     @Published var level: Int = 0
     @Published var accuracy: Double = 0.0
     
     private let persistence: PersistenceManager
     
-    init(persistence: PersistenceManager = .shared) {
+    init(persistence: PersistenceManager) {
         self.persistence = persistence
         loadStats()
     }

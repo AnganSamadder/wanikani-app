@@ -1,13 +1,17 @@
 # XcodeGen generated project
 *.xcodeproj/
+*.xcworkspace/
 
 # Xcode user data
 *.xcuserstate
+userdata/
 xcuserdata/
 
 # Build products
 build/
 DerivedData/
+*.dSYM/
+
 
 # CocoaPods
 Pods/
@@ -19,5 +23,5 @@ Pods/
 # macOS
 .DS_Store
 
-# Sisyphus internal state
-.sisyphus/boulder.json
+# Sisyphus
+.sisyphus/
