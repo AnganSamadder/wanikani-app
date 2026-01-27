@@ -8,10 +8,8 @@ struct WaniKaniWebView: UIViewControllerRepresentable {
     @StateObject private var offlineHandler = OfflineHandler()
     
     func makeUIViewController(context: Context) -> WebViewController {
-        let vc = WebViewController()
-        
         // Setup configuration with injectors
-        let config = vc.webView.configuration
+        let config = WKWebViewConfiguration()
         let userContentController = scriptInjector.createUserContentController()
         
         if let cssScript = cssInjector.createDarkModeScript() {
@@ -20,9 +18,10 @@ struct WaniKaniWebView: UIViewControllerRepresentable {
         
         config.userContentController = userContentController
         
+        let vc = WebViewController(url: url, configuration: config)
+        
         vc.delegate = context.coordinator
         
-        vc.load(url: url)
         return vc
     }
     

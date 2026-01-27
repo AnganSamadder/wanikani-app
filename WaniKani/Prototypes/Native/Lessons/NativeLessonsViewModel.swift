@@ -17,7 +17,7 @@ class NativeLessonsViewModel: ObservableObject {
     private let persistence: PersistenceManager
     private var lessonQueue: [PersistentAssignment] = []
     
-    init(persistence: PersistenceManager = .shared) {
+    init(persistence: PersistenceManager) {
         self.persistence = persistence
         loadLessons()
     }

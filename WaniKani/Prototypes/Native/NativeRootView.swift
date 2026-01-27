@@ -1,11 +1,25 @@
 import SwiftUI
+import WaniKaniCore
 
 struct NativeRootView: View {
+    @StateObject private var authManager = AuthenticationManager.shared
+    
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     
     var body: some View {
+        Group {
+            if authManager.isAuthenticated {
+                content
+            } else {
+                NativeLoginView()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var content: some View {
         #if os(iOS)
         if horizontalSizeClass == .compact {
             TabNavigationView()

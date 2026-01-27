@@ -1,0 +1,9 @@
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:5066422D-B032-4DE7-A0BE-F3D49E9A3D20, OS:18.3.1, name:iPhone 16 }
+{ platform:iOS Simulator, arch:x86_64, id:5066422D-B032-4DE7-A0BE-F3D49E9A3D20, OS:18.3.1, name:iPhone 16 }
+2026-01-26 04:20:41.816 xcodebuild[61919:4625754] [MT] IDETestOperationsObserverDebug: 117.210 elapsed -- Testing started completed.
+2026-01-26 04:20:41.817 xcodebuild[61919:4625754] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-01-26 04:20:41.817 xcodebuild[61919:4625754] [MT] IDETestOperationsObserverDebug: 117.210 sec, +117.210 sec -- end
+** TEST FAILED **
+
+Testing started

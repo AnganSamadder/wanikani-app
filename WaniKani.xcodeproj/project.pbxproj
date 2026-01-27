@@ -8,100 +8,174 @@
 
 /* Begin PBXBuildFile section */
 		0022E894C05E52C54F061A6A /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0560B684CF66F547733510EB /* AuthenticationManager.swift */; };
+		01E72A7ACF3A76ABD4C2513E /* NativeLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C4DA473F3AD1A4925FF1F /* NativeLoginView.swift */; };
+		036228CB9C3E61216D7A81C7 /* OfflineHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60593EF271629F9D1284760 /* OfflineHandler.swift */; };
+		036F7139AACF3C96A8F186C6 /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
+		060A43260402A662A8CDF7B2 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119F1528603B1CAB0BE0335 /* OnboardingView.swift */; };
+		07630E97A195994A7AB406EA /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		090DD17B76ED17FE513930AA /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
 		095689B09DB40C4456C60B42 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB3E3E41301D3E58784D1F2 /* NotificationManagerTests.swift */; };
 		09DB9D8D9FE06D223E500FC2 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC72A5E8C5C9C98DB0E530 /* Assignment.swift */; };
-		0EFC71C611995C0BAF0EF2DB /* OfflineSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */; };
+		0A3C161FCC1BEE8704E49207 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		0D8AA32D57E8683D2F5F59AD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
+		0F396D359C4F3FA0720A666B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
+		0FA9FC50C60C7952E03C921C /* MarketplaceWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */; };
 		0FBF05261617D7F0DDEDEA83 /* AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC188B2D03EE9ABC97A6DE2 /* AssignmentTests.swift */; };
-		1317B6714670771C3732D0CD /* APITokenEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65629DEC3E41083BDA46B4DD /* APITokenEntryView.swift */; };
-		13921F935FA247EF58950DF3 /* NativeStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */; };
+		13F3A68F202443C448C9A804 /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
+		17AEC6D24BD3C0080BAE774D /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		19D1EAE6E67531A8034AAAD4 /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
 		19D2234BFD480A200DA50D97 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */; };
+		19DF7A8EA98FA74ACEDDFDB0 /* NativeLessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */; };
+		1A9E240EEFF40A7EAAA7D07B /* NativeSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */; };
+		1AD881745DCA7668F4AD6BF1 /* APITokenEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65629DEC3E41083BDA46B4DD /* APITokenEntryView.swift */; };
+		1B8089595B05D30E849CEB30 /* ScriptInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F4AD9FD4A228F7582F3FA0 /* ScriptInjector.swift */; };
+		1BA6CFDEC4EC1D8D0C555471 /* ScriptInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F4AD9FD4A228F7582F3FA0 /* ScriptInjector.swift */; };
 		1C625FF3618F55454B6F1317 /* WaniKaniUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */; };
+		1DC2C6AA97EF7D140888EC62 /* DashboardWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E272CAE29890130A6B01A45F /* DashboardWebView.swift */; };
+		1DCE8AB8C6E5F09FAC5E127D /* MarketplaceWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */; };
 		1DCFDC9BF11E889DCA47DD42 /* GreasyForkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF4BE28532933945EC0DE2 /* GreasyForkAPI.swift */; };
-		20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
-		24D573A79A4B3430B2439E1C /* DashboardWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E272CAE29890130A6B01A45F /* DashboardWebView.swift */; };
-		24F51CFA43823649A99C0CC1 /* NativeSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */; };
-		2935384119DB6EEDF7BD3081 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
+		1E23F7AC60141C092A598C19 /* WaniKaniWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B00BF23A16BD7F14025D53C /* WaniKaniWebView.swift */; };
+		22A29A5CEA5A0E80D63FE69E /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB802A3658E4076386B8FB09 /* AppState.swift */; };
+		2567745DDA3E04F44FA4B2DD /* NativeStatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4546BEF441C0DEB0E142C6 /* NativeStatisticsViewModel.swift */; };
 		2B3C205798811040D07EC4EB /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C70EB45D9DC72EE315BACF /* PersistenceModels.swift */; };
+		2BD01155351F078D448E6F89 /* NativeReviewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0525B3F1A77B7596C91114 /* NativeReviewsView.swift */; };
 		2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D99334153FA9E6EC8ADB1ED /* SummaryTests.swift */; };
-		37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF94381957891EDD09FB45 /* NativeRootView.swift */; };
-		38FE7DF64EE5AEFF5D8F6026 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB802A3658E4076386B8FB09 /* AppState.swift */; };
+		2E030CB436B89EA4039FCA65 /* NativeDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C2545DB28896101F28C27 /* NativeDashboardViewModel.swift */; };
+		2F8FA292A9A4F6591FB99F98 /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
+		2FD239746BDDE9C4279DFAF5 /* NativeLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C4DA473F3AD1A4925FF1F /* NativeLoginView.swift */; };
+		304F9446E6BAA5DB3E093E82 /* OfflineSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */; };
+		337AAFC20F51B501B090C4E7 /* MarketplaceWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */; };
+		39EA5D3558E215C14F0856F5 /* WebViewLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A9E28292304CC40402666 /* WebViewLoginView.swift */; };
+		3DCCD3EE35B99E004E28084A /* NativeLessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */; };
+		3E32DE9167A7EA0CD4E7A1DC /* NativeDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C2545DB28896101F28C27 /* NativeDashboardViewModel.swift */; };
 		3E72212A702F5FA2700A1554 /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D000CD07D4B7DB4BACA9B815 /* Subject.swift */; };
-		4228AF94EA699C228F3F8313 /* NativeReviewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0525B3F1A77B7596C91114 /* NativeReviewsView.swift */; };
+		41F4253F8D3E66ED7777739A /* NativeStatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4546BEF441C0DEB0E142C6 /* NativeStatisticsViewModel.swift */; };
+		43D3DE545CEF540E1FC42A5D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
+		456C047FA90017DC68E5E672 /* NativeStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */; };
 		47FAA2C53AD5F6CA2A295541 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		48A476B35DAB554547AA9323 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
+		48E79B2318696FFDC02A7782 /* NativeReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6AE4A3A2E89B9A0C79B61C /* NativeReviewsViewModel.swift */; };
+		4A40DBA423595C3BACD6425B /* NativeLessonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16407EFB1E04CEE5CE83C42 /* NativeLessonsView.swift */; };
 		4A7FBEEC533844D2E108B933 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */; };
+		4B3E8AB2C7540ECA831E287F /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
+		4C135263F60D0D998A276A18 /* NativeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B201D8DC20AF748C0C135B20 /* NativeDashboardView.swift */; };
+		4E3B2A2DE7EBB5561428503B /* WebViewLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A9E28292304CC40402666 /* WebViewLoginView.swift */; };
 		4FF56A98364FE92D9BF9CBBC /* SRSStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90957C7105A64846D21E4864 /* SRSStateMachineTests.swift */; };
-		5195D7B88DB57DA56644F93B /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */; };
+		51148AD3F6764004F8500B12 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
+		5556A9F73B18A58B87397A5B /* HybridDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */; };
+		5657B3D844C17450D0BDCD9D /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
+		576781D93239CFE0099D88F9 /* NativeLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C4DA473F3AD1A4925FF1F /* NativeLoginView.swift */; };
 		580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCA18EB806BA0F637D203E /* SubjectTests.swift */; };
 		585FFE34646A9FC3D49D2A42 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C340AE31C51ABBB1ECBA63 /* SessionManager.swift */; };
-		59DA77E058CC556C9AB8B14B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119F1528603B1CAB0BE0335 /* OnboardingView.swift */; };
+		58BA6E58475CA5AAED3A0B1A /* DashboardWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E272CAE29890130A6B01A45F /* DashboardWebView.swift */; };
 		5AF8624906289788360C699C /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884806C7B4A1872146CF102 /* Review.swift */; };
+		5BBD4F4628075A8DF3188591 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB802A3658E4076386B8FB09 /* AppState.swift */; };
 		5D657103CDE7AF242B5ABCC3 /* SRSStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67F8B4B3A98CF1F6F85D9C /* SRSStateMachine.swift */; };
-		640DEA3887182A757F8D9058 /* OfflineHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60593EF271629F9D1284760 /* OfflineHandler.swift */; };
-		682C586E1FF929E8681B42AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
-		6D0804B66F7904701261021E /* ScriptInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F4AD9FD4A228F7582F3FA0 /* ScriptInjector.swift */; };
-		765143DD9112B00AE8133588 /* LoginWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB71ADC8F00B48D875926F /* LoginWebView.swift */; };
+		5F1B3C6DE77DAE9620730B0F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119F1528603B1CAB0BE0335 /* OnboardingView.swift */; };
+		6166E2FA5475BA16A5A7212C /* HybridDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */; };
+		635C8D005E7C7E4BCD8F76C8 /* NativeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B201D8DC20AF748C0C135B20 /* NativeDashboardView.swift */; };
+		6524D68B0EDA52CC4571F86B /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */; };
+		6654929B5189D9BB876C5434 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B66D03EE521ABBC521F7A8 /* WebViewController.swift */; };
+		6A63A48D1EC1566E76E057AF /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
+		6AEB884D8743D1327F5D6C44 /* NativeRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF94381957891EDD09FB45 /* NativeRootView.swift */; };
+		6BD9C584BAA664400DD858A1 /* APITokenEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65629DEC3E41083BDA46B4DD /* APITokenEntryView.swift */; };
+		71D438172BF4F32251E830FD /* ReviewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74A77B949EE394F618E548 /* ReviewsWebView.swift */; };
+		722A4B2F0442D7E64910C8A5 /* LessonsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */; };
+		73470DE5B23F7AAF2085A45B /* NativeReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6AE4A3A2E89B9A0C79B61C /* NativeReviewsViewModel.swift */; };
 		76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B044FF7E9102B1B48140925 /* PreferencesManagerTests.swift */; };
+		76D5D1B088372591D2894FB4 /* ReviewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74A77B949EE394F618E548 /* ReviewsWebView.swift */; };
+		7731D89DB0C0A6CCB2DFB323 /* WebViewLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A9E28292304CC40402666 /* WebViewLoginView.swift */; };
+		7784564EAFAE463FA14BA8B0 /* NativeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B201D8DC20AF748C0C135B20 /* NativeDashboardView.swift */; };
+		7788ECB8AD7CC22E8D7DE33A /* NativeSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */; };
+		77F7CBEBE6C6A4EE3DC55BD5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
 		78398425C0451FE6FEDCE018 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */; };
 		78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007A36B143AC6FF95E6D74A /* NetworkClientTests.swift */; };
-		7A05A034E5D3EF8995DEEC45 /* MarketplaceWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D470A4196A71B08C76E612 /* MarketplaceWebView.swift */; };
-		7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F1057243CA8E1618D2D028 /* ForumsWebView.swift */; };
-		7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
-		801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
+		794CDBC5296F725473A4E644 /* HybridDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */; };
+		7DD922467875089F23E3C5AD /* NativeReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6AE4A3A2E89B9A0C79B61C /* NativeReviewsViewModel.swift */; };
 		819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */; };
+		833EB101520540350107C010 /* OfflineHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60593EF271629F9D1284760 /* OfflineHandler.swift */; };
+		8349298236948AC4C3460B44 /* NativeDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C2545DB28896101F28C27 /* NativeDashboardViewModel.swift */; };
+		85E87362555402BDE4A1E32B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119F1528603B1CAB0BE0335 /* OnboardingView.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
-		885F9B4AF9FC51548E2A172F /* NativeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */; };
-		8ADAB45B81156C6AFAE8C0EB /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
-		8C7B66638032D4FCF1177B21 /* NativeLessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */; };
+		87051DF86C46107B3E5FF8C2 /* CSSInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F78692CA66FA238B4824A52 /* CSSInjector.swift */; };
+		87BC1EA46CB3B6C560167FC4 /* NativeRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF94381957891EDD09FB45 /* NativeRootView.swift */; };
+		89AB80035390340E285E1B0F /* OfflineSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */; };
 		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
 		8DBE80200DCCB9E77C124095 /* GreasyForkAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FA1C8094D8E0353CCA9D9 /* GreasyForkAPITests.swift */; };
+		8FA9048191BFF86DBA52ED88 /* MarketplaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */; };
 		8FC4B97378BE262EF475B736 /* WaniKaniUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */; };
+		8FF03E856A2B5E55BD8A4375 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */; };
+		90015FA0A428AEDC36E8C6B3 /* ReviewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74A77B949EE394F618E548 /* ReviewsWebView.swift */; };
 		914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */; };
-		9800164761AD06A2F4815733 /* NativeStatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4546BEF441C0DEB0E142C6 /* NativeStatisticsViewModel.swift */; };
-		982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
-		99033C418EFC604074CACCFA /* NativeDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C2545DB28896101F28C27 /* NativeDashboardViewModel.swift */; };
+		92D576B096255E31D2FE0A26 /* LoginWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB71ADC8F00B48D875926F /* LoginWebView.swift */; };
+		93C53C1F480A69E1C0394AEF /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
+		9427B7F9CB9AEED5AF3052B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
+		958CBB09C2F8A8316CE5E508 /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
+		97FF29BB211653F028DFFCBE /* APITokenEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65629DEC3E41083BDA46B4DD /* APITokenEntryView.swift */; };
+		99BA7309F4D7CC4B8206F2C7 /* NativeStatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4546BEF441C0DEB0E142C6 /* NativeStatisticsViewModel.swift */; };
+		9A5E227954E6705FD1FF5FDA /* NativeStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */; };
+		9BCB3C351B5C0C9F4E7DDE2B /* NativeLessonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16407EFB1E04CEE5CE83C42 /* NativeLessonsView.swift */; };
 		9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */; };
+		9F6AB57E554C50A86282353C /* StatisticsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E86A0522742F6C5BCB7A11 /* StatisticsWebView.swift */; };
+		A06226878321DAD5C41DA802 /* LessonsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */; };
 		A06834D5DDE76EB8D75BF124 /* WaniKaniAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */; };
+		A17CED95503E9047F2E815FC /* WaniKaniWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B00BF23A16BD7F14025D53C /* WaniKaniWebView.swift */; };
+		A3D60C08442920613BC2FDE7 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B66D03EE521ABBC521F7A8 /* WebViewController.swift */; };
+		A5D53AED74802E76C9B2B5BC /* NativeStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A30FE4882A84AA9F44ECC5 /* NativeStatisticsView.swift */; };
+		A6B15E4B17B908307CA51C36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
 		A798CC9D951A1D5085985846 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973EF16359BE0063AECEA7DC /* NetworkError.swift */; };
-		A7E0489476C8CEFE8880CD61 /* CSSInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F78692CA66FA238B4824A52 /* CSSInjector.swift */; };
-		ACAE59F9B548F5F6F8E56307 /* WebViewLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A9E28292304CC40402666 /* WebViewLoginView.swift */; };
+		AA7974859E65E80360EC265B /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
+		AB6B7E0F76341B17775205CA /* LoginWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB71ADC8F00B48D875926F /* LoginWebView.swift */; };
 		AEBDD9890BA56619C79865C8 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EECBB26946967C5798AD6C /* KeychainWrapperTests.swift */; };
+		AEBFD6E8BF1D53E931EAFBD8 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */; };
 		B0D4F8FAD0D3168FFC1DABE1 /* DeepLinkRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */; };
 		B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310F771771E7F6E44819753 /* UserTests.swift */; };
+		B3048ACBA940F7EC159CE8E1 /* OfflineHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60593EF271629F9D1284760 /* OfflineHandler.swift */; };
 		B3A7BC072BE1E468DA86140E /* WaniKaniAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1751183FAAD9475100813A /* WaniKaniAPI.swift */; };
+		B59D74FC6C6B8F23F416E485 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
 		B94A025A4C24AA8A7AC3AE92 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C78E07F1058BCDB2C3AA285 /* User.swift */; };
 		B9A64D3716F7AF0EE1845FB9 /* SyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B4C75BCE9C9C0302C96C0 /* SyncManagerTests.swift */; };
-		C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
-		C07B7F59E21A73C7BC423730 /* NativeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B201D8DC20AF748C0C135B20 /* NativeDashboardView.swift */; };
+		BBA2D9CDD901A0FF091B82A1 /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BDE161003E5268F10AE69F12 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		C25603A37BCA6F1FCC2CD0A9 /* LoginWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB71ADC8F00B48D875926F /* LoginWebView.swift */; };
 		C66299A18ACF0FEE041ADE19 /* WaniKaniTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */; };
-		D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74A77B949EE394F618E548 /* ReviewsWebView.swift */; };
+		C729D999DD6A47F5195F9C30 /* CSSInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F78692CA66FA238B4824A52 /* CSSInjector.swift */; };
+		CB1042160B6238DAAB0FC025 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5870BD49703DACC1F56DDE /* ContentView.swift */; };
+		CB3AF9CCD50F45B700A35922 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B66D03EE521ABBC521F7A8 /* WebViewController.swift */; };
+		CC5F0D612EBAD821A2946F09 /* WaniKaniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6CA3E69475A9B0B9E256BE /* WaniKaniApp.swift */; };
+		CD355CFC0A6C49380960BF3F /* OfflineSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2411BEBC9F00891FFBB6A420 /* OfflineSyncView.swift */; };
+		D0AC2E869B2F33316CC42D70 /* WaniKaniWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B00BF23A16BD7F14025D53C /* WaniKaniWebView.swift */; };
+		D4112C304923C64A5CF14AF0 /* NativeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */; };
+		D4D4F835DE1DF5DE616B8970 /* NativeSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */; };
 		D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
-		D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2E8010099C7DA06CF5EA30B /* Assets.xcassets */; };
+		D6D3A8C49A338712A423F104 /* NativeLessonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16407EFB1E04CEE5CE83C42 /* NativeLessonsView.swift */; };
 		D9EBD0E1EE60A14930DD868D /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607E13A815A2DC983288E670 /* SyncManager.swift */; };
+		DB08B5DA434892DDD8EF4873 /* WebViewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4D66C0006F686B9785C6EC /* WebViewRootView.swift */; };
+		DB5478BCDA4056D9F434C319 /* NativeReviewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0525B3F1A77B7596C91114 /* NativeReviewsView.swift */; };
+		DB88231E5AE8D9F1FF0FD132 /* NativeRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF94381957891EDD09FB45 /* NativeRootView.swift */; };
+		DC7C0E51F77F7E606C946A2A /* NativeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */; };
+		DDBAB27B91E08BFF923678A5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB802A3658E4076386B8FB09 /* AppState.swift */; };
 		DE0ECB34BFEC1E2BBED42812 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24DA6594C99BE17AE635C0 /* AuthenticationManagerTests.swift */; };
-		DE86FBB26BE2ACD5A80B9BFB /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B66D03EE521ABBC521F7A8 /* WebViewController.swift */; };
 		DEF9D30EA840667D4AB9A39E /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6310E23B9F214167F2C42502 /* Endpoint.swift */; };
 		DFD59028B1CC0550E7FEA957 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD273EE40854880F59E7F2 /* PreferencesManager.swift */; };
+		E2B6C5DB81924F94B70879FE /* WaniKaniCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E31943FA49E704690EF9E734 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F703A95AAA1F7263A1E8B /* NetworkClient.swift */; };
+		E3C92957586E31F4FE7CF7B8 /* CSSInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F78692CA66FA238B4824A52 /* CSSInjector.swift */; };
 		E49AE0068CD7A2923FBE6E81 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEDBCB2FC6681878AA3727C /* PersistenceManager.swift */; };
-		E9584A5100D6B5DB012225C5 /* WaniKaniWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B00BF23A16BD7F14025D53C /* WaniKaniWebView.swift */; };
+		E66FBB252EC9745C3686E0F9 /* LessonsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */; };
+		E7321C147DB78C58088E5B62 /* NativeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */; };
+		E8C76CACE7A5DCB18C62A184 /* NativeLessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */; };
 		EAD8415850FF278BF6B704CA /* WaniKaniCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7268CCF844CD915CD4ED7769 /* WaniKaniCore.swift */; };
-		EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC59D9A98E9AEFA046E3381 /* LessonsWebView.swift */; };
-		F951F586F4552ACE089F94F4 /* NativeLessonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16407EFB1E04CEE5CE83C42 /* NativeLessonsView.swift */; };
+		F0268EAB46B23BD769F9DFB7 /* NativeReviewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0525B3F1A77B7596C91114 /* NativeReviewsView.swift */; };
+		F6FF3711C704C5A8E7378095 /* HybridRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD23812885E8248B886DB26D /* HybridRootView.swift */; };
 		F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAE9CE51B6340B5C445C88 /* ResourceEnvelopeTests.swift */; };
+		FBAFE8730E6228313B87D7EB /* DashboardWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E272CAE29890130A6B01A45F /* DashboardWebView.swift */; };
 		FC43E640F3E8E504BC349141 /* URLSessionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */; };
-		FE2744981808FDEB2A47F30F /* NativeReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6AE4A3A2E89B9A0C79B61C /* NativeReviewsViewModel.swift */; };
-		FF2EFB3ECA9F35BCA2FBCF11 /* HybridDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D98D767ED5E8E252796CD91 /* HybridDashboardView.swift */; };
+		FD097D090522A790389FA5B8 /* ScriptInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F4AD9FD4A228F7582F3FA0 /* ScriptInjector.swift */; };
+		FE7314ECF686A4AD9AD45F9F /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34F977074FFEE960651489B /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		589F6FE114CAE78E55C01613 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A5535FF14D63EE871C207965;
-			remoteInfo = WaniKani;
-		};
 		72CB920FD71559663D390F33 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
@@ -109,30 +183,51 @@
 			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
 			remoteInfo = WaniKaniCore;
 		};
-		D39A95C89454D0D1B4353B76 /* PBXContainerItemProxy */ = {
+		77C38E56B60CBDE31C5E12CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
 			remoteInfo = WaniKaniCore;
 		};
-		F1CF3292561C93C4BE223D56 /* PBXContainerItemProxy */ = {
+		7E9A353DF8380AACD766CDEE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A5535FF14D63EE871C207965;
-			remoteInfo = WaniKani;
+			remoteGlobalIDString = 992B9FAB2B4AD9EC5EC56AF2;
+			remoteInfo = WaniKaniNative;
+		};
+		97595AF673BF909EBD9FC8B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
+			remoteInfo = WaniKaniCore;
+		};
+		9C3CEAB33A817B9467917DB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F66DF82C7213FC06E2CE5BF9;
+			remoteInfo = WaniKaniCore;
+		};
+		AA6101EC9C62D149633E0228 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9527F3F7C43C8593E12ECAD8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 992B9FAB2B4AD9EC5EC56AF2;
+			remoteInfo = WaniKaniNative;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A6AFB3CCD05D152720AED1E4 /* Embed Frameworks */ = {
+		5F1150E4167002F11544211B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7D92408426AF191D6CCD3B71 /* WaniKaniCore.framework in Embed Frameworks */,
+				17AEC6D24BD3C0080BAE774D /* WaniKaniCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,6 +239,28 @@
 			dstSubfolderSpec = 10;
 			files = (
 				47FAA2C53AD5F6CA2A295541 /* WaniKaniCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E564F4ACEAAAB652A23C64F6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E2B6C5DB81924F94B70879FE /* WaniKaniCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDE0D6C53B244B54EE217C14 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BBA2D9CDD901A0FF091B82A1 /* WaniKaniCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,13 +292,14 @@
 		30CE9A0CBB310CF095BEF74B /* WaniKaniTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniTests.swift; sourceTree = "<group>"; };
 		3310F771771E7F6E44819753 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		3C78E07F1058BCDB2C3AA285 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3D63C8B4825DFE5968DC3150 /* WaniKaniHybrid.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKaniHybrid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E4546BEF441C0DEB0E142C6 /* NativeStatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeStatisticsViewModel.swift; sourceTree = "<group>"; };
-		42034E5769A63BFA5473A50D /* WaniKani.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKani.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42B66D03EE521ABBC521F7A8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4FEF94381957891EDD09FB45 /* NativeRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRootView.swift; sourceTree = "<group>"; };
 		570F703A95AAA1F7263A1E8B /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		5BE02C62E9A96681F536AE68 /* NativeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsView.swift; sourceTree = "<group>"; };
+		5E0D42DC6934573A722D4788 /* WaniKaniNative.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKaniNative.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607E13A815A2DC983288E670 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		6119F1528603B1CAB0BE0335 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		613FAD1EF7DA1ABFEFC3E285 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
@@ -229,7 +347,9 @@
 		B5F953B9A2DADEDFBEE63D92 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B85495123BEE1AFB4B837150 /* NativeSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsViewModel.swift; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		BA1C4DA473F3AD1A4925FF1F /* NativeLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeLoginView.swift; sourceTree = "<group>"; };
 		BA2D6E4636DEFB6764F03121 /* MarketplaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewModel.swift; sourceTree = "<group>"; };
+		BABDC9F657948E21E1455156 /* WaniKaniWebView.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKaniWebView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouterTests.swift; sourceTree = "<group>"; };
 		BCECADA522B0B99665C4C566 /* NativeLessonsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeLessonsViewModel.swift; sourceTree = "<group>"; };
 		BDFF8C9624FE1F89A58A560D /* URLSessionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionNetworkClient.swift; sourceTree = "<group>"; };
@@ -262,6 +382,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4355CC32AF2BC01C6E7576E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A3C161FCC1BEE8704E49207 /* WaniKaniCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		751E847331C34C6076106EAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BDE161003E5268F10AE69F12 /* WaniKaniCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		81C36A0246774F6C9F05E256 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,11 +406,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EE3D821AAA1A43E7F39D41D2 /* Frameworks */ = {
+		C8DC3C2BB2309EA21AFC9F85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */,
+				07630E97A195994A7AB406EA /* WaniKaniCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,10 +472,12 @@
 		17C7B8F5CD7AB1CD6BB84D50 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42034E5769A63BFA5473A50D /* WaniKani.app */,
 				DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */,
+				3D63C8B4825DFE5968DC3150 /* WaniKaniHybrid.app */,
+				5E0D42DC6934573A722D4788 /* WaniKaniNative.app */,
 				0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */,
 				6D18D45A3F2D34F65AE368FF /* WaniKaniUITests.xctest */,
+				BABDC9F657948E21E1455156 /* WaniKaniWebView.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -579,6 +717,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		8E226B687031DCAB2B424C53 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				BA1C4DA473F3AD1A4925FF1F /* NativeLoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		9E05705BC34455C699B8890D /* PersistenceTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -662,6 +808,7 @@
 			isa = PBXGroup;
 			children = (
 				4FEF94381957891EDD09FB45 /* NativeRootView.swift */,
+				8E226B687031DCAB2B424C53 /* Auth */,
 				FF384A10C11DAF66E74A0164 /* Dashboard */,
 				63013DC2D1913A0D560B3A79 /* Lessons */,
 				C884F1D72415F466ABD4128F /* Reviews */,
@@ -846,6 +993,69 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6D1ED4FBA5089BBFC57EE503 /* WaniKaniHybrid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20F49FC442765F572D0C6901 /* Build configuration list for PBXNativeTarget "WaniKaniHybrid" */;
+			buildPhases = (
+				48EAED9824853E4EF16873D0 /* Sources */,
+				5DAC775B9E0869F13E843F29 /* Resources */,
+				C8DC3C2BB2309EA21AFC9F85 /* Frameworks */,
+				FDE0D6C53B244B54EE217C14 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A4F52BE9EB9E74FE99DB2594 /* PBXTargetDependency */,
+			);
+			name = WaniKaniHybrid;
+			packageProductDependencies = (
+			);
+			productName = WaniKaniHybrid;
+			productReference = 3D63C8B4825DFE5968DC3150 /* WaniKaniHybrid.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7D893ECE7975B22B2961B302 /* WaniKaniWebView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02C4539E5A942FF94E35C010 /* Build configuration list for PBXNativeTarget "WaniKaniWebView" */;
+			buildPhases = (
+				5E06E0FF3DC82C501B3F7075 /* Sources */,
+				0391843408DB975F299E276F /* Resources */,
+				751E847331C34C6076106EAC /* Frameworks */,
+				E564F4ACEAAAB652A23C64F6 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB1324A79C31038D11231C38 /* PBXTargetDependency */,
+			);
+			name = WaniKaniWebView;
+			packageProductDependencies = (
+			);
+			productName = WaniKaniWebView;
+			productReference = BABDC9F657948E21E1455156 /* WaniKaniWebView.app */;
+			productType = "com.apple.product-type.application";
+		};
+		992B9FAB2B4AD9EC5EC56AF2 /* WaniKaniNative */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A24C14FDA20E66E8E937D4A /* Build configuration list for PBXNativeTarget "WaniKaniNative" */;
+			buildPhases = (
+				3ACA66999CDC711B2D1F4860 /* Sources */,
+				3B5712BDBA11D3C1627FB5EA /* Resources */,
+				4355CC32AF2BC01C6E7576E8 /* Frameworks */,
+				5F1150E4167002F11544211B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95F1F1F40CF7453A264C4C1E /* PBXTargetDependency */,
+			);
+			name = WaniKaniNative;
+			packageProductDependencies = (
+			);
+			productName = WaniKaniNative;
+			productReference = 5E0D42DC6934573A722D4788 /* WaniKaniNative.app */;
+			productType = "com.apple.product-type.application";
+		};
 		9B8B1CA1E244D38CFC81EA0C /* WaniKaniTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 477EABE015B017BA2FAADC5E /* Build configuration list for PBXNativeTarget "WaniKaniTests" */;
@@ -857,7 +1067,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9518A36B35A87F0A09B1B5E4 /* PBXTargetDependency */,
+				C8C75E555859B662B161DED6 /* PBXTargetDependency */,
 				0F4D76CA465E9237CFFD346E /* PBXTargetDependency */,
 			);
 			name = WaniKaniTests;
@@ -866,27 +1076,6 @@
 			productName = WaniKaniTests;
 			productReference = 0A0F5041E5D9908CC90D95DF /* WaniKaniTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		A5535FF14D63EE871C207965 /* WaniKani */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D26F3568B2A058A6CDEB83F2 /* Build configuration list for PBXNativeTarget "WaniKani" */;
-			buildPhases = (
-				D179F19242267CC0003B1391 /* Sources */,
-				41503276440C26F1709182BD /* Resources */,
-				EE3D821AAA1A43E7F39D41D2 /* Frameworks */,
-				A6AFB3CCD05D152720AED1E4 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				60CB5A59E359DCB8922050ED /* PBXTargetDependency */,
-			);
-			name = WaniKani;
-			packageProductDependencies = (
-			);
-			productName = WaniKani;
-			productReference = 42034E5769A63BFA5473A50D /* WaniKani.app */;
-			productType = "com.apple.product-type.application";
 		};
 		EF4E54D87D45D7DF39FAC4E5 /* WaniKaniUITests */ = {
 			isa = PBXNativeTarget;
@@ -897,7 +1086,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A171E822368AF09E6CA069C5 /* PBXTargetDependency */,
+				DC7EF41F8A820362E332131A /* PBXTargetDependency */,
 			);
 			name = WaniKaniUITests;
 			packageProductDependencies = (
@@ -932,8 +1121,30 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					6D1ED4FBA5089BBFC57EE503 = {
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
+					};
+					7D893ECE7975B22B2961B302 = {
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
+					};
+					992B9FAB2B4AD9EC5EC56AF2 = {
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
+					};
+					9B8B1CA1E244D38CFC81EA0C = {
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
+					};
 					EF4E54D87D45D7DF39FAC4E5 = {
-						TestTargetID = A5535FF14D63EE871C207965;
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 992B9FAB2B4AD9EC5EC56AF2;
+					};
+					F66DF82C7213FC06E2CE5BF9 = {
+						DevelopmentTeam = 39YTAJZTZ6;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -951,20 +1162,38 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A5535FF14D63EE871C207965 /* WaniKani */,
 				F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */,
+				6D1ED4FBA5089BBFC57EE503 /* WaniKaniHybrid */,
+				992B9FAB2B4AD9EC5EC56AF2 /* WaniKaniNative */,
 				9B8B1CA1E244D38CFC81EA0C /* WaniKaniTests */,
 				EF4E54D87D45D7DF39FAC4E5 /* WaniKaniUITests */,
+				7D893ECE7975B22B2961B302 /* WaniKaniWebView */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		41503276440C26F1709182BD /* Resources */ = {
+		0391843408DB975F299E276F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D68EE1B794B014E6939C1B32 /* Assets.xcassets in Resources */,
+				0F396D359C4F3FA0720A666B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B5712BDBA11D3C1627FB5EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6B15E4B17B908307CA51C36 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5DAC775B9E0869F13E843F29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9427B7F9CB9AEED5AF3052B5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1036,46 +1265,135 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D179F19242267CC0003B1391 /* Sources */ = {
+		3ACA66999CDC711B2D1F4860 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1317B6714670771C3732D0CD /* APITokenEntryView.swift in Sources */,
-				38FE7DF64EE5AEFF5D8F6026 /* AppState.swift in Sources */,
-				A7E0489476C8CEFE8880CD61 /* CSSInjector.swift in Sources */,
-				2935384119DB6EEDF7BD3081 /* Config.swift in Sources */,
-				682C586E1FF929E8681B42AB /* ContentView.swift in Sources */,
-				24D573A79A4B3430B2439E1C /* DashboardWebView.swift in Sources */,
-				7C1ACE1C9E3AF8BEE8DA8D05 /* ForumsWebView.swift in Sources */,
-				FF2EFB3ECA9F35BCA2FBCF11 /* HybridDashboardView.swift in Sources */,
-				C06A04215C8BD17AD2FFBAF6 /* HybridRootView.swift in Sources */,
-				EBAC7F07F5CC10C8D095DBCE /* LessonsWebView.swift in Sources */,
-				765143DD9112B00AE8133588 /* LoginWebView.swift in Sources */,
-				8ADAB45B81156C6AFAE8C0EB /* MarketplaceViewModel.swift in Sources */,
-				7A05A034E5D3EF8995DEEC45 /* MarketplaceWebView.swift in Sources */,
-				C07B7F59E21A73C7BC423730 /* NativeDashboardView.swift in Sources */,
-				99033C418EFC604074CACCFA /* NativeDashboardViewModel.swift in Sources */,
-				F951F586F4552ACE089F94F4 /* NativeLessonsView.swift in Sources */,
-				8C7B66638032D4FCF1177B21 /* NativeLessonsViewModel.swift in Sources */,
-				4228AF94EA699C228F3F8313 /* NativeReviewsView.swift in Sources */,
-				FE2744981808FDEB2A47F30F /* NativeReviewsViewModel.swift in Sources */,
-				37A470789033246FAB1C6EED /* NativeRootView.swift in Sources */,
-				885F9B4AF9FC51548E2A172F /* NativeSettingsView.swift in Sources */,
-				24F51CFA43823649A99C0CC1 /* NativeSettingsViewModel.swift in Sources */,
-				13921F935FA247EF58950DF3 /* NativeStatisticsView.swift in Sources */,
-				9800164761AD06A2F4815733 /* NativeStatisticsViewModel.swift in Sources */,
-				640DEA3887182A757F8D9058 /* OfflineHandler.swift in Sources */,
-				0EFC71C611995C0BAF0EF2DB /* OfflineSyncView.swift in Sources */,
-				59DA77E058CC556C9AB8B14B /* OnboardingView.swift in Sources */,
-				D1003E7B52DFE17E6A3C6771 /* ReviewsWebView.swift in Sources */,
-				6D0804B66F7904701261021E /* ScriptInjector.swift in Sources */,
-				801BAADA11DD0C00BAC24114 /* StatisticsWebView.swift in Sources */,
-				20393497078F7C31A958C1A6 /* WaniKaniApp.swift in Sources */,
-				E9584A5100D6B5DB012225C5 /* WaniKaniWebView.swift in Sources */,
-				5195D7B88DB57DA56644F93B /* WebViewContainer.swift in Sources */,
-				DE86FBB26BE2ACD5A80B9BFB /* WebViewController.swift in Sources */,
-				ACAE59F9B548F5F6F8E56307 /* WebViewLoginView.swift in Sources */,
-				7FF8F4DAA6E705F8CDEC1171 /* WebViewRootView.swift in Sources */,
+				97FF29BB211653F028DFFCBE /* APITokenEntryView.swift in Sources */,
+				DDBAB27B91E08BFF923678A5 /* AppState.swift in Sources */,
+				E3C92957586E31F4FE7CF7B8 /* CSSInjector.swift in Sources */,
+				48A476B35DAB554547AA9323 /* Config.swift in Sources */,
+				CB1042160B6238DAAB0FC025 /* ContentView.swift in Sources */,
+				FBAFE8730E6228313B87D7EB /* DashboardWebView.swift in Sources */,
+				19D1EAE6E67531A8034AAAD4 /* ForumsWebView.swift in Sources */,
+				6166E2FA5475BA16A5A7212C /* HybridDashboardView.swift in Sources */,
+				090DD17B76ED17FE513930AA /* HybridRootView.swift in Sources */,
+				E66FBB252EC9745C3686E0F9 /* LessonsWebView.swift in Sources */,
+				C25603A37BCA6F1FCC2CD0A9 /* LoginWebView.swift in Sources */,
+				13F3A68F202443C448C9A804 /* MarketplaceViewModel.swift in Sources */,
+				337AAFC20F51B501B090C4E7 /* MarketplaceWebView.swift in Sources */,
+				4C135263F60D0D998A276A18 /* NativeDashboardView.swift in Sources */,
+				2E030CB436B89EA4039FCA65 /* NativeDashboardViewModel.swift in Sources */,
+				D6D3A8C49A338712A423F104 /* NativeLessonsView.swift in Sources */,
+				3DCCD3EE35B99E004E28084A /* NativeLessonsViewModel.swift in Sources */,
+				576781D93239CFE0099D88F9 /* NativeLoginView.swift in Sources */,
+				DB5478BCDA4056D9F434C319 /* NativeReviewsView.swift in Sources */,
+				48E79B2318696FFDC02A7782 /* NativeReviewsViewModel.swift in Sources */,
+				87BC1EA46CB3B6C560167FC4 /* NativeRootView.swift in Sources */,
+				E7321C147DB78C58088E5B62 /* NativeSettingsView.swift in Sources */,
+				1A9E240EEFF40A7EAAA7D07B /* NativeSettingsViewModel.swift in Sources */,
+				A5D53AED74802E76C9B2B5BC /* NativeStatisticsView.swift in Sources */,
+				2567745DDA3E04F44FA4B2DD /* NativeStatisticsViewModel.swift in Sources */,
+				036228CB9C3E61216D7A81C7 /* OfflineHandler.swift in Sources */,
+				CD355CFC0A6C49380960BF3F /* OfflineSyncView.swift in Sources */,
+				5F1B3C6DE77DAE9620730B0F /* OnboardingView.swift in Sources */,
+				71D438172BF4F32251E830FD /* ReviewsWebView.swift in Sources */,
+				1B8089595B05D30E849CEB30 /* ScriptInjector.swift in Sources */,
+				958CBB09C2F8A8316CE5E508 /* StatisticsWebView.swift in Sources */,
+				CC5F0D612EBAD821A2946F09 /* WaniKaniApp.swift in Sources */,
+				1E23F7AC60141C092A598C19 /* WaniKaniWebView.swift in Sources */,
+				AEBFD6E8BF1D53E931EAFBD8 /* WebViewContainer.swift in Sources */,
+				6654929B5189D9BB876C5434 /* WebViewController.swift in Sources */,
+				39EA5D3558E215C14F0856F5 /* WebViewLoginView.swift in Sources */,
+				DB08B5DA434892DDD8EF4873 /* WebViewRootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48EAED9824853E4EF16873D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BD9C584BAA664400DD858A1 /* APITokenEntryView.swift in Sources */,
+				5BBD4F4628075A8DF3188591 /* AppState.swift in Sources */,
+				87051DF86C46107B3E5FF8C2 /* CSSInjector.swift in Sources */,
+				FE7314ECF686A4AD9AD45F9F /* Config.swift in Sources */,
+				77F7CBEBE6C6A4EE3DC55BD5 /* ContentView.swift in Sources */,
+				1DC2C6AA97EF7D140888EC62 /* DashboardWebView.swift in Sources */,
+				4B3E8AB2C7540ECA831E287F /* ForumsWebView.swift in Sources */,
+				794CDBC5296F725473A4E644 /* HybridDashboardView.swift in Sources */,
+				F6FF3711C704C5A8E7378095 /* HybridRootView.swift in Sources */,
+				A06226878321DAD5C41DA802 /* LessonsWebView.swift in Sources */,
+				92D576B096255E31D2FE0A26 /* LoginWebView.swift in Sources */,
+				036F7139AACF3C96A8F186C6 /* MarketplaceViewModel.swift in Sources */,
+				0FA9FC50C60C7952E03C921C /* MarketplaceWebView.swift in Sources */,
+				7784564EAFAE463FA14BA8B0 /* NativeDashboardView.swift in Sources */,
+				3E32DE9167A7EA0CD4E7A1DC /* NativeDashboardViewModel.swift in Sources */,
+				9BCB3C351B5C0C9F4E7DDE2B /* NativeLessonsView.swift in Sources */,
+				E8C76CACE7A5DCB18C62A184 /* NativeLessonsViewModel.swift in Sources */,
+				2FD239746BDDE9C4279DFAF5 /* NativeLoginView.swift in Sources */,
+				2BD01155351F078D448E6F89 /* NativeReviewsView.swift in Sources */,
+				73470DE5B23F7AAF2085A45B /* NativeReviewsViewModel.swift in Sources */,
+				6AEB884D8743D1327F5D6C44 /* NativeRootView.swift in Sources */,
+				D4112C304923C64A5CF14AF0 /* NativeSettingsView.swift in Sources */,
+				7788ECB8AD7CC22E8D7DE33A /* NativeSettingsViewModel.swift in Sources */,
+				456C047FA90017DC68E5E672 /* NativeStatisticsView.swift in Sources */,
+				99BA7309F4D7CC4B8206F2C7 /* NativeStatisticsViewModel.swift in Sources */,
+				B3048ACBA940F7EC159CE8E1 /* OfflineHandler.swift in Sources */,
+				304F9446E6BAA5DB3E093E82 /* OfflineSyncView.swift in Sources */,
+				85E87362555402BDE4A1E32B /* OnboardingView.swift in Sources */,
+				90015FA0A428AEDC36E8C6B3 /* ReviewsWebView.swift in Sources */,
+				1BA6CFDEC4EC1D8D0C555471 /* ScriptInjector.swift in Sources */,
+				5657B3D844C17450D0BDCD9D /* StatisticsWebView.swift in Sources */,
+				51148AD3F6764004F8500B12 /* WaniKaniApp.swift in Sources */,
+				D0AC2E869B2F33316CC42D70 /* WaniKaniWebView.swift in Sources */,
+				8FF03E856A2B5E55BD8A4375 /* WebViewContainer.swift in Sources */,
+				CB3AF9CCD50F45B700A35922 /* WebViewController.swift in Sources */,
+				7731D89DB0C0A6CCB2DFB323 /* WebViewLoginView.swift in Sources */,
+				B59D74FC6C6B8F23F416E485 /* WebViewRootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5E06E0FF3DC82C501B3F7075 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AD881745DCA7668F4AD6BF1 /* APITokenEntryView.swift in Sources */,
+				22A29A5CEA5A0E80D63FE69E /* AppState.swift in Sources */,
+				C729D999DD6A47F5195F9C30 /* CSSInjector.swift in Sources */,
+				43D3DE545CEF540E1FC42A5D /* Config.swift in Sources */,
+				0D8AA32D57E8683D2F5F59AD /* ContentView.swift in Sources */,
+				58BA6E58475CA5AAED3A0B1A /* DashboardWebView.swift in Sources */,
+				2F8FA292A9A4F6591FB99F98 /* ForumsWebView.swift in Sources */,
+				5556A9F73B18A58B87397A5B /* HybridDashboardView.swift in Sources */,
+				93C53C1F480A69E1C0394AEF /* HybridRootView.swift in Sources */,
+				722A4B2F0442D7E64910C8A5 /* LessonsWebView.swift in Sources */,
+				AB6B7E0F76341B17775205CA /* LoginWebView.swift in Sources */,
+				8FA9048191BFF86DBA52ED88 /* MarketplaceViewModel.swift in Sources */,
+				1DCE8AB8C6E5F09FAC5E127D /* MarketplaceWebView.swift in Sources */,
+				635C8D005E7C7E4BCD8F76C8 /* NativeDashboardView.swift in Sources */,
+				8349298236948AC4C3460B44 /* NativeDashboardViewModel.swift in Sources */,
+				4A40DBA423595C3BACD6425B /* NativeLessonsView.swift in Sources */,
+				19DF7A8EA98FA74ACEDDFDB0 /* NativeLessonsViewModel.swift in Sources */,
+				01E72A7ACF3A76ABD4C2513E /* NativeLoginView.swift in Sources */,
+				F0268EAB46B23BD769F9DFB7 /* NativeReviewsView.swift in Sources */,
+				7DD922467875089F23E3C5AD /* NativeReviewsViewModel.swift in Sources */,
+				DB88231E5AE8D9F1FF0FD132 /* NativeRootView.swift in Sources */,
+				DC7C0E51F77F7E606C946A2A /* NativeSettingsView.swift in Sources */,
+				D4D4F835DE1DF5DE616B8970 /* NativeSettingsViewModel.swift in Sources */,
+				9A5E227954E6705FD1FF5FDA /* NativeStatisticsView.swift in Sources */,
+				41F4253F8D3E66ED7777739A /* NativeStatisticsViewModel.swift in Sources */,
+				833EB101520540350107C010 /* OfflineHandler.swift in Sources */,
+				89AB80035390340E285E1B0F /* OfflineSyncView.swift in Sources */,
+				060A43260402A662A8CDF7B2 /* OnboardingView.swift in Sources */,
+				76D5D1B088372591D2894FB4 /* ReviewsWebView.swift in Sources */,
+				FD097D090522A790389FA5B8 /* ScriptInjector.swift in Sources */,
+				9F6AB57E554C50A86282353C /* StatisticsWebView.swift in Sources */,
+				AA7974859E65E80360EC265B /* WaniKaniApp.swift in Sources */,
+				A17CED95503E9047F2E815FC /* WaniKaniWebView.swift in Sources */,
+				6524D68B0EDA52CC4571F86B /* WebViewContainer.swift in Sources */,
+				A3D60C08442920613BC2FDE7 /* WebViewController.swift in Sources */,
+				4E3B2A2DE7EBB5561428503B /* WebViewLoginView.swift in Sources */,
+				6A63A48D1EC1566E76E057AF /* WebViewRootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1087,28 +1405,176 @@
 			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
 			targetProxy = 72CB920FD71559663D390F33 /* PBXContainerItemProxy */;
 		};
-		60CB5A59E359DCB8922050ED /* PBXTargetDependency */ = {
+		95F1F1F40CF7453A264C4C1E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
-			targetProxy = D39A95C89454D0D1B4353B76 /* PBXContainerItemProxy */;
+			targetProxy = 77C38E56B60CBDE31C5E12CD /* PBXContainerItemProxy */;
 		};
-		9518A36B35A87F0A09B1B5E4 /* PBXTargetDependency */ = {
+		A4F52BE9EB9E74FE99DB2594 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A5535FF14D63EE871C207965 /* WaniKani */;
-			targetProxy = 589F6FE114CAE78E55C01613 /* PBXContainerItemProxy */;
+			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
+			targetProxy = 9C3CEAB33A817B9467917DB8 /* PBXContainerItemProxy */;
 		};
-		A171E822368AF09E6CA069C5 /* PBXTargetDependency */ = {
+		C8C75E555859B662B161DED6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A5535FF14D63EE871C207965 /* WaniKani */;
-			targetProxy = F1CF3292561C93C4BE223D56 /* PBXContainerItemProxy */;
+			target = 992B9FAB2B4AD9EC5EC56AF2 /* WaniKaniNative */;
+			targetProxy = AA6101EC9C62D149633E0228 /* PBXContainerItemProxy */;
+		};
+		CB1324A79C31038D11231C38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F66DF82C7213FC06E2CE5BF9 /* WaniKaniCore */;
+			targetProxy = 97595AF673BF909EBD9FC8B7 /* PBXContainerItemProxy */;
+		};
+		DC7EF41F8A820362E332131A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 992B9FAB2B4AD9EC5EC56AF2 /* WaniKaniNative */;
+			targetProxy = 7E9A353DF8380AACD766CDEE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		070C5207CC0344E81C7D15AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.native;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		29AA8A9CF4D0089BC2A6FB5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.hybrid;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3226771889AD7E8210FDE50D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.webview;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3306EB4A277BF54DFF2F67D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.native;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		60EABAA5754470B19D23D23C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1119,7 +1585,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.uitests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = WaniKani;
+				TEST_TARGET_NAME = WaniKaniNative;
 			};
 			name = Release;
 		};
@@ -1127,11 +1593,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1148,33 +1618,12 @@
 			};
 			name = Debug;
 		};
-		6B8D8E24DA1070AD0ED7F556 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_GENERATION_MODE = GeneratedFile;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		6C4BC62F058E4FE28BC3DE74 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1185,7 +1634,41 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKaniNative.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKaniNative";
+			};
+			name = Release;
+		};
+		6E10317627AE1BDAD262A8EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.hybrid;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1193,6 +1676,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1203,7 +1688,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.uitests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = WaniKani;
+				TEST_TARGET_NAME = WaniKaniNative;
 			};
 			name = Debug;
 		};
@@ -1211,11 +1696,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1232,10 +1721,46 @@
 			};
 			name = Release;
 		};
+		874A5AD8CA0811702099AEC0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.webview;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		B53EBF552FD4A2A03E9AA184 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 39YTAJZTZ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1246,7 +1771,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKaniNative.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKaniNative";
 			};
 			name = Debug;
 		};
@@ -1369,37 +1894,41 @@
 			};
 			name = Debug;
 		};
-		F50449F9304501ACA022E65D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_GENERATION_MODE = GeneratedFile;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		02C4539E5A942FF94E35C010 /* Build configuration list for PBXNativeTarget "WaniKaniWebView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				874A5AD8CA0811702099AEC0 /* Debug */,
+				3226771889AD7E8210FDE50D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		20F49FC442765F572D0C6901 /* Build configuration list for PBXNativeTarget "WaniKaniHybrid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29AA8A9CF4D0089BC2A6FB5A /* Debug */,
+				6E10317627AE1BDAD262A8EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		477EABE015B017BA2FAADC5E /* Build configuration list for PBXNativeTarget "WaniKaniTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B53EBF552FD4A2A03E9AA184 /* Debug */,
 				6C4BC62F058E4FE28BC3DE74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5A24C14FDA20E66E8E937D4A /* Build configuration list for PBXNativeTarget "WaniKaniNative" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070C5207CC0344E81C7D15AD /* Debug */,
+				3306EB4A277BF54DFF2F67D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1418,15 +1947,6 @@
 			buildConfigurations = (
 				62C537E274F36941FE346F08 /* Debug */,
 				7BA614326B4DA4EDD81BC36A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		D26F3568B2A058A6CDEB83F2 /* Build configuration list for PBXNativeTarget "WaniKani" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F50449F9304501ACA022E65D /* Debug */,
-				6B8D8E24DA1070AD0ED7F556 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

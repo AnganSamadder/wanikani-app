@@ -8,7 +8,7 @@ public actor SyncManager {
     
     public init(
         api: WaniKaniAPI,
-        persistence: PersistenceManager = .shared,
+        persistence: PersistenceManager,
         preferences: PreferencesManager = PreferencesManager()
     ) {
         self.api = api

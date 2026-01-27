@@ -2,7 +2,7 @@ import SwiftUI
 import WaniKaniCore
 
 struct NativeDashboardView: View {
-    @StateObject private var viewModel = NativeDashboardViewModel()
+    @StateObject private var viewModel = NativeDashboardViewModel(persistence: .shared)
     
     var body: some View {
         ScrollView {

@@ -8,9 +8,8 @@ struct WebViewContainer: UIViewControllerRepresentable {
     @Binding var canGoForward: Bool
     
     func makeUIViewController(context: Context) -> WebViewController {
-        let vc = WebViewController()
+        let vc = WebViewController(url: url)
         vc.delegate = context.coordinator
-        vc.load(url: url)
         return vc
     }
     

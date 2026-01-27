@@ -8,7 +8,7 @@ class NativeStatisticsViewModel: ObservableObject {
     
     private let persistence: PersistenceManager
     
-    init(persistence: PersistenceManager = .shared) {
+    init(persistence: PersistenceManager) {
         self.persistence = persistence
         loadStats()
     }

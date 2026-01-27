@@ -10,16 +10,32 @@ protocol WebViewControllerDelegate: AnyObject {
 final class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     var webView: WKWebView!
     weak var delegate: WebViewControllerDelegate?
+    private let configuration: WKWebViewConfiguration
+    private let url: URL
+    
+    init(url: URL, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
+        self.url = url
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
-        let config = WKWebViewConfiguration()
-        config.applicationNameForUserAgent = "WaniKani iOS/1.0"
+        configuration.applicationNameForUserAgent = "WaniKani iOS/1.0"
         
-        webView = WKWebView(frame: .zero, configuration: config)
+        webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
         view = webView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        load(url: url)
     }
     
     func load(url: URL) {

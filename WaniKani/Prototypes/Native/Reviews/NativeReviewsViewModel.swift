@@ -23,7 +23,7 @@ class NativeReviewsViewModel: ObservableObject {
     private let srsStateMachine: SRSStateMachine
     
     // For MVP: Fetch from persistence
-    init(persistence: PersistenceManager = .shared, srsStateMachine: SRSStateMachine = SRSStateMachine()) {
+    init(persistence: PersistenceManager, srsStateMachine: SRSStateMachine = SRSStateMachine()) {
         self.persistence = persistence
         self.srsStateMachine = srsStateMachine
         loadReviews()

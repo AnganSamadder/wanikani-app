@@ -13,7 +13,19 @@ class AppState: ObservableObject {
     }
     
     var prototypeMode: PrototypeMode {
-        let mode = ProcessInfo.processInfo.environment["PROTOTYPE_MODE"] ?? "webview"
-        return PrototypeMode(rawValue: mode) ?? .webview
+        // 1. Prefer Environment Variable (Xcode Scheme)
+        if let mode = ProcessInfo.processInfo.environment["PROTOTYPE_MODE"],
+           let proto = PrototypeMode(rawValue: mode) {
+            return proto
+        }
+        
+        // 2. Fallback to Bundle ID (Standalone App)
+        let bundleID = Bundle.main.bundleIdentifier?.lowercased() ?? ""
+        if bundleID.contains(".native") { return .native }
+        if bundleID.contains(".hybrid") { return .hybrid }
+        if bundleID.contains(".webview") { return .webview }
+        
+        // 3. Default
+        return .webview
     }
 }

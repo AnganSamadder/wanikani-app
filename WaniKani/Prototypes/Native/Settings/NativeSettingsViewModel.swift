@@ -9,10 +9,13 @@ class NativeSettingsViewModel: ObservableObject {
     private let preferences: PreferencesManager
     private let syncManager: SyncManager
     
-    init(preferences: PreferencesManager = PreferencesManager()) {
+    init(persistence: PersistenceManager, preferences: PreferencesManager = PreferencesManager()) {
         self.preferences = preferences
         // Stub SyncManager
-        self.syncManager = SyncManager(api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""))
+        self.syncManager = SyncManager(
+            api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""),
+            persistence: persistence
+        )
         self.lastSyncDate = preferences.lastSyncDate
     }
     

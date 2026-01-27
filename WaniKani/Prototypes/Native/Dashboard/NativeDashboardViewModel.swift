@@ -12,11 +12,14 @@ class NativeDashboardViewModel: ObservableObject {
     
     // For MVP, we'll initialize SyncManager internally if not provided, 
     // but ideally it should be injected. For now we can assume shared/default.
-    init(persistence: PersistenceManager = .shared) {
+    init(persistence: PersistenceManager) {
         self.persistence = persistence
         // Stub sync manager for now until we have dependency injection or singleton
         // In real app, SyncManager should be shared
-        self.syncManager = SyncManager(api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: "")) 
+        self.syncManager = SyncManager(
+            api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""),
+            persistence: persistence
+        ) 
         // Logic fix: SyncManager init requires API token which we don't have easily here.
         // Better: Fetch purely from persistence for now, trigger sync elsewhere.
         

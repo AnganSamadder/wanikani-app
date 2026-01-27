@@ -2,7 +2,7 @@ import SwiftUI
 import WaniKaniCore
 
 struct HybridDashboardView: View {
-    @StateObject private var viewModel = NativeDashboardViewModel()
+    @StateObject private var viewModel = NativeDashboardViewModel(persistence: .shared)
     
     var body: some View {
         VStack(spacing: 0) {
