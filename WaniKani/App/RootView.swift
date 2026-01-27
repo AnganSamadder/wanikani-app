@@ -1,7 +1,7 @@
 import SwiftUI
 import WaniKaniCore
 
-struct NativeRootView: View {
+struct RootView: View {
     @StateObject private var authManager = AuthenticationManager.shared
     
     #if os(iOS)
@@ -13,7 +13,7 @@ struct NativeRootView: View {
             if authManager.isAuthenticated {
                 content
             } else {
-                NativeLoginView()
+                LoginView()
             }
         }
     }

@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct NativeSettingsView: View {
-    @StateObject private var viewModel = NativeSettingsViewModel(persistence: .shared)
+struct SettingsView: View {
+    @StateObject private var viewModel = SettingsViewModel(persistence: .shared)
     
     var body: some View {
         Form {

@@ -2,7 +2,7 @@ import SwiftUI
 import WaniKaniCore
 
 @MainActor
-class NativeDashboardViewModel: ObservableObject {
+class DashboardViewModel: ObservableObject {
     @Published var user: User?
     @Published var summary: Summary?
     @Published var isLoading = false

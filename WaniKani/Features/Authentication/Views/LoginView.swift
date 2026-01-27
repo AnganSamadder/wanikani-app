@@ -1,7 +1,7 @@
 import SwiftUI
 import WaniKaniCore
 
-struct NativeLoginView: View {
+struct LoginView: View {
     @State private var apiToken: String = ""
     @State private var errorMessage: String?
     @FocusState private var isFocused: Bool
@@ -121,5 +121,5 @@ struct NativeLoginView: View {
 }
 
 #Preview {
-    NativeLoginView()
+    LoginView()
 }

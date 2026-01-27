@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OfflineSyncView: View {
-    @ObservedObject var viewModel: NativeSettingsViewModel
+    @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
         List {

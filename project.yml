@@ -11,68 +11,17 @@ configs:
   Release: release
 
 targets:
-  WaniKaniWebView:
+  WaniKani:
     type: application
     platform: iOS
     sources:
-      - WaniKani
+      - WaniKani/Features
+      - WaniKani/App
     dependencies:
       - target: WaniKaniCore
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.webview
-        INFOPLIST_GENERATION_MODE: GeneratedFile
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
-        SWIFT_EMIT_LOC_STRINGS: YES
-        STRING_CATALOG_GENERATE_SYMBOLS: YES
-        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        ENABLE_PREVIEWS: YES
-        CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "39YTAJZTZ6"
-        ENABLE_USER_SCRIPT_SANDBOXING: YES
-
-  WaniKaniNative:
-    type: application
-    platform: iOS
-    sources:
-      - WaniKani
-    dependencies:
-      - target: WaniKaniCore
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.native
-        INFOPLIST_GENERATION_MODE: GeneratedFile
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
-        SWIFT_EMIT_LOC_STRINGS: YES
-        STRING_CATALOG_GENERATE_SYMBOLS: YES
-        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        ENABLE_PREVIEWS: YES
-        CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "39YTAJZTZ6"
-        ENABLE_USER_SCRIPT_SANDBOXING: YES
-
-  WaniKaniHybrid:
-    type: application
-    platform: iOS
-    sources:
-      - WaniKani
-    dependencies:
-      - target: WaniKaniCore
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.hybrid
+        PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani
         INFOPLIST_GENERATION_MODE: GeneratedFile
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -114,14 +63,14 @@ targets:
     sources:
       - WaniKaniTests
     dependencies:
-      - target: WaniKaniNative # Default to native for testing host
+      - target: WaniKani
       - target: WaniKaniCore
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.tests
         INFOPLIST_GENERATION_MODE: GeneratedFile
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/WaniKaniNative.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKaniNative"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani"
         BUNDLE_LOADER: "$(TEST_HOST)"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "39YTAJZTZ6"
@@ -132,76 +81,24 @@ targets:
     sources:
       - WaniKaniUITests
     dependencies:
-      - target: WaniKaniNative
+      - target: WaniKani
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.uitests
         INFOPLIST_GENERATION_MODE: GeneratedFile
         GENERATE_INFOPLIST_FILE: YES
-        TEST_TARGET_NAME: WaniKaniNative
+        TEST_TARGET_NAME: WaniKani
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "39YTAJZTZ6"
 
 schemes:
-  WaniKani-WebView:
+  WaniKani:
     build:
       targets:
-        WaniKaniWebView: all
+        WaniKani: all
         WaniKaniCore: [run, test]
     run:
       config: Debug
-      environmentVariables:
-        - variable: PROTOTYPE_MODE
-          value: webview
-          isEnabled: true
-    test:
-      config: Debug
-      gatherCoverageData: true
-      targets:
-        - WaniKaniTests
-        - WaniKaniUITests
-    profile:
-      config: Release
-    analyze:
-      config: Debug
-    archive:
-      config: Release
-
-  WaniKani-Native:
-    build:
-      targets:
-        WaniKaniNative: all
-        WaniKaniCore: [run, test]
-    run:
-      config: Debug
-      environmentVariables:
-        - variable: PROTOTYPE_MODE
-          value: native
-          isEnabled: true
-    test:
-      config: Debug
-      gatherCoverageData: true
-      targets:
-        - WaniKaniTests
-        - WaniKaniUITests
-    profile:
-      config: Release
-    analyze:
-      config: Debug
-    archive:
-      config: Release
-
-  WaniKani-Hybrid:
-    build:
-      targets:
-        WaniKaniHybrid: all
-        WaniKaniCore: [run, test]
-    run:
-      config: Debug
-      environmentVariables:
-        - variable: PROTOTYPE_MODE
-          value: hybrid
-          isEnabled: true
     test:
       config: Debug
       gatherCoverageData: true

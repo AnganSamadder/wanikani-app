@@ -13,7 +13,7 @@ enum QuestionType {
 }
 
 @MainActor
-class NativeReviewsViewModel: ObservableObject {
+class ReviewsViewModel: ObservableObject {
     @Published var state: ReviewState = .loading
     @Published var userAnswer = ""
     @Published var correctCount = 0

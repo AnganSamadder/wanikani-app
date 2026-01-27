@@ -10,7 +10,7 @@ enum LessonState {
 }
 
 @MainActor
-class NativeLessonsViewModel: ObservableObject {
+class LessonsViewModel: ObservableObject {
     @Published var state: LessonState = .loading
     @Published var userAnswer = ""
     

@@ -6,9 +6,9 @@ PLATFORM ?= iOS Simulator
 # Explicitly set OS to 18.3.1 to match available simulator for iPhone 16
 DESTINATION = platform=$(PLATFORM),name=$(DEVICE_NAME),OS=18.3.1
 
-.PHONY: all help generate build-all build-native build-webview build-hybrid test clean
+.PHONY: all help generate build test clean open
 
-all: generate build-all ## Generate project and build all targets (Default)
+all: generate build ## Generate project and build (Default)
 
 help: ## Show this help message
 	@echo "Usage: make [target]"
@@ -22,19 +22,11 @@ generate: ## Regenerate the Xcode project using xcodegen
 open: ## Open the generated project in Xcode
 	xed .
 
-build-all: build-native build-webview build-hybrid ## Build all targets
-
-build-native: ## Build the Native prototype
-	xcodebuild -scheme WaniKani-Native -destination '$(DESTINATION)' build
-
-build-webview: ## Build the WebView prototype
-	xcodebuild -scheme WaniKani-WebView -destination '$(DESTINATION)' build
-
-build-hybrid: ## Build the Hybrid prototype
-	xcodebuild -scheme WaniKani-Hybrid -destination '$(DESTINATION)' build
+build: ## Build the app
+	xcodebuild -scheme WaniKani -destination '$(DESTINATION)' build
 
 test: ## Run unit tests
-	xcodebuild -scheme WaniKani-Native -destination '$(DESTINATION)' test
+	xcodebuild -scheme WaniKani -destination '$(DESTINATION)' test
 
 clean: ## Clean build folder
 	xcodebuild clean

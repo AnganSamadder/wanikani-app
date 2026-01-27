@@ -2,7 +2,7 @@ import SwiftUI
 import WaniKaniCore
 
 @MainActor
-class NativeSettingsViewModel: ObservableObject {
+class SettingsViewModel: ObservableObject {
     @Published var lastSyncDate: Date?
     @Published var isSyncing = false
     
