@@ -1,13 +1,17 @@
 # XcodeGen generated project
 *.xcodeproj/
+*.xcworkspace/
 
 # Xcode user data
 *.xcuserstate
+userdata/
 xcuserdata/
 
 # Build products
 build/
 DerivedData/
+*.dSYM/
+
 
 # CocoaPods
 Pods/
