@@ -1,24 +1,341 @@
-name: CI
+name: iOS CI
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
   pull_request:
-    branches: [ main ]
+    branches: ["main"]
 
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    runs-on: macos-15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [none, thread, address]
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
+      - name: Install xcodegen
+        run: |
+          brew install xcodegen
 
       - name: Generate Project
-        run: xcodegen generate
+        run: |
+          xcodegen generate
 
-      - name: Build and Test
-        run: xcodebuild -scheme WaniKani -destination 'platform=iOS Simulator,name=iPhone 16' test
+      - name: Detect latest stable Xcode (not beta)
+        id: detect-xcode
+        run: |
+          # Get all stable Xcode versions (format: Xcode_16.1.app)
+          # Exclude RC, beta, and Xcode 27+ (iOS 27 ecosystem not yet stable for CI)
+          LATEST_STABLE=$(ls /Applications | grep -E "^Xcode_[0-9]+\.[0-9]+\.app$" | grep -v "^Xcode_27\." | sort -V | tail -1 | sed 's/Xcode_//;s/\.app//')
+          if [ -z "$LATEST_STABLE" ]; then
+            echo "ERROR: No stable Xcode version found in /Applications"
+            echo "Available Xcode installations:"
+            ls /Applications | grep Xcode || echo "None found"
+            exit 1
+          fi
+          echo "version=$LATEST_STABLE" >> $GITHUB_OUTPUT
+          echo "Using Xcode $LATEST_STABLE"
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ steps.detect-xcode.outputs.version }}
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Detect iOS SDK Version
+        id: detect-sdk
+        run: |
+          SDK_VERSION=$(xcodebuild -showsdks | grep -o 'iphoneos[0-9]*\.[0-9]*' | sed 's/iphoneos//' | sort -V | tail -1)
+          if [ -z "$SDK_VERSION" ]; then
+            echo "ERROR: Could not detect iOS SDK version"
+            exit 1
+          fi
+          SDK_MAJOR=$(echo "$SDK_VERSION" | cut -d. -f1)
+          echo "sdk-version=$SDK_VERSION" >> $GITHUB_OUTPUT
+          echo "sdk-major=$SDK_MAJOR" >> $GITHUB_OUTPUT
+          echo "Detected iOS SDK: $SDK_VERSION (major: $SDK_MAJOR)"
+
+      - name: List Available iOS Runtimes
+        run: |
+          echo "Available iOS runtimes:"
+          xcrun simctl runtime list | grep -E "iOS" || echo "No iOS runtimes found"
+
+      - name: Remove unavailable simulators
+        run: xcrun simctl delete unavailable || true
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/org.swift.swiftpm
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved', '**/project.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Install xcpretty
+        run: sudo gem install xcpretty --no-document
+
+      - name: Resolve dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies -project WaniKani.xcodeproj -scheme WaniKani
+
+      - name: List Available Simulators
+        run: |
+          echo "Xcode version:"
+          xcodebuild -version
+          echo ""
+          echo "Available iOS Simulators:"
+          xcrun simctl list devices iPhone available
+
+      - name: Select iPhone Simulator
+        env:
+          SDK_MAJOR: ${{ steps.detect-sdk.outputs.sdk-major }}
+        run: |
+          python3 <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+
+          def parse_runtime(runtime: str, target_major: int):
+            if ".iOS-" not in runtime:
+              return (), ""
+            version_raw = runtime.split(".iOS-")[-1].replace("-", ".")
+            parts = []
+            for token in version_raw.split('.'):
+              token = ''.join(ch for ch in token if ch.isdigit()) or '0'
+              parts.append(int(token))
+            if parts and parts[0] != target_major:
+              return (), ""
+            return tuple(parts), version_raw
+
+          def get_device_priority(name: str):
+            if "Pro Max" in name:
+              return 100
+            if "Pro" in name:
+              return 90
+            if "Plus" in name:
+              return 80
+            if "Air" in name:
+              return 70
+            if name.startswith("iPhone ") and name.split()[1].isdigit():
+              return 60
+            if "SE" in name:
+              return 10
+            return 50
+
+          def pick_preferred(candidates):
+            def sorter(entry):
+              version_tuple, name, udid, version_str = entry
+              return (version_tuple, get_device_priority(name), name)
+            sorted_candidates = sorted(candidates, key=sorter, reverse=True)
+            return sorted_candidates[0]
+
+          try:
+            result = subprocess.check_output([
+              "xcrun", "simctl", "list", "devices", "available", "--json",
+            ])
+          except subprocess.CalledProcessError as exc:
+            print(f"Failed to list simulators: {exc}", file=sys.stderr)
+            sys.exit(1)
+
+          sdk_major = int(os.environ.get("SDK_MAJOR", "26")) # Default to 26 if detection fails
+          print(f"Matching simulators for iOS SDK major version: {sdk_major}")
+
+          data = json.loads(result)
+          candidates = []
+          for runtime, devices in data.get("devices", {}).items():
+            version_tuple, version_str = parse_runtime(runtime, sdk_major)
+            if not version_tuple:
+              continue
+            for device in devices:
+              if not device.get("isAvailable"):
+                continue
+              name = device.get("name", "")
+              if "iPhone" not in name:
+                continue
+              udid = device.get("udid")
+              if not udid:
+                continue
+              candidates.append((version_tuple, name, udid, version_str))
+
+          if not candidates:
+            print("No available iPhone simulator found", file=sys.stderr)
+            sys.exit(1)
+
+          version_tuple, name, udid, version_str = pick_preferred(candidates)
+          print(f"Selected simulator: {name} (iOS {version_str}) [{udid}]")
+
+          env_path = os.environ.get("GITHUB_ENV")
+          if not env_path:
+            print("GITHUB_ENV not set", file=sys.stderr)
+            sys.exit(1)
+
+          with open(env_path, "a", encoding="utf-8") as env_file:
+            env_file.write(f"SIMULATOR_UDID={udid}\n")
+            env_file.write(f"SIMULATOR_NAME={name}\n")
+            env_file.write(f"SIMULATOR_OS={version_str}\n")
+            env_file.write(f"SIMULATOR_DESTINATION=platform=iOS Simulator,id={udid}\n")
+
+          summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary_path:
+            with open(summary_path, "a", encoding="utf-8") as summary:
+              summary.write(f"\n- Using simulator **{name}** (iOS {version_str})\n")
+          PY
+
+      - name: Boot Selected Simulator
+        run: |
+          set -e
+          if [ -z "$SIMULATOR_UDID" ]; then
+            echo "ERROR: SIMULATOR_UDID not set"
+            exit 1
+          fi
+          echo "Booting simulator ${SIMULATOR_NAME:-unknown} (${SIMULATOR_UDID})"
+          open -a Simulator || true
+          xcrun simctl boot "$SIMULATOR_UDID" || echo "Simulator already booted or boot failed"
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b || true
+          xcrun simctl list devices iPhone | grep -A1 "${SIMULATOR_UDID}"
+          sleep 5
+          echo "Simulator ready"
+
+      - name: Clean Previous Test Results
+        run: |
+          rm -rf TestResults.xcresult coverage.json coverage-report.txt || true
+          echo "Cleaned previous test artifacts"
+
+      - name: Run Unit Tests (No Sanitizer)
+        if: matrix.sanitizer == 'none'
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project WaniKani.xcodeproj \
+            -scheme WaniKani \
+            -configuration Debug \
+            -destination "$SIMULATOR_DESTINATION" \
+            -parallel-testing-enabled NO \
+            -enableCodeCoverage YES \
+            -resultBundlePath TestResults.xcresult \
+            | tee test-output.txt \
+            | xcpretty
+        env:
+          NSUnbufferedIO: "YES"
+
+      - name: Report Skipped Tests
+        if: matrix.sanitizer == 'none' && always()
+        run: |
+          echo "## Skipped Tests" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          SKIPPED_COUNT=$(grep -o "with [0-9]* tests skipped" test-output.txt | grep -o "[0-9]*" | head -1 || echo "0")
+          if [ -z "$SKIPPED_COUNT" ]; then SKIPPED_COUNT=0; fi
+          echo "**Total Skipped: $SKIPPED_COUNT tests**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$SKIPPED_COUNT" -gt "0" ]; then
+            echo "<details>" >> $GITHUB_STEP_SUMMARY
+            echo "<summary>Click to see which tests were skipped</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            grep "◷\|Skipped" test-output.txt | head -100 >> $GITHUB_STEP_SUMMARY || echo "Could not extract skipped test details" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: Run Unit Tests (Thread Sanitizer)
+        if: matrix.sanitizer == 'thread'
+        run: |
+          xcodebuild test \
+            -project WaniKani.xcodeproj \
+            -scheme WaniKani \
+            -configuration Debug \
+            -destination "$SIMULATOR_DESTINATION" \
+            -parallel-testing-enabled NO \
+            -enableThreadSanitizer YES \
+            -resultBundlePath TestResults.xcresult \
+            | xcpretty
+        env:
+          NSUnbufferedIO: "YES"
+
+      - name: Run Unit Tests (Address Sanitizer)
+        if: matrix.sanitizer == 'address'
+        run: |
+          xcodebuild test \
+            -project WaniKani.xcodeproj \
+            -scheme WaniKani \
+            -configuration Debug \
+            -destination "$SIMULATOR_DESTINATION" \
+            -parallel-testing-enabled NO \
+            -enableAddressSanitizer YES \
+            -resultBundlePath TestResults.xcresult \
+            | xcpretty
+        env:
+          NSUnbufferedIO: "YES"
+
+      - name: Generate Coverage Report
+        if: matrix.sanitizer == 'none'
+        run: |
+          if [ ! -d TestResults.xcresult ]; then
+            echo "ERROR: TestResults.xcresult not found - tests likely did not run"
+            exit 1
+          fi
+          if xcrun xccov view --report --json TestResults.xcresult > coverage.json 2>&1; then
+            COVERAGE=$(python3 -c "import json; data=json.load(open('coverage.json')); print(f\"{data['lineCoverage']*100:.2f}\")")
+            echo "Code Coverage: ${COVERAGE}%"
+            echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
+            xcrun xccov view --report TestResults.xcresult > coverage-report.txt
+            
+            echo "## Code Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Overall Coverage: ${COVERAGE}%**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            head -n 50 coverage-report.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ERROR: No coverage data in TestResults.xcresult"
+            echo "This usually means tests did not run successfully."
+            echo "Check the test execution logs above."
+            exit 1
+          fi
+
+      - name: Check Coverage Threshold
+        if: matrix.sanitizer == 'none'
+        run: |
+          THRESHOLD=48.0
+          COVERAGE=${{ env.COVERAGE }}
+          echo "Coverage: ${COVERAGE}%"
+          echo "Threshold: ${THRESHOLD}%"
+          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+            echo "❌ Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% meets threshold ${THRESHOLD}%"
+          fi
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.sanitizer }}
+          path: TestResults.xcresult
+          retention-days: 30
+
+      - name: Upload Coverage Report
+        if: matrix.sanitizer == 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.json
+            coverage-report.txt
+          retention-days: 30
