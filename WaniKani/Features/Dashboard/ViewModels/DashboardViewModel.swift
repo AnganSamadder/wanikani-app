@@ -6,6 +6,7 @@ class DashboardViewModel: ObservableObject {
     @Published var user: User?
     @Published var summary: Summary?
     @Published var isLoading = false
+    @Published var errorMessage: String?
     
     private let persistence: PersistenceManager
     private let syncManager: SyncManager
@@ -50,8 +51,10 @@ class DashboardViewModel: ObservableObject {
             try await syncManager.syncUser()
             logger.info("User sync completed successfully")
             loadData()
+            errorMessage = nil
         } catch {
             logger.error("Refresh failed: \(error.localizedDescription)")
+            errorMessage = error.localizedDescription
         }
         isLoading = false
     }

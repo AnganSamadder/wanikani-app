@@ -50,6 +50,12 @@ public final class URLSessionNetworkClient: NetworkClient {
             throw NetworkError.unknown(NSError(domain: "NetworkClient", code: -1))
         }
         
+        if !(200...299).contains(httpResponse.statusCode) {
+            if let errorString = String(data: data, encoding: .utf8) {
+                print("[NetworkClient] Error Response Body: \(errorString)")
+            }
+        }
+        
         switch httpResponse.statusCode {
         case 200...299:
             do {

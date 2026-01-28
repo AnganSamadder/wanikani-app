@@ -9,6 +9,26 @@ struct DashboardView: View {
             VStack(spacing: 20) {
                 if let user = viewModel.user {
                     UserProfileHeader(user: user)
+                } else if let error = viewModel.errorMessage {
+                    VStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.yellow)
+                        Text("Error Loading Data")
+                            .font(.headline)
+                        Text(error)
+                            .font(.body)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
+                        Button("Retry") {
+                            Task {
+                                await viewModel.refresh()
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
                 } else {
                     Text("Welcome Guest")
                         .font(.largeTitle)
