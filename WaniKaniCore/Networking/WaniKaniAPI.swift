@@ -3,6 +3,7 @@ import Foundation
 public final class WaniKaniAPI {
     private let networkClient: NetworkClient
     private let apiToken: String
+    private let apiBasePath = "/v2"
     
     public init(networkClient: NetworkClient, apiToken: String) {
         self.networkClient = networkClient
@@ -28,10 +29,22 @@ public final class WaniKaniAPI {
     }
     
     /// Parses a full nextURL from the API into path and query parameters
+    /// The API returns full URLs like "https://api.wanikani.com/v2/subjects?page_after_id=1000"
+    /// We need to strip the "/v2" prefix since our base URL already includes it
     private func parseNextURL(_ urlString: String) -> (path: String, queryParams: [String: String])? {
         guard let url = URL(string: urlString),
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
+        }
+        
+        var path = components.path
+        if path.hasPrefix(apiBasePath) {
+            path.removeFirst(apiBasePath.count)
+        }
+        if path.isEmpty {
+            path = "/"
+        } else if !path.hasPrefix("/") {
+            path = "/" + path
         }
         
         var queryParams: [String: String] = [:]
@@ -41,7 +54,7 @@ public final class WaniKaniAPI {
             }
         }
         
-        return (components.path, queryParams)
+        return (path, queryParams)
     }
     
     // MARK: - User
@@ -66,11 +79,14 @@ public final class WaniKaniAPI {
     
     public func getAllSubjects(
         types: [SubjectType]? = nil,
-        levels: [Int]? = nil
+        levels: [Int]? = nil,
+        updatedAfter: Date? = nil
     ) async throws -> [SubjectData] {
         var allSubjects: [SubjectData] = []
         var nextURL: String? = nil
         var isFirstRequest = true
+        
+        let iso8601Formatter = ISO8601DateFormatter()
         
         while isFirstRequest || nextURL != nil {
             let currentEndpoint: Endpoint
@@ -83,6 +99,9 @@ public final class WaniKaniAPI {
                 }
                 if let levels = levels, !levels.isEmpty {
                     queryParams["levels"] = levels.map { String($0) }.joined(separator: ",")
+                }
+                if let updatedAfter = updatedAfter {
+                    queryParams["updated_after"] = iso8601Formatter.string(from: updatedAfter)
                 }
                 
                 currentEndpoint = endpoint(path: "/subjects", queryParameters: queryParams)
@@ -107,7 +126,8 @@ public final class WaniKaniAPI {
     public func getAssignments(
         subjectIDs: [Int]? = nil,
         availableBefore: Date? = nil,
-        availableAfter: Date? = nil
+        availableAfter: Date? = nil,
+        updatedAfter: Date? = nil
     ) async throws -> [Assignment] {
         var allAssignments: [Assignment] = []
         var nextURL: String? = nil
@@ -130,6 +150,9 @@ public final class WaniKaniAPI {
                 if let availableAfter = availableAfter {
                     queryParams["available_after"] = iso8601Formatter.string(from: availableAfter)
                 }
+                if let updatedAfter = updatedAfter {
+                    queryParams["updated_after"] = iso8601Formatter.string(from: updatedAfter)
+                }
                 
                 currentEndpoint = endpoint(path: "/assignments", queryParameters: queryParams)
             } else if let next = nextURL, let parsed = parseNextURL(next) {
@@ -146,6 +169,137 @@ public final class WaniKaniAPI {
         }
         
         return allAssignments
+    }
+    
+    // MARK: - Assignment Actions
+    
+    public func startAssignment(id: Int, startedAt: Date? = nil) async throws -> Assignment {
+        struct AssignmentStartRequest: Encodable {
+            let assignment: AssignmentStartData
+        }
+        
+        struct AssignmentStartData: Encodable {
+            let startedAt: String?
+            
+            enum CodingKeys: String, CodingKey {
+                case startedAt = "started_at"
+            }
+        }
+        
+        let iso8601Formatter = ISO8601DateFormatter()
+        let startedAtString = startedAt.map { iso8601Formatter.string(from: $0) }
+        
+        let request = AssignmentStartRequest(
+            assignment: AssignmentStartData(startedAt: startedAtString)
+        )
+        
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        let body = try encoder.encode(request)
+        
+        var headers = buildHeaders()
+        headers["Content-Type"] = "application/json"
+        
+        let endpoint = Endpoint(
+            path: "/assignments/\(id)/start",
+            method: .put,
+            headers: headers,
+            body: body
+        )
+        
+        let envelope: ResourceEnvelope<AssignmentData> = try await networkClient.request(endpoint)
+        
+        return Assignment(
+            id: id,
+            object: "assignment",
+            url: "",
+            dataUpdatedAt: nil,
+            data: envelope.data
+        )
+    }
+    
+    // MARK: - Review Statistics with Pagination
+    
+    public func getReviewStatistics(
+        subjectIDs: [Int]? = nil,
+        subjectTypes: [SubjectType]? = nil,
+        updatedAfter: Date? = nil
+    ) async throws -> [ReviewStatistic] {
+        var allStats: [ReviewStatistic] = []
+        var nextURL: String? = nil
+        var isFirstRequest = true
+        
+        let iso8601Formatter = ISO8601DateFormatter()
+        
+        while isFirstRequest || nextURL != nil {
+            let currentEndpoint: Endpoint
+            
+            if isFirstRequest {
+                var queryParams: [String: String] = [:]
+                
+                if let subjectIDs = subjectIDs, !subjectIDs.isEmpty {
+                    queryParams["subject_ids"] = subjectIDs.map { String($0) }.joined(separator: ",")
+                }
+                if let subjectTypes = subjectTypes, !subjectTypes.isEmpty {
+                    queryParams["subject_types"] = subjectTypes.map { $0.rawValue }.joined(separator: ",")
+                }
+                if let updatedAfter = updatedAfter {
+                    queryParams["updated_after"] = iso8601Formatter.string(from: updatedAfter)
+                }
+                
+                currentEndpoint = endpoint(path: "/review_statistics", queryParameters: queryParams)
+            } else if let next = nextURL, let parsed = parseNextURL(next) {
+                currentEndpoint = endpoint(path: parsed.path, queryParameters: parsed.queryParams)
+            } else {
+                break
+            }
+            
+            isFirstRequest = false
+            
+            let envelope: CollectionEnvelope<ReviewStatistic> = try await networkClient.request(currentEndpoint)
+            allStats.append(contentsOf: envelope.data)
+            nextURL = envelope.pages.nextURL
+        }
+        
+        return allStats
+    }
+    
+    // MARK: - Level Progressions with Pagination
+    
+    public func getLevelProgressions(
+        updatedAfter: Date? = nil
+    ) async throws -> [LevelProgression] {
+        var allProgressions: [LevelProgression] = []
+        var nextURL: String? = nil
+        var isFirstRequest = true
+        
+        let iso8601Formatter = ISO8601DateFormatter()
+        
+        while isFirstRequest || nextURL != nil {
+            let currentEndpoint: Endpoint
+            
+            if isFirstRequest {
+                var queryParams: [String: String] = [:]
+                
+                if let updatedAfter = updatedAfter {
+                    queryParams["updated_after"] = iso8601Formatter.string(from: updatedAfter)
+                }
+                
+                currentEndpoint = endpoint(path: "/level_progressions", queryParameters: queryParams)
+            } else if let next = nextURL, let parsed = parseNextURL(next) {
+                currentEndpoint = endpoint(path: parsed.path, queryParameters: parsed.queryParams)
+            } else {
+                break
+            }
+            
+            isFirstRequest = false
+            
+            let envelope: CollectionEnvelope<LevelProgression> = try await networkClient.request(currentEndpoint)
+            allProgressions.append(contentsOf: envelope.data)
+            nextURL = envelope.pages.nextURL
+        }
+        
+        return allProgressions
     }
     
     // MARK: - Reviews

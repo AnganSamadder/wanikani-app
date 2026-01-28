@@ -4,6 +4,8 @@ public final class URLSessionNetworkClient: NetworkClient {
     private let baseURL: URL
     private let session: URLSession
     private let decoder: JSONDecoder
+    private let logger = SmartLogger(subsystem: "com.angansamadder.wanikani", category: "Networking")
+    private static let maxBodyPreviewBytes = 600
     
     public init(
         baseURL: URL = URL(string: "https://api.wanikani.com/v2")!,
@@ -12,10 +14,64 @@ public final class URLSessionNetworkClient: NetworkClient {
         self.baseURL = baseURL
         self.session = session
         self.decoder = JSONDecoder()
-        // .iso8601 strategy can be strict. If it fails on fractional seconds, we can use a custom strategy.
-        // For now, we'll try .iso8601 as it often handles recent formats.
-        // If "The data couldn’t be read" persists with code 4865 (data corrupted), we'll switch this.
-        self.decoder.dateDecodingStrategy = .iso8601
+        self.decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+            
+            formatter.formatOptions = [.withInternetDateTime]
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+            
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Invalid date format: \(dateString)"
+            )
+        }
+    }
+
+    private func redactedHeaders(_ headers: [String: String]) -> [String: String] {
+        var sanitized: [String: String] = [:]
+        for (key, value) in headers {
+            let lowerKey = key.lowercased()
+            if lowerKey == "authorization" {
+                sanitized[key] = redactAuthorization(value)
+            } else if lowerKey.contains("token") || lowerKey.contains("cookie") {
+                sanitized[key] = "<redacted>"
+            } else {
+                sanitized[key] = value
+            }
+        }
+        return sanitized
+    }
+
+    private func redactAuthorization(_ value: String) -> String {
+        let parts = value.split(separator: " ")
+        guard parts.count == 2 else { return "<redacted>" }
+        let scheme = parts[0]
+        let token = String(parts[1])
+        if token.count <= 8 {
+            return "\(scheme) <redacted>"
+        }
+        let prefix = token.prefix(4)
+        let suffix = token.suffix(4)
+        return "\(scheme) \(prefix)…\(suffix)"
+    }
+
+    private func bodyPreview(_ data: Data) -> String {
+        guard !data.isEmpty else { return "<empty>" }
+        let previewData = data.prefix(Self.maxBodyPreviewBytes)
+        let previewString = String(decoding: previewData, as: UTF8.self)
+        if data.count > previewData.count {
+            return "\(previewString)… (truncated, \(data.count) bytes)"
+        }
+        return "\(previewString) (\(data.count) bytes)"
     }
     
     public func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
@@ -40,12 +96,12 @@ public final class URLSessionNetworkClient: NetworkClient {
         }
         
         #if DEBUG
-        print("➡️ [REQUEST] \(endpoint.method.rawValue) \(url.absoluteString)")
-        if let headers = request.allHTTPHeaderFields {
-            print("   Headers: \(headers)")
+        logger.debug("➡️ [REQUEST] \(endpoint.method.rawValue) \(url.absoluteString)")
+        if let headers = request.allHTTPHeaderFields, !headers.isEmpty {
+            logger.debug("   Headers: \(redactedHeaders(headers))")
         }
-        if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
-            print("   Body: \(bodyString)")
+        if let body = request.httpBody, !body.isEmpty {
+            logger.debug("   Body: \(bodyPreview(body))")
         }
         #endif
         
@@ -56,7 +112,7 @@ public final class URLSessionNetworkClient: NetworkClient {
             (data, response) = try await session.data(for: request)
         } catch {
             #if DEBUG
-            print("❌ [ERROR] Request failed: \(error)")
+            logger.error("❌ [ERROR] Request failed: \(error)")
             #endif
             throw NetworkError.noConnection
         }
@@ -66,9 +122,9 @@ public final class URLSessionNetworkClient: NetworkClient {
         }
         
         #if DEBUG
-        print("⬅️ [RESPONSE] \(httpResponse.statusCode) \(url.absoluteString)")
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("   Body: \(responseString)")
+        logger.debug("⬅️ [RESPONSE] \(httpResponse.statusCode) \(url.absoluteString)")
+        if !data.isEmpty {
+            logger.debug("   Body: \(bodyPreview(data))")
         }
         #endif
         
@@ -77,12 +133,26 @@ public final class URLSessionNetworkClient: NetworkClient {
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
+                #if DEBUG
+                print("   ❌ Decode error: \(error.localizedDescription)")
+                #endif
                 throw NetworkError.decodingFailed(error)
             }
         case 401:
             throw NetworkError.unauthorized
         case 429:
-            let retryAfter = Int(httpResponse.value(forHTTPHeaderField: "Retry-After") ?? "60") ?? 60
+            // WaniKani API provides RateLimit-Reset (epoch timestamp) or Retry-After (seconds)
+            let retryAfter: Int
+            if let resetHeader = httpResponse.value(forHTTPHeaderField: "RateLimit-Reset"),
+               let resetTimestamp = Double(resetHeader) {
+                let resetDate = Date(timeIntervalSince1970: resetTimestamp)
+                retryAfter = max(1, Int(resetDate.timeIntervalSinceNow))
+            } else if let retryAfterHeader = httpResponse.value(forHTTPHeaderField: "Retry-After"),
+                      let retryAfterValue = Int(retryAfterHeader) {
+                retryAfter = retryAfterValue
+            } else {
+                retryAfter = 60 // Default to 60 seconds
+            }
             throw NetworkError.rateLimited(retryAfter: retryAfter)
         case 500...599:
             throw NetworkError.serverError(statusCode: httpResponse.statusCode)
@@ -90,4 +160,5 @@ public final class URLSessionNetworkClient: NetworkClient {
             throw NetworkError.unknown(NSError(domain: "NetworkClient", code: httpResponse.statusCode))
         }
     }
+    
 }
