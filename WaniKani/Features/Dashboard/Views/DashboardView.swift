@@ -2,7 +2,15 @@ import SwiftUI
 import WaniKaniCore
 
 struct DashboardView: View {
-    @StateObject private var viewModel = DashboardViewModel(persistence: .shared)
+    @StateObject private var viewModel: DashboardViewModel
+    
+    init() {
+        let apiToken = AuthenticationManager.shared.apiToken ?? ""
+        let api = WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: apiToken)
+        let summaryRepo = SummaryRepository(api: api)
+        // Using StateObject initialization with wrappedValue for DI
+        _viewModel = StateObject(wrappedValue: DashboardViewModel(persistence: .shared, summaryRepository: summaryRepo))
+    }
     
     var body: some View {
         ScrollView {
@@ -30,13 +38,19 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                 } else {
-                    Text("Welcome Guest")
-                        .font(.largeTitle)
+                    if viewModel.isLoading && viewModel.user == nil {
+                         ProgressView()
+                            .scaleEffect(1.5)
+                            .padding()
+                    } else {
+                         Text("Welcome Guest")
+                            .font(.largeTitle)
+                    }
                 }
                 
                 HStack(spacing: 16) {
-                    StatusCard(title: "Lessons", count: 0, color: .pink)
-                    StatusCard(title: "Reviews", count: 0, color: .blue)
+                    StatusCard(title: "Lessons", count: viewModel.lessons, color: .pink)
+                    StatusCard(title: "Reviews", count: viewModel.reviews, color: .blue)
                 }
                 .padding(.horizontal)
             }
@@ -46,9 +60,11 @@ struct DashboardView: View {
         .refreshable {
             await viewModel.refresh()
         }
+        // Use onAppear or task to trigger load if needed, but VM init already calls loadData.
+        // We can add a check here just in case.
         .task {
-            if viewModel.user == nil {
-                await viewModel.refresh()
+            if viewModel.user == nil && !viewModel.isLoading {
+                await viewModel.loadData()
             }
         }
     }
