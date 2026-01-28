@@ -200,4 +200,19 @@ When working as an agent on this repository:
 5. **No Prototypes**: The prototypes (WebView, Hybrid) have been deprecated. Do not attempt to re-implement or reference them.
 
 ---
+
+## 12. Agent Reporting Standards
+
+When reporting task completion, you **MUST** include a "Technical Problem & Solution" section.
+
+### Required Format
+**Technical Analysis:**
+- **Problem**: [Technical cause] (e.g., "Race condition in `fetchUser()` due to background thread access")
+- **Solution**: [Code change] (e.g., "Added `@MainActor` to `PersistenceManager`")
+
+**Example:**
+> **Problem**: The app crashed on launch because `WaniKani/Shared` was missing from `project.yml` sources, creating an invalid bundle.
+> **Solution**: Added `WaniKani/Shared` to the `sources` list in `project.yml` and regenerated the project.
+
+---
 *End of Documentation*
