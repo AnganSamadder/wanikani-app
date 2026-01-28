@@ -25,14 +25,6 @@ class DashboardViewModel: ObservableObject {
         
         logger.debug("DashboardViewModel initialized with token length: \(apiToken.count)")
         loadData()
-        
-        // Auto-refresh if data is missing
-        if user == nil && !apiToken.isEmpty {
-            logger.info("User missing in persistence, triggering initial sync")
-            Task {
-                await refresh()
-            }
-        }
     }
     
     func loadData() {

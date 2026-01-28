@@ -29,6 +29,6 @@ class SettingsViewModel: ObservableObject {
     }
     
     func signOut() {
-        // Clear token and reset state
+        AuthenticationManager.shared.logout()
     }
 }

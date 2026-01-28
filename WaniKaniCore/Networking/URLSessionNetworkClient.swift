@@ -37,12 +37,25 @@ public final class URLSessionNetworkClient: NetworkClient {
             request.setValue(value, forHTTPHeaderField: key)
         }
         
+        #if DEBUG
+        print("➡️ [REQUEST] \(endpoint.method.rawValue) \(url.absoluteString)")
+        if let headers = request.allHTTPHeaderFields {
+            print("   Headers: \(headers)")
+        }
+        if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+            print("   Body: \(bodyString)")
+        }
+        #endif
+        
         let data: Data
         let response: URLResponse
         
         do {
             (data, response) = try await session.data(for: request)
         } catch {
+            #if DEBUG
+            print("❌ [ERROR] Request failed: \(error)")
+            #endif
             throw NetworkError.noConnection
         }
         
@@ -50,11 +63,12 @@ public final class URLSessionNetworkClient: NetworkClient {
             throw NetworkError.unknown(NSError(domain: "NetworkClient", code: -1))
         }
         
-        if !(200...299).contains(httpResponse.statusCode) {
-            if let errorString = String(data: data, encoding: .utf8) {
-                print("[NetworkClient] Error Response Body: \(errorString)")
-            }
+        #if DEBUG
+        print("⬅️ [RESPONSE] \(httpResponse.statusCode) \(url.absoluteString)")
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("   Body: \(responseString)")
         }
+        #endif
         
         switch httpResponse.statusCode {
         case 200...299:

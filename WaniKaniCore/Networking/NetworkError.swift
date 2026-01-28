@@ -40,9 +40,17 @@ public enum NetworkError: Error, Equatable, CustomStringConvertible {
             return l == r
         case (.decodingFailed, .decodingFailed),
              (.unknown, .unknown):
-            return true
+            // Error is not Equatable, so we just assume equal for now or compare descriptions
+            // For testing purposes, we usually just care they are the same case
+            return true 
         default:
             return false
         }
+    }
+}
+
+extension NetworkError: LocalizedError {
+    public var errorDescription: String? {
+        return description
     }
 }

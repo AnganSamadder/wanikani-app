@@ -46,6 +46,11 @@ struct DashboardView: View {
         .refreshable {
             await viewModel.refresh()
         }
+        .task {
+            if viewModel.user == nil {
+                await viewModel.refresh()
+            }
+        }
     }
 }
 
