@@ -37,6 +37,7 @@
 		818A42E58BE8A32173275F3B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A2BD8DB66FD4171129EBC5 /* SettingsViewModel.swift */; };
 		819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */; };
 		864F6AA65474B7563D8475DB /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69CF0A9847A539C639ED383 /* Summary.swift */; };
+		8C2E4756C1361A35952563AB /* SmartLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480245BA0E8AB74C29130D8 /* SmartLogger.swift */; };
 		8C69768212EC569BC0F68F7C /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C80D0A0A279D33793704C /* DashboardView.swift */; };
 		8C75783155B4CEECB413E783 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BD56C64053BBC584DAF6D4 /* Config.swift */; };
 		8D2F10E5C207246E55F879C9 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AADE9A7F5DDFF1B8709430 /* KeychainWrapper.swift */; };
@@ -144,6 +145,7 @@
 		10398866F56A72B9B7E807B7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		12C119B1D9FE921FF7AF6AF4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		15A44B7EEF4EE26E82240F14 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1BCEDBF88A8D1CD231383ABE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1E1751183FAAD9475100813A /* WaniKaniAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPI.swift; sourceTree = "<group>"; };
 		1EF849E50A0FFC8FC7925B26 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1F57CE02B8F79B461DA34EBD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		386A4B016089A04A45127B67 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3C78E07F1058BCDB2C3AA285 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		42034E5769A63BFA5473A50D /* WaniKani.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WaniKani.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		461DAC40616FB952C7D4CD2C /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		47536E87E57A6B936C045F0B /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		49A2BD8DB66FD4171129EBC5 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		4FB69FCD435DCF8A04292BE0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -178,6 +181,7 @@
 		7FAE32E5E5276E88EBE9B113 /* PersistenceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManagerTests.swift; sourceTree = "<group>"; };
 		80A98F8993E29762104E47E0 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		82A4C270DF73F7197457BF81 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		8480245BA0E8AB74C29130D8 /* SmartLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartLogger.swift; sourceTree = "<group>"; };
 		876CEB8ABDA521E84335B573 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 		87F1B6F562F87DC922F44F20 /* WaniKaniUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITests.swift; sourceTree = "<group>"; };
 		8869750FEE8A893432C1E9C1 /* MarketplaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewModel.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 		A99C80D0A0A279D33793704C /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		A9BD56C64053BBC584DAF6D4 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B1809BB5329EC1CFA829171E /* OfflineSyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncView.swift; sourceTree = "<group>"; };
+		B4DE9DD41544190084DC14A7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B50E2A1FD4AEBB0EF35F89CA /* ReviewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsViewModel.swift; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouterTests.swift; sourceTree = "<group>"; };
@@ -351,6 +356,7 @@
 			children = (
 				83521DC2941435786BA69B2C /* App */,
 				CAFAACBA677E032CE065EEF5 /* Features */,
+				443EE4220928864467FFD1EB /* Shared */,
 				7AC07A6583FEC02E46179547 /* WaniKaniCore */,
 				B0E72D52CE03A6B8C8130E42 /* WaniKaniTests */,
 				D43030D0B9E85674767D4149 /* WaniKaniUITests */,
@@ -369,6 +375,17 @@
 				3310F771771E7F6E44819753 /* UserTests.swift */,
 			);
 			path = ModelsTests;
+			sourceTree = "<group>";
+		};
+		443EE4220928864467FFD1EB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DA247C9F7B86AE49B6F983D0 /* Components */,
+				BFE9FB56136623BD119D459E /* Extensions */,
+				9C0EDC7768CAABE9935D614C /* Theme */,
+			);
+			name = Shared;
+			path = WaniKani/Shared;
 			sourceTree = "<group>";
 		};
 		4970387FD17768594824DA8E /* Networking */ = {
@@ -435,6 +452,7 @@
 				537644C2306A9889B37BD9B5 /* Persistence */,
 				0B947DD541CE3AF4619E100F /* Security */,
 				166F21B752CFBF9B09D88279 /* Storage */,
+				E2F17BD15EFB2AA4C600CBB5 /* Utilities */,
 			);
 			path = WaniKaniCore;
 			sourceTree = "<group>";
@@ -485,6 +503,14 @@
 				BEBB4A14819235CA36160D0E /* Views */,
 			);
 			path = Forums;
+			sourceTree = "<group>";
+		};
+		9C0EDC7768CAABE9935D614C /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				1BCEDBF88A8D1CD231383ABE /* .gitkeep */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		9C2271FAAE55942EA03F57D3 /* Authentication */ = {
@@ -593,6 +619,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		BFE9FB56136623BD119D459E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B4DE9DD41544190084DC14A7 /* .gitkeep */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		CAFAACBA677E032CE065EEF5 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -649,6 +683,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DA247C9F7B86AE49B6F983D0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				461DAC40616FB952C7D4CD2C /* .gitkeep */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		E01B6F239A1373E85DCC09C2 /* SecurityTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -657,6 +699,14 @@
 				D8EECBB26946967C5798AD6C /* KeychainWrapperTests.swift */,
 			);
 			path = SecurityTests;
+			sourceTree = "<group>";
+		};
+		E2F17BD15EFB2AA4C600CBB5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8480245BA0E8AB74C29130D8 /* SmartLogger.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		E7355AB3A275106CB5A736EB /* ViewModels */ = {
@@ -853,6 +903,7 @@
 				5AF8624906289788360C699C /* Review.swift in Sources */,
 				5D657103CDE7AF242B5ABCC3 /* SRSStateMachine.swift in Sources */,
 				585FFE34646A9FC3D49D2A42 /* SessionManager.swift in Sources */,
+				8C2E4756C1361A35952563AB /* SmartLogger.swift in Sources */,
 				3E72212A702F5FA2700A1554 /* Subject.swift in Sources */,
 				864F6AA65474B7563D8475DB /* Summary.swift in Sources */,
 				D9EBD0E1EE60A14930DD868D /* SyncManager.swift in Sources */,
@@ -1051,7 +1102,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/WaniKani";
 			};
 			name = Release;
 		};
@@ -1120,7 +1171,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.angansamadder.wanikani.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WaniKani.app/WaniKani";
 			};
 			name = Debug;
 		};

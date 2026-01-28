@@ -114,6 +114,12 @@ class DashboardViewModel: ObservableObject {
 - Use DocC comments (`///`) for public APIs in `WaniKaniCore`.
 - Explain the "why" for complex logic, not just the "what".
 
+### Logging
+- **SmartLogger**: Use `SmartLogger.shared` for all logging.
+- **Debug Only**: Logs are wrapped in `#if DEBUG` and will be stripped from release builds.
+- **Privacy**: Avoid logging sensitive user data (tokens, emails) in plain text.
+- **Levels**: Use appropriate levels (`debug`, `info`, `error`, `fault`).
+
 ---
 
 ## 7. Testing Strategy

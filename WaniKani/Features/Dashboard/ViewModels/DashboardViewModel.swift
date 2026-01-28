@@ -9,37 +9,50 @@ class DashboardViewModel: ObservableObject {
     
     private let persistence: PersistenceManager
     private let syncManager: SyncManager
+    private let logger = SmartLogger(subsystem: "com.angansamadder.wanikani", category: "Dashboard")
     
     // For MVP, we'll initialize SyncManager internally if not provided, 
     // but ideally it should be injected. For now we can assume shared/default.
     init(persistence: PersistenceManager) {
         self.persistence = persistence
-        // Stub sync manager for now until we have dependency injection or singleton
-        // In real app, SyncManager should be shared
+        
+        let apiToken = AuthenticationManager.shared.apiToken ?? ""
         self.syncManager = SyncManager(
-            api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: ""),
+            api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: apiToken),
             persistence: persistence
         ) 
-        // Logic fix: SyncManager init requires API token which we don't have easily here.
-        // Better: Fetch purely from persistence for now, trigger sync elsewhere.
         
+        logger.debug("DashboardViewModel initialized with token length: \(apiToken.count)")
         loadData()
+        
+        // Auto-refresh if data is missing
+        if user == nil && !apiToken.isEmpty {
+            logger.info("User missing in persistence, triggering initial sync")
+            Task {
+                await refresh()
+            }
+        }
     }
     
     func loadData() {
         if let pUser = persistence.fetchUser() {
             self.user = pUser
+            logger.debug("Loaded user from persistence: \(pUser.username)")
+        } else {
+            logger.debug("No user found in persistence")
         }
-        // Fetch summary from persistence if available (PersistentSummary not fully impl in 1.6 yet? Check PersistenceModels)
-        // If not, leave nil
     }
     
     func refresh() async {
         isLoading = true
-        // In future: await syncManager.syncEverything()
-        // For now: reload from persistence
-        loadData()
-        try? await Task.sleep(nanoseconds: 1 * 1_000_000_000) // Fake delay
+        logger.info("Starting dashboard refresh")
+        do {
+            try await syncManager.syncUser()
+            logger.info("User sync completed successfully")
+            loadData()
+        } catch {
+            logger.error("Refresh failed: \(error.localizedDescription)")
+        }
         isLoading = false
     }
 }
