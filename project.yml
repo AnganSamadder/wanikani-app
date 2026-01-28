@@ -17,6 +17,7 @@ targets:
     sources:
       - WaniKani/Features
       - WaniKani/App
+      - WaniKani/Shared
     dependencies:
       - target: WaniKaniCore
     settings:
@@ -70,7 +71,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.tests
         INFOPLIST_GENERATION_MODE: GeneratedFile
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/WaniKani.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WaniKani"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/WaniKani.app/WaniKani"
         BUNDLE_LOADER: "$(TEST_HOST)"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "39YTAJZTZ6"

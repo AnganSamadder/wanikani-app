@@ -2,6 +2,7 @@ import XCTest
 import SwiftData
 @testable import WaniKaniCore
 
+@MainActor
 final class PersistenceManagerTests: XCTestCase {
     var sut: PersistenceManager!
     
