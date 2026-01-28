@@ -1,35 +1,6 @@
 import XCTest
 @testable import WaniKaniCore
 
-final class MockNetworkClient: NetworkClient {
-    var responses: [Any] = []
-    var capturedEndpoints: [Endpoint] = []
-    private var callIndex = 0
-    
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        capturedEndpoints.append(endpoint)
-        
-        guard callIndex < responses.count else {
-            throw NetworkError.unknown(NSError(domain: "MockNetworkClient", code: -1))
-        }
-        
-        let response = responses[callIndex]
-        callIndex += 1
-        
-        if let error = response as? Error {
-            throw error
-        }
-        
-        guard let typedResponse = response as? T else {
-            throw NetworkError.decodingFailed(
-                NSError(domain: "MockNetworkClient", code: -1)
-            )
-        }
-        
-        return typedResponse
-    }
-}
-
 final class WaniKaniAPITests: XCTestCase {
     private var sut: WaniKaniAPI!
     private var mockClient: MockNetworkClient!

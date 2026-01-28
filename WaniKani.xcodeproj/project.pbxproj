@@ -69,6 +69,7 @@
 		C91EAAAD986371142C121393 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74594E690C6A25D0F25E0A4 /* LoginView.swift */; };
 		C940B0A4F5B32038CA4A0AF6 /* ReviewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CDBE86E23A666AAF9C67A9 /* ReviewsView.swift */; };
 		CD428435F516F64D30447D05 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA42F7DFEFA1B2945FCC5B /* DashboardViewModel.swift */; };
+		D4A332BB5201CE5801FBC3FA /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14212007954296B62A8BBB57 /* Mocks.swift */; };
 		D5D9A33FE4D668234C354EC7 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
 		D9EBD0E1EE60A14930DD868D /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607E13A815A2DC983288E670 /* SyncManager.swift */; };
 		DE0ECB34BFEC1E2BBED42812 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24DA6594C99BE17AE635C0 /* AuthenticationManagerTests.swift */; };
@@ -149,6 +150,7 @@
 		0F8122827C3A885C8C17F397 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		10398866F56A72B9B7E807B7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		12C119B1D9FE921FF7AF6AF4 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		14212007954296B62A8BBB57 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		15A44B7EEF4EE26E82240F14 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1BCEDBF88A8D1CD231383ABE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1E1751183FAAD9475100813A /* WaniKaniAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniAPI.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		0D2215604ACA42F1398A2769 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				14212007954296B62A8BBB57 /* Mocks.swift */,
 				9E44880657D0A847E3F0B6D3 /* TestHelpers.swift */,
 			);
 			path = Helpers;
@@ -967,6 +970,7 @@
 				B0D4F8FAD0D3168FFC1DABE1 /* DeepLinkRouterTests.swift in Sources */,
 				8DBE80200DCCB9E77C124095 /* GreasyForkAPITests.swift in Sources */,
 				AEBDD9890BA56619C79865C8 /* KeychainWrapperTests.swift in Sources */,
+				D4A332BB5201CE5801FBC3FA /* Mocks.swift in Sources */,
 				78FF39DB176FB8520B1788FB /* NetworkClientTests.swift in Sources */,
 				095689B09DB40C4456C60B42 /* NotificationManagerTests.swift in Sources */,
 				819286D1220BF2B80CD711F7 /* PersistenceManagerTests.swift in Sources */,
