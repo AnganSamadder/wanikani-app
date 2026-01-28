@@ -3,6 +3,7 @@ import WaniKaniCore
 
 struct RootView: View {
     @StateObject private var authManager = AuthenticationManager.shared
+    @StateObject private var themeController = ThemeController.shared
     
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -16,6 +17,7 @@ struct RootView: View {
                 LoginView()
             }
         }
+        .preferredColorScheme(themeController.preferredColorScheme)
     }
     
     @ViewBuilder
@@ -39,14 +41,14 @@ struct TabNavigationView: View {
                 DashboardView()
             }
             .tabItem {
-                Label("Dashboard", systemImage: "house.fill")
+                Label("Today", systemImage: "sun.max.fill")
             }
             
             NavigationStack {
                 ReviewsView()
             }
             .tabItem {
-                Label("Reviews", systemImage: "checkmark.circle.fill")
+                Label("Reviews", systemImage: "flame.fill")
             }
             
             NavigationStack {
@@ -57,12 +59,20 @@ struct TabNavigationView: View {
             }
             
             NavigationStack {
+                StatisticsView()
+            }
+            .tabItem {
+                Label("Progress", systemImage: "chart.bar.fill")
+            }
+            
+            NavigationStack {
                 SettingsView()
             }
             .tabItem {
-                Label("Settings", systemImage: "gear")
+                Label("Settings", systemImage: "gearshape.fill")
             }
         }
+        .tint(WKColor.kanji)
     }
 }
 
@@ -70,34 +80,49 @@ struct SidebarNavigationView: View {
     @State private var selection: NavigationItem? = .dashboard
     
     enum NavigationItem: Hashable {
-        case dashboard, reviews, lessons, settings
+        case dashboard, reviews, lessons, statistics, settings
     }
     
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
-                NavigationLink(value: NavigationItem.dashboard) {
-                    Label("Dashboard", systemImage: "house.fill")
+                Section {
+                    NavigationLink(value: NavigationItem.dashboard) {
+                        Label("Today", systemImage: "sun.max.fill")
+                    }
+                    NavigationLink(value: NavigationItem.reviews) {
+                        Label("Reviews", systemImage: "flame.fill")
+                    }
+                    NavigationLink(value: NavigationItem.lessons) {
+                        Label("Lessons", systemImage: "book.fill")
+                    }
                 }
-                NavigationLink(value: NavigationItem.reviews) {
-                    Label("Reviews", systemImage: "checkmark.circle.fill")
-                }
-                NavigationLink(value: NavigationItem.lessons) {
-                    Label("Lessons", systemImage: "book.fill")
-                }
-                NavigationLink(value: NavigationItem.settings) {
-                    Label("Settings", systemImage: "gear")
+                
+                Section {
+                    NavigationLink(value: NavigationItem.statistics) {
+                        Label("Progress", systemImage: "chart.bar.fill")
+                    }
+                    NavigationLink(value: NavigationItem.settings) {
+                        Label("Settings", systemImage: "gearshape.fill")
+                    }
                 }
             }
+            .listStyle(.sidebar)
             .navigationTitle("WaniKani")
         } detail: {
             switch selection {
             case .dashboard: DashboardView()
             case .reviews: ReviewsView()
             case .lessons: LessonsView()
+            case .statistics: StatisticsView()
             case .settings: SettingsView()
-            case .none: Text("Select an item")
+            case .none: 
+                WKEmptyState.noContent(
+                    title: "Welcome",
+                    message: "Select an item from the sidebar to get started."
+                )
             }
         }
+        .tint(WKColor.kanji)
     }
 }
