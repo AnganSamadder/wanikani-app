@@ -36,28 +36,28 @@ struct TabNavigationView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                Text("Dashboard") // Placeholder
+                DashboardView()
             }
             .tabItem {
                 Label("Dashboard", systemImage: "house.fill")
             }
             
             NavigationStack {
-                Text("Reviews") // Placeholder
+                ReviewsView()
             }
             .tabItem {
                 Label("Reviews", systemImage: "checkmark.circle.fill")
             }
             
             NavigationStack {
-                Text("Lessons") // Placeholder
+                LessonsView()
             }
             .tabItem {
                 Label("Lessons", systemImage: "book.fill")
             }
             
             NavigationStack {
-                Text("Settings") // Placeholder
+                SettingsView()
             }
             .tabItem {
                 Label("Settings", systemImage: "gear")
@@ -92,10 +92,10 @@ struct SidebarNavigationView: View {
             .navigationTitle("WaniKani")
         } detail: {
             switch selection {
-            case .dashboard: Text("Dashboard")
-            case .reviews: Text("Reviews")
-            case .lessons: Text("Lessons")
-            case .settings: Text("Settings")
+            case .dashboard: DashboardView()
+            case .reviews: ReviewsView()
+            case .lessons: LessonsView()
+            case .settings: SettingsView()
             case .none: Text("Select an item")
             }
         }
