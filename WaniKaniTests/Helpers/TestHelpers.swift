@@ -55,7 +55,9 @@ extension User {
                 lessonsBatchSize: 5,
                 lessonsPresentationOrder: "ascending_level_then_subject",
                 reviewsAutoplayAudio: false,
-                reviewsDisplaySRSIndicator: true
+                reviewsDisplaySRSIndicator: true,
+                extraStudyAutoplayAudio: false,
+                reviewsPresentationOrder: "shuffled"
             )
         )
     }

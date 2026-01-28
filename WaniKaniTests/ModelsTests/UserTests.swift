@@ -31,7 +31,9 @@ final class UserTests: XCTestCase {
                 "lessons_batch_size": 5,
                 "lessons_presentation_order": "ascending_level_then_subject",
                 "reviews_autoplay_audio": false,
-                "reviews_display_srs_indicator": true
+                "reviews_display_srs_indicator": true,
+                "extra_study_autoplay_audio": false,
+                "reviews_presentation_order": "shuffled"
             }
         }
         """.data(using: .utf8)!
@@ -89,7 +91,9 @@ final class UserTests: XCTestCase {
                 "lessons_batch_size": 5,
                 "lessons_presentation_order": "ascending_level_then_subject",
                 "reviews_autoplay_audio": false,
-                "reviews_display_srs_indicator": true
+                "reviews_display_srs_indicator": true,
+                "extra_study_autoplay_audio": false,
+                "reviews_presentation_order": "shuffled"
             }
         }
         """.data(using: .utf8)!

@@ -304,7 +304,9 @@ final class WaniKaniAPITests: XCTestCase {
                 lessonsBatchSize: 5,
                 lessonsPresentationOrder: "ascending_level_then_subject",
                 reviewsAutoplayAudio: true,
-                reviewsDisplaySRSIndicator: true
+                reviewsDisplaySRSIndicator: true,
+                extraStudyAutoplayAudio: false,
+                reviewsPresentationOrder: "shuffled"
             )
         )
     }
