@@ -49,12 +49,12 @@ public final class MockSummaryRepository: SummaryRepositoryProtocol, @unchecked 
 
 // MARK: - MockSubjectRepository
 public final class MockSubjectRepository: SubjectRepositoryProtocol, @unchecked Sendable {
-    public var mockSubject: PersistentSubject?
+    public var mockSubject: SubjectSnapshot?
     public var error: Error?
 
     public init() {}
 
-    public func fetchSubject(id: Int) async throws -> PersistentSubject? {
+    public func fetchSubject(id: Int) async throws -> SubjectSnapshot? {
         if let error = error { throw error }
         return mockSubject
     }
@@ -62,18 +62,18 @@ public final class MockSubjectRepository: SubjectRepositoryProtocol, @unchecked 
 
 // MARK: - MockAssignmentRepository
 public final class MockAssignmentRepository: AssignmentRepositoryProtocol, @unchecked Sendable {
-    public var mockAssignments: [PersistentAssignment] = []
-    public var mockAssignment: PersistentAssignment?
+    public var mockAssignments: [AssignmentSnapshot] = []
+    public var mockAssignment: AssignmentSnapshot?
     public var error: Error?
 
     public init() {}
 
-    public func fetchAssignments(availableBefore: Date) async throws -> [PersistentAssignment] {
+    public func fetchAssignments(availableBefore: Date) async throws -> [AssignmentSnapshot] {
         if let error = error { throw error }
         return mockAssignments
     }
 
-    public func fetchAssignment(id: Int) async throws -> PersistentAssignment? {
+    public func fetchAssignment(id: Int) async throws -> AssignmentSnapshot? {
         if let error = error { throw error }
         return mockAssignment
     }
