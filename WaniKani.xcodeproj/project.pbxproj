@@ -49,6 +49,7 @@
 		914F1D5BC7F2E2DB76362A18 /* ResourceEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB8677018448A4A6E72D0CF /* ResourceEnvelope.swift */; };
 		93462EE2BC1024C7418E15CB /* LessonsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC859F8CDD21B136B2CA68C /* LessonsViewModel.swift */; };
 		982064647BB56916E6D4CF71 /* WaniKaniCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB00719B1B369C75C0818BD8 /* WaniKaniCore.framework */; };
+		98C3E542BED9D1D842970D65 /* SummaryRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3A11E2A3D16019AE79C966 /* SummaryRepositoryTests.swift */; };
 		9949A5E75B1EE9E589CD877B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F57CE02B8F79B461DA34EBD /* RootView.swift */; };
 		9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C7AD8E991C2C4DBEC85A0E /* ReviewTests.swift */; };
 		A06834D5DDE76EB8D75BF124 /* WaniKaniAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD2EF45084297AE1FC1A971 /* WaniKaniAPITests.swift */; };
@@ -210,6 +211,7 @@
 		A39FA1C8094D8E0353CCA9D9 /* GreasyForkAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreasyForkAPITests.swift; sourceTree = "<group>"; };
 		A99C80D0A0A279D33793704C /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		A9BD56C64053BBC584DAF6D4 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		AE3A11E2A3D16019AE79C966 /* SummaryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRepositoryTests.swift; sourceTree = "<group>"; };
 		B1809BB5329EC1CFA829171E /* OfflineSyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncView.swift; sourceTree = "<group>"; };
 		B4DE9DD41544190084DC14A7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B50E2A1FD4AEBB0EF35F89CA /* ReviewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsViewModel.swift; sourceTree = "<group>"; };
@@ -583,6 +585,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		AC15EB120C2B53FC969029E8 /* RepositoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				AE3A11E2A3D16019AE79C966 /* SummaryRepositoryTests.swift */,
+			);
+			path = RepositoryTests;
+			sourceTree = "<group>";
+		};
 		ACFD0B6D8DAEDB2B57C2E73F /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -603,6 +613,7 @@
 				3C15FB18A7ED82F5B8B690EE /* ModelsTests */,
 				8AF3D1287C796A17361DC1F9 /* NetworkingTests */,
 				9E05705BC34455C699B8890D /* PersistenceTests */,
+				AC15EB120C2B53FC969029E8 /* RepositoryTests */,
 				E01B6F239A1373E85DCC09C2 /* SecurityTests */,
 				B9AA0A10B4FE633A7D49AF35 /* StorageTests */,
 			);
@@ -979,6 +990,7 @@
 				9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */,
 				4FF56A98364FE92D9BF9CBBC /* SRSStateMachineTests.swift in Sources */,
 				580DE586200D655B67E43D65 /* SubjectTests.swift in Sources */,
+				98C3E542BED9D1D842970D65 /* SummaryRepositoryTests.swift in Sources */,
 				2C5C77AB8CCB88A9760DD3B4 /* SummaryTests.swift in Sources */,
 				B9A64D3716F7AF0EE1845FB9 /* SyncManagerTests.swift in Sources */,
 				4A7FBEEC533844D2E108B933 /* TestHelpers.swift in Sources */,
