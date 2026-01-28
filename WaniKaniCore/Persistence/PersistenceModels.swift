@@ -177,6 +177,7 @@ public final class PersistentAssignment {
     public var subjectType: String
     public var srsStage: Int
     public var availableAt: Date?
+    public var unlockedAt: Date?
     public var startedAt: Date?
     public var passedAt: Date?
     public var burnedAt: Date?
@@ -188,6 +189,7 @@ public final class PersistentAssignment {
         self.subjectType = assignment.data.subjectType.rawValue
         self.srsStage = assignment.data.srsStage
         self.availableAt = assignment.data.availableAt
+        self.unlockedAt = assignment.data.unlockedAt
         self.startedAt = assignment.data.startedAt
         self.passedAt = assignment.data.passedAt
         self.burnedAt = assignment.data.burnedAt

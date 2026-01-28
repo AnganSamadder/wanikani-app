@@ -28,11 +28,17 @@ public struct SummaryData: Codable, Equatable {
     public let nextReviewsAt: Date?
     
     public var availableLessonsCount: Int {
-        lessons.first(where: { $0.availableAt <= Date() })?.subjectIDs.count ?? 0
+        let now = Date()
+        return lessons
+            .filter { $0.availableAt <= now }
+            .reduce(0) { $0 + $1.subjectIDs.count }
     }
     
     public var availableReviewsCount: Int {
-        reviews.first(where: { $0.availableAt <= Date() })?.subjectIDs.count ?? 0
+        let now = Date()
+        return reviews
+            .filter { $0.availableAt <= now }
+            .reduce(0) { $0 + $1.subjectIDs.count }
     }
     
     private enum CodingKeys: String, CodingKey {

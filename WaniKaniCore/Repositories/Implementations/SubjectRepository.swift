@@ -8,7 +8,7 @@ public final class SubjectRepository: SubjectRepositoryProtocol {
         self.persistenceManager = persistenceManager
     }
     
-    public func fetchSubject(id: Int) async throws -> PersistentSubject? {
-        persistenceManager.fetchSubject(id: id)
+    public func fetchSubject(id: Int) async throws -> SubjectSnapshot? {
+        persistenceManager.fetchSubjectSnapshot(id: id)
     }
 }

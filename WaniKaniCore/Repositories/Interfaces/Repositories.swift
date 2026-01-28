@@ -11,21 +11,21 @@ public protocol SummaryRepositoryProtocol: Sendable {
 public protocol SubjectRepositoryProtocol: Sendable {
     /// Fetches a specific subject by its ID.
     /// - Parameter id: The unique identifier of the subject.
-    /// - Returns: A `PersistentSubject` if found, otherwise `nil`.
-    func fetchSubject(id: Int) async throws -> PersistentSubject?
+    /// - Returns: A `SubjectSnapshot` if found, otherwise `nil`.
+    func fetchSubject(id: Int) async throws -> SubjectSnapshot?
 }
 
 /// Protocol defining the interface for managing assignment data.
 public protocol AssignmentRepositoryProtocol: Sendable {
     /// Fetches assignments that are available before a specific date.
     /// - Parameter availableBefore: The cutoff date for available assignments.
-    /// - Returns: An array of `PersistentAssignment` objects.
-    func fetchAssignments(availableBefore: Date) async throws -> [PersistentAssignment]
+    /// - Returns: An array of `AssignmentSnapshot` objects.
+    func fetchAssignments(availableBefore: Date) async throws -> [AssignmentSnapshot]
     
     /// Fetches a specific assignment by its ID.
     /// - Parameter id: The unique identifier of the assignment.
-    /// - Returns: A `PersistentAssignment` if found, otherwise `nil`.
-    func fetchAssignment(id: Int) async throws -> PersistentAssignment?
+    /// - Returns: An `AssignmentSnapshot` if found, otherwise `nil`.
+    func fetchAssignment(id: Int) async throws -> AssignmentSnapshot?
 }
 
 /// Protocol defining the interface for submitting reviews.

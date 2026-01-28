@@ -1,6 +1,15 @@
 import Foundation
 import SwiftData
 
+public enum SyncProgress: Sendable {
+    case starting
+    case syncingUser
+    case syncingSubjects(Int) // count fetched so far
+    case syncingAssignments(Int) // count fetched so far
+    case completed
+    case failed(String)
+}
+
 public actor SyncManager {
     private let api: WaniKaniAPI
     private let persistence: PersistenceManager
@@ -17,59 +26,68 @@ public actor SyncManager {
     }
     
     public func syncUser() async throws {
-        SmartLogger.shared.info("Starting user sync")
         do {
             let user = try await api.getUser()
             await MainActor.run {
                 persistence.saveUser(user)
             }
-            preferences.lastSyncDate = Date()
-            SmartLogger.shared.info("User sync completed")
         } catch {
-            SmartLogger.shared.error("Failed to sync user: \(error.localizedDescription)")
+            SmartLogger.shared.error("User sync failed: \(error.localizedDescription)")
             throw error
         }
     }
     
-    public func syncSubjects() async throws {
-        SmartLogger.shared.info("Starting subjects sync")
+    public func syncSubjects(updatedAfter: Date? = nil, progress: ((SyncProgress) -> Void)? = nil) async throws {
+        progress?(.syncingSubjects(0))
         do {
-            let subjects = try await api.getAllSubjects()
-            SmartLogger.shared.info("Fetched \(subjects.count) subjects, saving to persistence")
+            let subjects = try await api.getAllSubjects(updatedAfter: updatedAfter)
+            progress?(.syncingSubjects(subjects.count))
             await MainActor.run {
                 persistence.saveSubjects(subjects)
             }
-            SmartLogger.shared.info("Subjects sync completed")
         } catch {
-            SmartLogger.shared.error("Failed to sync subjects: \(error.localizedDescription)")
+            SmartLogger.shared.error("Subjects sync failed: \(error.localizedDescription)")
             throw error
         }
     }
     
-    public func syncAssignments() async throws {
-        SmartLogger.shared.info("Starting assignments sync")
+    public func syncAssignments(updatedAfter: Date? = nil, progress: ((SyncProgress) -> Void)? = nil) async throws {
+        progress?(.syncingAssignments(0))
         do {
-            let assignments = try await api.getAssignments()
-            SmartLogger.shared.info("Fetched \(assignments.count) assignments, saving to persistence")
+            let assignments = try await api.getAssignments(updatedAfter: updatedAfter)
+            progress?(.syncingAssignments(assignments.count))
             await MainActor.run {
                 persistence.saveAssignments(assignments)
             }
-            SmartLogger.shared.info("Assignments sync completed")
         } catch {
-            SmartLogger.shared.error("Failed to sync assignments: \(error.localizedDescription)")
+            SmartLogger.shared.error("Assignments sync failed: \(error.localizedDescription)")
             throw error
         }
     }
     
-    public func syncEverything() async throws {
-        SmartLogger.shared.info("Starting full sync")
+    public func syncEverything(progress: ((SyncProgress) -> Void)? = nil) async throws {
+        progress?(.starting)
+        
+        let lastSyncDate = preferences.lastSyncDate
+        
         do {
+            progress?(.syncingUser)
             try await syncUser()
-            try await syncSubjects()
-            try await syncAssignments()
-            SmartLogger.shared.info("Full sync completed")
+            
+            progress?(.syncingSubjects(0))
+            try await syncSubjects(updatedAfter: lastSyncDate, progress: progress)
+            
+            progress?(.syncingAssignments(0))
+            try await syncAssignments(updatedAfter: lastSyncDate, progress: progress)
+            
+            // Update last sync date only after successful completion
+            preferences.lastSyncDate = Date()
+            
+            progress?(.completed)
         } catch {
-            SmartLogger.shared.error("Full sync failed: \(error.localizedDescription)")
+            let errorMessage = error.localizedDescription
+            SmartLogger.shared.error("Sync failed: \(errorMessage)")
+            progress?(.failed(errorMessage))
             throw error
         }
     }

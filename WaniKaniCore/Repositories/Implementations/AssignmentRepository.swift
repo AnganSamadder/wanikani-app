@@ -8,11 +8,11 @@ public final class AssignmentRepository: AssignmentRepositoryProtocol {
         self.persistenceManager = persistenceManager
     }
     
-    public func fetchAssignments(availableBefore: Date) async throws -> [PersistentAssignment] {
-        persistenceManager.fetchAvailableAssignments(before: availableBefore)
+    public func fetchAssignments(availableBefore: Date) async throws -> [AssignmentSnapshot] {
+        persistenceManager.fetchAvailableAssignmentSnapshots(before: availableBefore)
     }
     
-    public func fetchAssignment(id: Int) async throws -> PersistentAssignment? {
-        persistenceManager.fetchAssignment(id: id)
+    public func fetchAssignment(id: Int) async throws -> AssignmentSnapshot? {
+        persistenceManager.fetchAssignmentSnapshot(id: id)
     }
 }

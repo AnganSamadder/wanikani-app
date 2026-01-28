@@ -2,11 +2,29 @@ import Foundation
 
 // MARK: - Subject Type
 
-public enum SubjectType: String, Codable {
+public enum SubjectType: String, Codable, Sendable {
     case radical
     case kanji
     case vocabulary
     case kanaVocabulary = "kana_vocabulary"
+}
+
+private extension KeyedDecodingContainer {
+    func decodeArray<T: Decodable>(_ type: [T].Type, forKey key: Key) throws -> [T] {
+        try decodeIfPresent(type, forKey: key) ?? []
+    }
+    
+    func decodeString(forKey key: Key) throws -> String {
+        try decodeIfPresent(String.self, forKey: key) ?? ""
+    }
+
+    func decodeBool(forKey key: Key, default defaultValue: Bool = false) throws -> Bool {
+        try decodeIfPresent(Bool.self, forKey: key) ?? defaultValue
+    }
+
+    func decodeInt(forKey key: Key, default defaultValue: Int = 0) throws -> Int {
+        try decodeIfPresent(Int.self, forKey: key) ?? defaultValue
+    }
 }
 
 // MARK: - Common Types
@@ -21,6 +39,13 @@ public struct Meaning: Codable, Equatable {
         case acceptedAnswer = "accepted_answer"
     }
     
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        meaning = try container.decodeString(forKey: .meaning)
+        primary = try container.decodeIfPresent(Bool.self, forKey: .primary) ?? false
+        acceptedAnswer = try container.decodeIfPresent(Bool.self, forKey: .acceptedAnswer) ?? true
+    }
+    
     public init(meaning: String, primary: Bool, acceptedAnswer: Bool) {
         self.meaning = meaning
         self.primary = primary
@@ -31,6 +56,16 @@ public struct Meaning: Codable, Equatable {
 public struct AuxiliaryMeaning: Codable, Equatable {
     public let meaning: String
     public let type: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case meaning, type
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        meaning = try container.decodeString(forKey: .meaning)
+        type = try container.decodeIfPresent(String.self, forKey: .type) ?? "whitelist"
+    }
     
     public init(meaning: String, type: String) {
         self.meaning = meaning
@@ -49,6 +84,14 @@ public struct Reading: Codable, Equatable {
         case acceptedAnswer = "accepted_answer"
     }
     
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        reading = try container.decodeString(forKey: .reading)
+        primary = try container.decodeIfPresent(Bool.self, forKey: .primary) ?? false
+        acceptedAnswer = try container.decodeIfPresent(Bool.self, forKey: .acceptedAnswer) ?? true
+        type = try container.decodeIfPresent(String.self, forKey: .type)
+    }
+    
     public init(reading: String, primary: Bool, acceptedAnswer: Bool, type: String? = nil) {
         self.reading = reading
         self.primary = primary
@@ -61,6 +104,16 @@ public struct ContextSentence: Codable, Equatable {
     public let en: String
     public let ja: String
     
+    private enum CodingKeys: String, CodingKey {
+        case en, ja
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        en = try container.decodeString(forKey: .en)
+        ja = try container.decodeString(forKey: .ja)
+    }
+    
     public init(en: String, ja: String) {
         self.en = en
         self.ja = ja
@@ -70,7 +123,7 @@ public struct ContextSentence: Codable, Equatable {
 public struct PronunciationAudio: Codable, Equatable {
     public let url: String
     public let contentType: String
-    public let metadata: AudioMetadata
+    public let metadata: AudioMetadata?
     
     private enum CodingKeys: String, CodingKey {
         case url
@@ -78,7 +131,18 @@ public struct PronunciationAudio: Codable, Equatable {
         case metadata
     }
     
-    public init(url: String, contentType: String, metadata: AudioMetadata) {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        url = try container.decodeString(forKey: .url)
+        contentType = try container.decodeString(forKey: .contentType)
+        if container.contains(.metadata) {
+            metadata = try? container.decode(AudioMetadata.self, forKey: .metadata)
+        } else {
+            metadata = nil
+        }
+    }
+    
+    public init(url: String, contentType: String, metadata: AudioMetadata? = nil) {
         self.url = url
         self.contentType = contentType
         self.metadata = metadata
@@ -99,6 +163,16 @@ public struct AudioMetadata: Codable, Equatable {
         case voiceActorID = "voice_actor_id"
         case voiceActorName = "voice_actor_name"
         case voiceDescription = "voice_description"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        gender = try container.decodeIfPresent(String.self, forKey: .gender) ?? ""
+        sourceID = try container.decodeIfPresent(Int.self, forKey: .sourceID) ?? 0
+        pronunciation = try container.decodeIfPresent(String.self, forKey: .pronunciation) ?? ""
+        voiceActorID = try container.decodeIfPresent(Int.self, forKey: .voiceActorID) ?? 0
+        voiceActorName = try container.decodeIfPresent(String.self, forKey: .voiceActorName) ?? ""
+        voiceDescription = try container.decodeIfPresent(String.self, forKey: .voiceDescription) ?? ""
     }
     
     public init(
@@ -127,6 +201,13 @@ public struct CharacterImage: Codable, Equatable {
         case url
         case contentType = "content_type"
         case metadata
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        url = try container.decodeString(forKey: .url)
+        contentType = try container.decodeString(forKey: .contentType)
+        metadata = try container.decodeIfPresent(ImageMetadata.self, forKey: .metadata)
     }
     
     public init(url: String, contentType: String, metadata: ImageMetadata? = nil) {
@@ -198,6 +279,23 @@ public struct RadicalData: Codable, Equatable {
         case meaningMnemonic = "meaning_mnemonic"
         case lessonPosition = "lesson_position"
         case spacedRepetitionSystemID = "spaced_repetition_system_id"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        level = try container.decode(Int.self, forKey: .level)
+        slug = try container.decode(String.self, forKey: .slug)
+        hiddenAt = try container.decodeIfPresent(Date.self, forKey: .hiddenAt)
+        documentURL = try container.decode(String.self, forKey: .documentURL)
+        characters = try container.decodeIfPresent(String.self, forKey: .characters)
+        characterImages = try container.decodeArray([CharacterImage].self, forKey: .characterImages)
+        meanings = try container.decodeArray([Meaning].self, forKey: .meanings)
+        auxiliaryMeanings = try container.decodeArray([AuxiliaryMeaning].self, forKey: .auxiliaryMeanings)
+        amalgamationSubjectIDs = try container.decodeArray([Int].self, forKey: .amalgamationSubjectIDs)
+        meaningMnemonic = try container.decodeString(forKey: .meaningMnemonic)
+        lessonPosition = try container.decode(Int.self, forKey: .lessonPosition)
+        spacedRepetitionSystemID = try container.decode(Int.self, forKey: .spacedRepetitionSystemID)
     }
     
     public init(
@@ -290,6 +388,28 @@ public struct KanjiData: Codable, Equatable {
         case readingHint = "reading_hint"
         case lessonPosition = "lesson_position"
         case spacedRepetitionSystemID = "spaced_repetition_system_id"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        level = try container.decode(Int.self, forKey: .level)
+        slug = try container.decode(String.self, forKey: .slug)
+        hiddenAt = try container.decodeIfPresent(Date.self, forKey: .hiddenAt)
+        documentURL = try container.decode(String.self, forKey: .documentURL)
+        characters = try container.decode(String.self, forKey: .characters)
+        meanings = try container.decodeArray([Meaning].self, forKey: .meanings)
+        auxiliaryMeanings = try container.decodeArray([AuxiliaryMeaning].self, forKey: .auxiliaryMeanings)
+        readings = try container.decodeArray([Reading].self, forKey: .readings)
+        componentSubjectIDs = try container.decodeArray([Int].self, forKey: .componentSubjectIDs)
+        amalgamationSubjectIDs = try container.decodeArray([Int].self, forKey: .amalgamationSubjectIDs)
+        visuallySimilarSubjectIDs = try container.decodeArray([Int].self, forKey: .visuallySimilarSubjectIDs)
+        meaningMnemonic = try container.decodeString(forKey: .meaningMnemonic)
+        meaningHint = try container.decodeIfPresent(String.self, forKey: .meaningHint)
+        readingMnemonic = try container.decodeString(forKey: .readingMnemonic)
+        readingHint = try container.decodeIfPresent(String.self, forKey: .readingHint)
+        lessonPosition = try container.decode(Int.self, forKey: .lessonPosition)
+        spacedRepetitionSystemID = try container.decode(Int.self, forKey: .spacedRepetitionSystemID)
     }
     
     public init(
@@ -390,6 +510,27 @@ public struct VocabularyData: Codable, Equatable {
         case pronunciationAudios = "pronunciation_audios"
         case lessonPosition = "lesson_position"
         case spacedRepetitionSystemID = "spaced_repetition_system_id"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        level = try container.decode(Int.self, forKey: .level)
+        slug = try container.decode(String.self, forKey: .slug)
+        hiddenAt = try container.decodeIfPresent(Date.self, forKey: .hiddenAt)
+        documentURL = try container.decode(String.self, forKey: .documentURL)
+        characters = try container.decode(String.self, forKey: .characters)
+        meanings = try container.decodeArray([Meaning].self, forKey: .meanings)
+        auxiliaryMeanings = try container.decodeArray([AuxiliaryMeaning].self, forKey: .auxiliaryMeanings)
+        readings = try container.decodeArray([Reading].self, forKey: .readings)
+        partsOfSpeech = try container.decodeArray([String].self, forKey: .partsOfSpeech)
+        componentSubjectIDs = try container.decodeArray([Int].self, forKey: .componentSubjectIDs)
+        meaningMnemonic = try container.decodeString(forKey: .meaningMnemonic)
+        readingMnemonic = try container.decodeString(forKey: .readingMnemonic)
+        contextSentences = try container.decodeArray([ContextSentence].self, forKey: .contextSentences)
+        pronunciationAudios = try container.decodeArray([PronunciationAudio].self, forKey: .pronunciationAudios)
+        lessonPosition = try container.decode(Int.self, forKey: .lessonPosition)
+        spacedRepetitionSystemID = try container.decode(Int.self, forKey: .spacedRepetitionSystemID)
     }
     
     public init(
