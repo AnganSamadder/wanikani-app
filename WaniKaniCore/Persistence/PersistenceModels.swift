@@ -17,6 +17,16 @@ public final class PersistentUser {
     public var maxLevelGranted: Int
     public var periodEndsAt: Date?
     
+    // Preferences
+    public var defaultVoiceActorID: Int
+    public var lessonsAutoplayAudio: Bool
+    public var lessonsBatchSize: Int
+    public var lessonsPresentationOrder: String
+    public var reviewsAutoplayAudio: Bool
+    public var reviewsDisplaySRSIndicator: Bool
+    public var extraStudyAutoplayAudio: Bool
+    public var reviewsPresentationOrder: String
+    
     public init(from domainUser: User) {
         self.id = domainUser.id
         self.username = domainUser.username
@@ -28,6 +38,16 @@ public final class PersistentUser {
         self.subscriptionType = domainUser.subscription.type.rawValue
         self.maxLevelGranted = domainUser.subscription.maxLevelGranted
         self.periodEndsAt = domainUser.subscription.periodEndsAt
+        
+        // Preferences
+        self.defaultVoiceActorID = domainUser.preferences.defaultVoiceActorID
+        self.lessonsAutoplayAudio = domainUser.preferences.lessonsAutoplayAudio
+        self.lessonsBatchSize = domainUser.preferences.lessonsBatchSize
+        self.lessonsPresentationOrder = domainUser.preferences.lessonsPresentationOrder
+        self.reviewsAutoplayAudio = domainUser.preferences.reviewsAutoplayAudio
+        self.reviewsDisplaySRSIndicator = domainUser.preferences.reviewsDisplaySRSIndicator
+        self.extraStudyAutoplayAudio = domainUser.preferences.extraStudyAutoplayAudio
+        self.reviewsPresentationOrder = domainUser.preferences.reviewsPresentationOrder
     }
     
     public func toDomain() -> User {
@@ -45,12 +65,14 @@ public final class PersistentUser {
                 periodEndsAt: periodEndsAt
             ),
             preferences: Preferences(
-                defaultVoiceActorID: 0,
-                lessonsAutoplayAudio: false,
-                lessonsBatchSize: 5,
-                lessonsPresentationOrder: "ascending_level_then_subject",
-                reviewsAutoplayAudio: false,
-                reviewsDisplaySRSIndicator: true
+                defaultVoiceActorID: defaultVoiceActorID,
+                lessonsAutoplayAudio: lessonsAutoplayAudio,
+                lessonsBatchSize: lessonsBatchSize,
+                lessonsPresentationOrder: lessonsPresentationOrder,
+                reviewsAutoplayAudio: reviewsAutoplayAudio,
+                reviewsDisplaySRSIndicator: reviewsDisplaySRSIndicator,
+                extraStudyAutoplayAudio: extraStudyAutoplayAudio,
+                reviewsPresentationOrder: reviewsPresentationOrder
             )
         )
     }

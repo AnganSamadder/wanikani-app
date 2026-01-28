@@ -81,6 +81,8 @@ public struct Preferences: Codable, Equatable {
     public let lessonsPresentationOrder: String
     public let reviewsAutoplayAudio: Bool
     public let reviewsDisplaySRSIndicator: Bool
+    public let extraStudyAutoplayAudio: Bool
+    public let reviewsPresentationOrder: String
     
     private enum CodingKeys: String, CodingKey {
         case defaultVoiceActorID = "default_voice_actor_id"
@@ -89,6 +91,8 @@ public struct Preferences: Codable, Equatable {
         case lessonsPresentationOrder = "lessons_presentation_order"
         case reviewsAutoplayAudio = "reviews_autoplay_audio"
         case reviewsDisplaySRSIndicator = "reviews_display_srs_indicator"
+        case extraStudyAutoplayAudio = "extra_study_autoplay_audio"
+        case reviewsPresentationOrder = "reviews_presentation_order"
     }
     
     public init(
@@ -97,7 +101,9 @@ public struct Preferences: Codable, Equatable {
         lessonsBatchSize: Int,
         lessonsPresentationOrder: String,
         reviewsAutoplayAudio: Bool,
-        reviewsDisplaySRSIndicator: Bool
+        reviewsDisplaySRSIndicator: Bool,
+        extraStudyAutoplayAudio: Bool,
+        reviewsPresentationOrder: String
     ) {
         self.defaultVoiceActorID = defaultVoiceActorID
         self.lessonsAutoplayAudio = lessonsAutoplayAudio
@@ -105,5 +111,7 @@ public struct Preferences: Codable, Equatable {
         self.lessonsPresentationOrder = lessonsPresentationOrder
         self.reviewsAutoplayAudio = reviewsAutoplayAudio
         self.reviewsDisplaySRSIndicator = reviewsDisplaySRSIndicator
+        self.extraStudyAutoplayAudio = extraStudyAutoplayAudio
+        self.reviewsPresentationOrder = reviewsPresentationOrder
     }
 }
