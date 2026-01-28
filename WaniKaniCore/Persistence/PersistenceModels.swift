@@ -91,8 +91,9 @@ public final class PersistentSubject {
     public var hiddenAt: Date?
     public var characters: String?
     @Relationship(deleteRule: .cascade) public var meanings: [PersistentMeaning]
+    public var readings: [PersistentReading]
     
-    public init(id: Int, object: String, url: String, dataUpdatedAt: Date?, level: Int, slug: String, documentURL: String, hiddenAt: Date?, characters: String?, meanings: [PersistentMeaning]) {
+    public init(id: Int, object: String, url: String, dataUpdatedAt: Date?, level: Int, slug: String, documentURL: String, hiddenAt: Date?, characters: String?, meanings: [PersistentMeaning], readings: [PersistentReading]) {
         self.id = id
         self.object = object
         self.url = url
@@ -103,6 +104,41 @@ public final class PersistentSubject {
         self.hiddenAt = hiddenAt
         self.characters = characters
         self.meanings = meanings
+        self.readings = readings
+    }
+
+    public init(from subjectData: SubjectData) {
+        self.id = subjectData.id
+        self.object = subjectData.object
+        self.url = subjectData.url
+        self.dataUpdatedAt = subjectData.dataUpdatedAt
+        
+        switch subjectData.data {
+        case .radical(let data):
+            self.level = data.level
+            self.slug = data.slug
+            self.documentURL = data.documentURL
+            self.hiddenAt = data.hiddenAt
+            self.characters = data.characters
+            self.meanings = data.meanings.map { PersistentMeaning(meaning: $0.meaning, primary: $0.primary, acceptedAnswer: $0.acceptedAnswer) }
+            self.readings = []
+        case .kanji(let data):
+            self.level = data.level
+            self.slug = data.slug
+            self.documentURL = data.documentURL
+            self.hiddenAt = data.hiddenAt
+            self.characters = data.characters
+            self.meanings = data.meanings.map { PersistentMeaning(meaning: $0.meaning, primary: $0.primary, acceptedAnswer: $0.acceptedAnswer) }
+            self.readings = data.readings.map { PersistentReading(reading: $0.reading, primary: $0.primary, acceptedAnswer: $0.acceptedAnswer, type: $0.type) }
+        case .vocabulary(let data):
+            self.level = data.level
+            self.slug = data.slug
+            self.documentURL = data.documentURL
+            self.hiddenAt = data.hiddenAt
+            self.characters = data.characters
+            self.meanings = data.meanings.map { PersistentMeaning(meaning: $0.meaning, primary: $0.primary, acceptedAnswer: $0.acceptedAnswer) }
+            self.readings = data.readings.map { PersistentReading(reading: $0.reading, primary: $0.primary, acceptedAnswer: $0.acceptedAnswer, type: $0.type) }
+        }
     }
 }
 
@@ -116,6 +152,20 @@ public final class PersistentMeaning {
         self.meaning = meaning
         self.primary = primary
         self.acceptedAnswer = acceptedAnswer
+    }
+}
+
+public struct PersistentReading: Codable, Hashable, Sendable {
+    public var reading: String
+    public var primary: Bool
+    public var acceptedAnswer: Bool
+    public var type: String?
+    
+    public init(reading: String, primary: Bool, acceptedAnswer: Bool, type: String? = nil) {
+        self.reading = reading
+        self.primary = primary
+        self.acceptedAnswer = acceptedAnswer
+        self.type = type
     }
 }
 
