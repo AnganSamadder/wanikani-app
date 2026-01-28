@@ -7,26 +7,33 @@ class DashboardViewModel: ObservableObject {
     @Published var summary: Summary?
     @Published var lessons: Int = 0
     @Published var reviews: Int = 0
+    @Published var nextReviewsAt: Date?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var needsInitialSync = false
     
     private let persistence: PersistenceManager
     private let summaryRepository: SummaryRepositoryProtocol
     private let syncManager: SyncManager
+    private let preferences: PreferencesManager
     private let logger = SmartLogger(subsystem: "com.angansamadder.wanikani", category: "Dashboard")
     
     // Initializer injecting dependencies
-    init(persistence: PersistenceManager, summaryRepository: SummaryRepositoryProtocol) {
+    init(persistence: PersistenceManager, summaryRepository: SummaryRepositoryProtocol, preferences: PreferencesManager = PreferencesManager()) {
         self.persistence = persistence
         self.summaryRepository = summaryRepository
+        self.preferences = preferences
         
         let apiToken = AuthenticationManager.shared.apiToken ?? ""
         self.syncManager = SyncManager(
             api: WaniKaniAPI(networkClient: URLSessionNetworkClient(), apiToken: apiToken),
-            persistence: persistence
+            persistence: persistence,
+            preferences: preferences
         )
         
-        logger.debug("DashboardViewModel initialized")
+        // Check if initial sync is needed
+        self.needsInitialSync = preferences.lastSyncDate == nil
+        
         // Start initial load
         Task {
             await loadData()
@@ -39,9 +46,16 @@ class DashboardViewModel: ObservableObject {
         // 1. Load User from Persistence
         if let pUser = persistence.fetchUser() {
             self.user = pUser
-            logger.debug("Loaded user: \(pUser.username)")
         } else {
-            logger.debug("No user in persistence")
+            // Auto-sync user if not present
+            do {
+                try await syncManager.syncUser()
+                if let syncedUser = persistence.fetchUser() {
+                    self.user = syncedUser
+                }
+            } catch {
+                logger.error("Failed to sync user: \(error.localizedDescription)")
+            }
         }
         
         // 2. Fetch Summary from Repository (API)
@@ -50,12 +64,10 @@ class DashboardViewModel: ObservableObject {
             self.summary = summary
             
             // Update counts using model's computed properties
-            // Note: If model logic needs improvement (e.g. summing all past buckets), do it in Model or here.
-            // For now trusting the model.
             self.lessons = summary.data.availableLessonsCount
             self.reviews = summary.data.availableReviewsCount
+            self.nextReviewsAt = summary.data.nextReviewsAt
             
-            logger.debug("Loaded summary. Lessons: \(self.lessons), Reviews: \(self.reviews)")
             self.errorMessage = nil
         } catch {
             logger.error("Failed to fetch summary: \(error.localizedDescription)")
@@ -67,14 +79,16 @@ class DashboardViewModel: ObservableObject {
     
     func refresh() async {
         isLoading = true
-        logger.info("Refreshing dashboard data...")
         
         do {
-            // 1. Sync User (API -> Persistence)
-            try await syncManager.syncUser()
-            logger.info("User sync complete")
+            // Perform full sync (user, subjects, assignments)
+            try await syncManager.syncEverything { [weak self] progress in
+                Task { @MainActor in
+                    self?.needsInitialSync = false
+                }
+            }
             
-            // 2. Reload Data (Persistence -> UI, and Summary API -> UI)
+            // Reload Data (Persistence -> UI, and Summary API -> UI)
             await loadData()
             
         } catch {
@@ -83,5 +97,9 @@ class DashboardViewModel: ObservableObject {
         }
         
         isLoading = false
+    }
+    
+    func performInitialSync() async {
+        await refresh()
     }
 }
