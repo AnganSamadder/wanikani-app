@@ -12,7 +12,9 @@ public final class URLSessionNetworkClient: NetworkClient {
         self.baseURL = baseURL
         self.session = session
         self.decoder = JSONDecoder()
-        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        // .iso8601 strategy can be strict. If it fails on fractional seconds, we can use a custom strategy.
+        // For now, we'll try .iso8601 as it often handles recent formats.
+        // If "The data couldn’t be read" persists with code 4865 (data corrupted), we'll switch this.
         self.decoder.dateDecodingStrategy = .iso8601
     }
     
