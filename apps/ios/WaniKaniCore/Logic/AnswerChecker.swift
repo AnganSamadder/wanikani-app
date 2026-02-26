@@ -30,9 +30,14 @@ public struct AnswerChecker: Sendable {
     /// - Parameters:
     ///   - userAnswer: The user's input
     ///   - subject: The subject snapshot containing accepted meanings
+    ///   - userSynonyms: Optional user-defined meaning synonyms
     /// - Returns: True if the answer matches an accepted meaning
-    public static func checkMeaning(_ userAnswer: String, for subject: SubjectSnapshot) -> Bool {
-        checkAnswer(userAnswer, against: subject.acceptedMeanings)
+    public static func checkMeaning(
+        _ userAnswer: String,
+        for subject: SubjectSnapshot,
+        userSynonyms: [String] = []
+    ) -> Bool {
+        checkAnswer(userAnswer, against: subject.acceptedMeanings + userSynonyms)
     }
     
     /// Checks if a reading answer is correct
@@ -48,19 +53,38 @@ public struct AnswerChecker: Sendable {
     /// Attempts: raw input, hiragana conversion, katakana conversion.
     public static func checkReadingWithRomaji(_ userAnswer: String, for subject: SubjectSnapshot) -> Bool {
         // 1. Raw input check
-        if checkAnswer(userAnswer, against: subject.acceptedReadings) {
+        if checkReadingAnswer(userAnswer, against: subject.acceptedReadings) {
             return true
         }
         // 2. Hiragana conversion
         let hiragana = RomajiKanaConverter.convert(userAnswer, targetScript: .hiragana)
-        if checkAnswer(hiragana, against: subject.acceptedReadings) {
+        if checkReadingAnswer(hiragana, against: subject.acceptedReadings) {
             return true
         }
         // 3. Katakana conversion (for on'yomi)
         let katakana = RomajiKanaConverter.convert(userAnswer, targetScript: .katakana)
-        if checkAnswer(katakana, against: subject.acceptedReadings) {
+        if checkReadingAnswer(katakana, against: subject.acceptedReadings) {
             return true
         }
         return false
+    }
+
+    /// Reading comparisons should be script-insensitive (hiragana/katakana).
+    /// This lets us display onyomi as katakana while still accepting equivalent hiragana internally.
+    private static func checkReadingAnswer(_ userAnswer: String, against acceptedAnswers: [String]) -> Bool {
+        let normalizedUser = normalizeReading(userAnswer)
+        guard !normalizedUser.isEmpty else { return false }
+
+        return acceptedAnswers.contains { accepted in
+            normalizeReading(accepted) == normalizedUser
+        }
+    }
+
+    private static func normalizeReading(_ input: String) -> String {
+        let cleaned = input
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: ".", with: "")
+        return cleaned.applyingTransform(.hiraganaToKatakana, reverse: true) ?? cleaned
     }
 }
