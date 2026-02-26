@@ -1,0 +1,153 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "globalDependencies": [
+    "turbo.json",
+    "package.json",
+    "bunfig.toml",
+    "bun.lock"
+  ],
+  "globalEnv": [
+    "CI",
+    "DEVELOPER_DIR",
+    "IOS_DESTINATION",
+    "IOS_SCHEME",
+    "WANIKANI_API_TOKEN",
+    "TURBO_TEAM",
+    "TURBO_TOKEN",
+    "TURBO_API"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "outputs": []
+    },
+    "ios:generate": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "project.yml",
+        "swiftgen.yml"
+      ],
+      "outputs": [
+        "WaniKani.xcodeproj/**",
+        "WaniKani/Generated/**"
+      ]
+    },
+    "ios:build": {
+      "dependsOn": [
+        "ios:generate",
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "build/**"
+      ]
+    },
+    "ios:test": {
+      "dependsOn": [
+        "ios:generate"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "build/TestResults.xcresult/**",
+        "build/test-output.txt"
+      ]
+    },
+    "ios:test:unit": {
+      "dependsOn": [
+        "ios:generate"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "build/UnitTestResults.xcresult/**",
+        "build/unit-test-output.txt"
+      ]
+    },
+    "android:build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "app/build/**"
+      ]
+    },
+    "android:bootstrap": {
+      "cache": false
+    },
+    "android:test": {
+      "dependsOn": [
+        "android:build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "app/build/test-results/**"
+      ]
+    },
+    "android:lint": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "app/build/reports/lint-results*.xml",
+        "app/build/reports/lint-results*.html"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
+    "design:sync": {
+      "cache": false,
+      "dependsOn": [
+        "@wanikani/design-tokens#build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    }
+  }
+}

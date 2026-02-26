@@ -11,6 +11,12 @@ xcuserdata/
 build/
 DerivedData/
 *.dSYM/
+**/.gradle/
+**/build/
+.turbo/
+node_modules/
+**/node_modules/
+apps/android/local.properties
 
 
 # CocoaPods
@@ -25,3 +31,7 @@ Pods/
 
 # Sisyphus
 .sisyphus/
+
+# Local tooling artifacts
+.playwright-mcp/
+playwright-*.png

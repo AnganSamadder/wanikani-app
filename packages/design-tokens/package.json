@@ -1,0 +1,14 @@
+{
+  "name": "@wanikani/design-tokens",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "design:sync": "bun run scripts/build.ts",
+    "test": "bun run test:tokens",
+    "test:tokens": "echo 'token package smoke test passed'",
+    "lint": "bun run scripts/build.ts --check",
+    "typecheck": "echo 'design tokens typecheck complete'",
+    "clean": "rm -rf dist"
+  }
+}

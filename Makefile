@@ -1,33 +1,81 @@
-# WaniKani iOS Makefile
+# WaniKani monorepo Makefile convenience wrapper.
 
-# Variables
-DEVICE_NAME ?= iPhone 16
-PLATFORM ?= iOS Simulator
-# Explicitly set OS to 18.3.1 to match available simulator for iPhone 16
-DESTINATION = platform=$(PLATFORM),name=$(DEVICE_NAME),OS=18.3.1
+.PHONY: help install generate open build test lint typecheck clean \
+	ios-generate ios-open ios-build ios-test ios-test-unit \
+	android-build android-test android-lint packages-build
 
-.PHONY: all help generate build test clean open
-
-all: generate build ## Generate project and build (Default)
-
-help: ## Show this help message
-	@echo "Usage: make [target]"
+help:
+	@echo "Usage: make <target>"
 	@echo ""
 	@echo "Targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@echo "  install          Install workspace dependencies with Bun"
+	@echo "  generate         Generate iOS project + token artifacts"
+	@echo "  open             Open root WaniKani.xcodeproj in Xcode"
+	@echo "  build            Build all workspace packages/apps via Turbo"
+	@echo "  test             Test all workspace packages/apps via Turbo"
+	@echo "  lint             Lint all workspace packages/apps via Turbo"
+	@echo "  typecheck        Typecheck all workspace packages/apps via Turbo"
+	@echo "  clean            Clean all workspace packages/apps via Turbo"
+	@echo "  ios-generate     Generate iOS project artifacts"
+	@echo "  ios-open         Open root WaniKani.xcodeproj in Xcode"
+	@echo "  ios-build        Build iOS app"
+	@echo "  ios-test         Run iOS full test suite for active scheme"
+	@echo "  ios-test-unit    Run iOS unit tests only for active scheme"
+	@echo "  android-build    Build Android shell"
+	@echo "  android-test     Run Android unit tests"
+	@echo "  android-lint     Run Android lint"
+	@echo "  packages-build   Build shared packages"
 
-generate: ## Regenerate the Xcode project using xcodegen
-	xcodegen generate
+install:
+	bun install
 
-open: ## Open the generated project in Xcode
-	xed .
+generate:
+	bun run design:sync
+	bun run ios:generate
 
-build: ## Build the app
-	xcodebuild -scheme WaniKani -destination '$(DESTINATION)' build
+open:
+	@if [ ! -d WaniKani.xcodeproj ]; then $(MAKE) generate; fi
+	bun run ios:open
 
-test: ## Run unit tests
-	xcodebuild -scheme WaniKani -destination '$(DESTINATION)' test
+build:
+	bun run build
 
-clean: ## Clean build folder
-	xcodebuild clean
-	rm -rf *.xcodeproj
+test:
+	bun run test
+
+lint:
+	bun run lint
+
+typecheck:
+	bun run typecheck
+
+clean:
+	bun run clean
+
+ios-generate:
+	bun run ios:generate
+
+ios-open:
+	@if [ ! -d WaniKani.xcodeproj ]; then $(MAKE) generate; fi
+	bun run ios:open
+
+ios-build:
+	bun run ios:build
+
+ios-test:
+	bun run ios:test
+
+ios-test-unit:
+	bun run ios:test:unit
+
+android-build:
+	bun run android:build
+
+android-test:
+	bun run android:test
+
+android-lint:
+	bun run android:lint
+
+packages-build:
+	bun run packages:build

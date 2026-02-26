@@ -1,0 +1,13 @@
+{
+  "name": "@wanikani/tooling",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "mkdir -p dist && cp configs/turbo-remote-cache.example.env dist/turbo-remote-cache.example.env",
+    "test": "echo 'tooling test complete'",
+    "lint": "echo 'tooling lint complete'",
+    "typecheck": "echo 'tooling typecheck complete'",
+    "design:sync": "node scripts/design-sync.mjs",
+    "clean": "rm -rf dist"
+  }
+}

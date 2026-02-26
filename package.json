@@ -1,0 +1,47 @@
+{
+  "name": "wanikani-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "bun@1.3.9",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean",
+    "design:sync": "turbo run design:sync",
+    "graph:build": "turbo run build --graph=build-graph.svg",
+    "build:summary": "turbo run build --summarize",
+    "test:summary": "turbo run test --summarize",
+    "build:affected": "turbo run build --affected",
+    "test:affected": "turbo run test --affected",
+    "lint:affected": "turbo run lint --affected",
+    "typecheck:affected": "turbo run typecheck --affected",
+    "ios:generate": "turbo run ios:generate --filter=apps/ios && bun run ios:generate:root",
+    "ios:generate:root": "xcodegen -s apps/ios/project.yml -p . -r apps/ios && swiftgen config run --config apps/ios/swiftgen.yml",
+    "ios:open": "xed WaniKani.xcodeproj",
+    "ios:build": "turbo run ios:build --filter=apps/ios",
+    "ios:test": "turbo run ios:test --filter=apps/ios",
+    "ios:test:unit": "turbo run ios:test:unit --filter=apps/ios",
+    "ios:test:unit:scheme": "IOS_SCHEME=WaniKani-Unit turbo run ios:test:unit --filter=apps/ios",
+    "ios:lint": "turbo run lint --filter=apps/ios",
+    "ios:typecheck": "turbo run typecheck --filter=apps/ios",
+    "android:build": "turbo run android:build --filter=apps/android",
+    "android:test": "turbo run android:test --filter=apps/android",
+    "android:lint": "turbo run android:lint --filter=apps/android",
+    "android:bootstrap": "turbo run android:bootstrap --filter=apps/android",
+    "android:typecheck": "turbo run typecheck --filter=apps/android",
+    "packages:build": "turbo run build --filter=./packages/*",
+    "packages:test": "turbo run test --filter=./packages/*",
+    "packages:lint": "turbo run lint --filter=./packages/*",
+    "packages:typecheck": "turbo run typecheck --filter=./packages/*"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.6"
+  }
+}

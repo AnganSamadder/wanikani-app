@@ -1,0 +1,58 @@
+[
+  {
+    "route": "dashboard",
+    "dataSource": "WaniKani API v2",
+    "status": "complete",
+    "tests": "unit+ui-smoke",
+    "knownGaps": "Route-specific UI journey assertions are still pending (current coverage is ViewModel + launch smoke)"
+  },
+  {
+    "route": "reviews",
+    "dataSource": "WaniKani API v2",
+    "status": "complete",
+    "tests": "unit+ui-smoke",
+    "knownGaps": "Full end-to-end UI session test coverage (multi-item retries/error banners) is still pending"
+  },
+  {
+    "route": "lessons",
+    "dataSource": "WaniKani API v2",
+    "status": "complete",
+    "tests": "unit+ui-smoke",
+    "knownGaps": "Route-specific UI flow assertions for study->quiz->complete transitions are still pending"
+  },
+  {
+    "route": "subjects/*",
+    "dataSource": "WaniKani API v2",
+    "status": "in-progress",
+    "tests": "partial",
+    "knownGaps": "List/detail content still static; API-backed filtering pending"
+  },
+  {
+    "route": "search",
+    "dataSource": "WaniKani API v2",
+    "status": "in-progress",
+    "tests": "pending",
+    "knownGaps": "Search service + debounced query execution pending"
+  },
+  {
+    "route": "extra-study/*",
+    "dataSource": "WaniKani API v2",
+    "status": "in-progress",
+    "tests": "pending",
+    "knownGaps": "Burn review and recently-missed repositories not connected"
+  },
+  {
+    "route": "settings/*",
+    "dataSource": "WaniKani API v2",
+    "status": "in-progress",
+    "tests": "partial",
+    "knownGaps": "App/account/token forms and persistence plumbing pending"
+  },
+  {
+    "route": "community/*",
+    "dataSource": "Discourse API",
+    "status": "in-progress",
+    "tests": "partial",
+    "knownGaps": "UI still static; live session/auth and moderation edge cases pending"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WaniKani Route Parity Matrix",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "route",
+      "dataSource",
+      "status",
+      "tests",
+      "knownGaps"
+    ],
+    "properties": {
+      "route": { "type": "string", "minLength": 1 },
+      "dataSource": { "type": "string", "minLength": 1 },
+      "status": { "type": "string", "enum": ["planned", "in-progress", "complete"] },
+      "tests": { "type": "string", "enum": ["pending", "partial", "complete", "unit+ui-smoke"] },
+      "knownGaps": { "type": "string" }
+    },
+    "additionalProperties": false
+  }
+}

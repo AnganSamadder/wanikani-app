@@ -1,0 +1,13 @@
+{
+  "name": "@wanikani/parity-matrix",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "mkdir -p dist && cp matrix.md dist/matrix.md && cp schema.json dist/schema.json && cp routes.json dist/routes.json",
+    "test": "bun run validate",
+    "validate": "node scripts/validate.mjs",
+    "lint": "bun run validate",
+    "typecheck": "echo 'parity matrix typecheck complete'",
+    "clean": "rm -rf dist"
+  }
+}
