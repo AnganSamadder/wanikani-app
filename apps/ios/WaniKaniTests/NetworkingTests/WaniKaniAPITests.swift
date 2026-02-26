@@ -155,6 +155,19 @@ final class WaniKaniAPITests: XCTestCase {
         let queryParams = mockClient.capturedEndpoints[0].queryParameters
         XCTAssertEqual(queryParams["levels"], "1,2,3")
     }
+
+    func test_getAllSubjects_withSubjectIDsFilter_sendsCorrectQueryParameter() async throws {
+        // Given
+        let page = makeSubjectCollectionEnvelope(subjects: [], nextURL: nil)
+        mockClient.responses = [page]
+
+        // When
+        _ = try await sut.getAllSubjects(subjectIDs: [11, 22, 33])
+
+        // Then
+        let queryParams = mockClient.capturedEndpoints[0].queryParameters
+        XCTAssertEqual(queryParams["ids"], "11,22,33")
+    }
     
     // MARK: - getAssignments Tests
     
@@ -257,6 +270,53 @@ final class WaniKaniAPITests: XCTestCase {
         XCTAssertEqual(review.data.assignmentID, 456)
         XCTAssertEqual(review.data.incorrectMeaningAnswers, 1)
         XCTAssertEqual(review.data.incorrectReadingAnswers, 2)
+    }
+
+    // MARK: - Study Materials Tests
+
+    func test_getStudyMaterials_withSubjectIDsFilter_sendsCorrectQueryParameter() async throws {
+        let page = CollectionEnvelope(
+            object: "collection",
+            url: "https://api.wanikani.com/v2/study_materials",
+            pages: CollectionPage(perPage: 500, nextURL: nil, previousURL: nil),
+            totalCount: 1,
+            dataUpdatedAt: nil,
+            data: [makeTestStudyMaterial(id: 1, subjectID: 42)]
+        )
+        mockClient.responses = [page]
+
+        let materials = try await sut.getStudyMaterials(subjectIDs: [42])
+
+        XCTAssertEqual(materials.count, 1)
+        XCTAssertEqual(mockClient.capturedEndpoints[0].queryParameters["subject_ids"], "42")
+    }
+
+    func test_upsertStudyMaterial_sendsPostBody() async throws {
+        let envelope = ResourceEnvelope(
+            object: "study_material",
+            url: "https://api.wanikani.com/v2/study_materials/1",
+            dataUpdatedAt: Date(),
+            data: StudyMaterialData(
+                createdAt: Date(),
+                subjectID: 42,
+                meaningNote: "note",
+                readingNote: nil,
+                meaningSynonyms: ["synonym"]
+            )
+        )
+        mockClient.responses = [envelope]
+
+        let material = try await sut.upsertStudyMaterial(
+            subjectID: 42,
+            meaningNote: "note",
+            readingNote: nil,
+            meaningSynonyms: ["synonym"]
+        )
+
+        XCTAssertEqual(material.data.subjectID, 42)
+        XCTAssertEqual(mockClient.capturedEndpoints[0].path, "/study_materials")
+        XCTAssertEqual(mockClient.capturedEndpoints[0].method, .post)
+        XCTAssertNotNil(mockClient.capturedEndpoints[0].body)
     }
     
     // MARK: - Test Helpers
@@ -375,6 +435,22 @@ final class WaniKaniAPITests: XCTestCase {
             endingSRSStage: 6,
             incorrectMeaningAnswers: 1,
             incorrectReadingAnswers: 2
+        )
+    }
+
+    private func makeTestStudyMaterial(id: Int, subjectID: Int) -> StudyMaterial {
+        StudyMaterial(
+            id: id,
+            object: "study_material",
+            url: "https://api.wanikani.com/v2/study_materials/\(id)",
+            dataUpdatedAt: Date(),
+            data: StudyMaterialData(
+                createdAt: Date(),
+                subjectID: subjectID,
+                meaningNote: nil,
+                readingNote: nil,
+                meaningSynonyms: []
+            )
         )
     }
 }
