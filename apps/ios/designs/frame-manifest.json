@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "generatedAt": "2026-02-23T03:15:00Z",
+  "source": "apps/ios/designs/wanikani-master.pen",
+  "notes": [
+    "Manifest maps Pencil frame IDs to AppRoute / FeatureRoute ownership.",
+    "Keep this file in sync with parity-matrix route changes."
+  ],
+  "frames": [
+    { "id": "krIQn", "name": "f_dash", "appRoute": "dashboard", "featureRoute": null, "swiftView": "DashboardHomeView" },
+    { "id": "jPxKc", "name": "f_level", "appRoute": "statistics", "featureRoute": null, "swiftView": "ProgressOverviewView" },
+    { "id": "x99my", "name": "f_stats", "appRoute": "statistics", "featureRoute": null, "swiftView": "ProgressOverviewView" },
+    { "id": "unoYM", "name": "f_rev_q", "appRoute": "reviews", "featureRoute": "reviewSession", "swiftView": "ReviewSessionView" },
+    { "id": "bIfh3", "name": "f_rev_ok", "appRoute": "reviews", "featureRoute": "reviewSession", "swiftView": "ReviewSessionView" },
+    { "id": "PASjF", "name": "f_rev_ng", "appRoute": "reviews", "featureRoute": "reviewSession", "swiftView": "ReviewSessionView" },
+    { "id": "MFxcs", "name": "f_rev_done", "appRoute": "reviews", "featureRoute": "reviewSession", "swiftView": "ReviewSessionView" },
+    { "id": "ZDcjb", "name": "f_les_c", "appRoute": "lessons", "featureRoute": "lessonSession", "swiftView": "LessonSessionView" },
+    { "id": "QCIAU", "name": "f_les_q", "appRoute": "lessons", "featureRoute": "lessonSession", "swiftView": "LessonSessionView" },
+    { "id": "obGlT", "name": "f_list_rad", "appRoute": "subjects", "featureRoute": null, "swiftView": "SubjectCatalogView" },
+    { "id": "eODOk", "name": "f_list_kan", "appRoute": "subjects", "featureRoute": null, "swiftView": "SubjectCatalogView" },
+    { "id": "NDxj8", "name": "f_list_voc", "appRoute": "subjects", "featureRoute": null, "swiftView": "SubjectCatalogView" },
+    { "id": "Ovc4x", "name": "f_det_rad", "appRoute": "subjects", "featureRoute": "subjectDetail", "swiftView": "SubjectDetailView" },
+    { "id": "0HbUW", "name": "f_det_kan", "appRoute": "subjects", "featureRoute": "subjectDetail", "swiftView": "SubjectDetailView" },
+    { "id": "dmVLG", "name": "f_det_voc", "appRoute": "subjects", "featureRoute": "subjectDetail", "swiftView": "SubjectDetailView" },
+    { "id": "d76AZ", "name": "f_login", "appRoute": "settings", "featureRoute": null, "swiftView": "AuthTokenView" },
+    { "id": "C1wUE", "name": "f_settings", "appRoute": "settings", "featureRoute": null, "swiftView": "SettingsHubView" },
+    { "id": "HFl5G", "name": "f_community", "appRoute": "community", "featureRoute": null, "swiftView": "CommunityHubView" },
+    { "id": "4C7rR", "name": "f_onb1", "appRoute": "settings", "featureRoute": null, "swiftView": "OnboardingFlowView" },
+    { "id": "8F65t", "name": "f_onb2", "appRoute": "settings", "featureRoute": null, "swiftView": "OnboardingFlowView" }
+  ]
+}

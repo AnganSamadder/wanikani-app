@@ -1,0 +1,6 @@
+xcassets:
+  inputs:
+    - WaniKani/Assets.xcassets
+  outputs:
+    - templateName: swift5
+      output: WaniKani/Generated/Assets+Generated.swift

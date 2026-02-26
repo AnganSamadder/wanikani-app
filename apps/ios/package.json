@@ -1,0 +1,20 @@
+{
+  "name": "apps/ios",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "@wanikani/design-tokens": "workspace:*",
+    "@wanikani/parity-matrix": "workspace:*"
+  },
+  "scripts": {
+    "ios:generate": "./Scripts/generate.sh",
+    "ios:build": "xcodebuild -project WaniKani.xcodeproj -scheme \"${IOS_SCHEME:-WaniKani}\" -destination \"${IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17}\" -derivedDataPath build/DerivedData build",
+    "ios:test": "./Scripts/test.sh",
+    "ios:test:unit": "./Scripts/test-unit.sh",
+    "typecheck": "xcodebuild -project WaniKani.xcodeproj -scheme \"${IOS_SCHEME:-WaniKani}\" -destination \"${IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17}\" -derivedDataPath build/DerivedData -quiet build-for-testing",
+    "build": "bun run ios:build",
+    "test": "bun run ios:test",
+    "lint": "./Scripts/lint.sh",
+    "clean": "xcodebuild -project WaniKani.xcodeproj clean -scheme \"${IOS_SCHEME:-WaniKani}\" || true"
+  }
+}
