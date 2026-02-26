@@ -18,6 +18,10 @@ public struct SubjectSnapshot: Sendable, Identifiable, Hashable {
     public let auxiliaryMeanings: [AuxiliaryMeaning]
     public let contextSentences: [ContextSentence]
     public let pronunciationAudios: [PronunciationAudio]
+    public let componentSubjectIDs: [Int]
+    public let amalgamationSubjectIDs: [Int]
+    public let visuallySimilarSubjectIDs: [Int]
+    public let partsOfSpeech: [String]
 
     public init(
         id: Int,
@@ -33,7 +37,11 @@ public struct SubjectSnapshot: Sendable, Identifiable, Hashable {
         readingHint: String? = nil,
         auxiliaryMeanings: [AuxiliaryMeaning] = [],
         contextSentences: [ContextSentence] = [],
-        pronunciationAudios: [PronunciationAudio] = []
+        pronunciationAudios: [PronunciationAudio] = [],
+        componentSubjectIDs: [Int] = [],
+        amalgamationSubjectIDs: [Int] = [],
+        visuallySimilarSubjectIDs: [Int] = [],
+        partsOfSpeech: [String] = []
     ) {
         self.id = id
         self.object = object
@@ -49,6 +57,10 @@ public struct SubjectSnapshot: Sendable, Identifiable, Hashable {
         self.auxiliaryMeanings = auxiliaryMeanings
         self.contextSentences = contextSentences
         self.pronunciationAudios = pronunciationAudios
+        self.componentSubjectIDs = componentSubjectIDs
+        self.amalgamationSubjectIDs = amalgamationSubjectIDs
+        self.visuallySimilarSubjectIDs = visuallySimilarSubjectIDs
+        self.partsOfSpeech = partsOfSpeech
     }
     
     /// Returns accepted meanings (used for answer checking)
@@ -74,6 +86,72 @@ public struct SubjectSnapshot: Sendable, Identifiable, Hashable {
     /// Whether this subject has readings (kanji/vocabulary)
     public var hasReadings: Bool {
         !readings.isEmpty
+    }
+}
+
+/// Sendable snapshot of persisted in-progress review state.
+public struct PendingReviewSnapshot: Sendable, Hashable, Identifiable {
+    public let assignmentID: Int
+    public let subjectID: Int
+    public let subjectType: String
+    public let hasReadings: Bool
+    public let meaningCompleted: Bool
+    public let readingCompleted: Bool
+    public let incorrectMeaningAnswers: Int
+    public let incorrectReadingAnswers: Int
+    public let updatedAt: Date
+
+    public var id: Int { assignmentID }
+
+    public init(
+        assignmentID: Int,
+        subjectID: Int,
+        subjectType: String,
+        hasReadings: Bool,
+        meaningCompleted: Bool,
+        readingCompleted: Bool,
+        incorrectMeaningAnswers: Int,
+        incorrectReadingAnswers: Int,
+        updatedAt: Date
+    ) {
+        self.assignmentID = assignmentID
+        self.subjectID = subjectID
+        self.subjectType = subjectType
+        self.hasReadings = hasReadings
+        self.meaningCompleted = meaningCompleted
+        self.readingCompleted = readingCompleted
+        self.incorrectMeaningAnswers = incorrectMeaningAnswers
+        self.incorrectReadingAnswers = incorrectReadingAnswers
+        self.updatedAt = updatedAt
+    }
+
+    public var isHalfComplete: Bool {
+        hasReadings && (meaningCompleted != readingCompleted)
+    }
+}
+
+/// Sendable snapshot of user study material (synonyms + notes).
+public struct StudyMaterialSnapshot: Sendable, Hashable, Identifiable {
+    public let subjectID: Int
+    public let meaningNote: String?
+    public let readingNote: String?
+    public let meaningSynonyms: [String]
+    public let updatedAt: Date
+
+    public var id: Int { subjectID }
+
+    public init(
+        subjectID: Int,
+        meaningNote: String?,
+        readingNote: String?,
+        meaningSynonyms: [String],
+        updatedAt: Date
+    ) {
+        self.subjectID = subjectID
+        self.meaningNote = meaningNote
+        self.readingNote = readingNote
+        self.meaningSynonyms = meaningSynonyms
+        self.updatedAt = updatedAt
     }
 }
 
@@ -183,6 +261,10 @@ extension SubjectSnapshot {
         self.auxiliaryMeanings = persistent.auxiliaryMeaningsJSON.flatMap { try? decoder.decode([AuxiliaryMeaning].self, from: $0) } ?? []
         self.contextSentences = persistent.contextSentencesJSON.flatMap { try? decoder.decode([ContextSentence].self, from: $0) } ?? []
         self.pronunciationAudios = persistent.pronunciationAudiosJSON.flatMap { try? decoder.decode([PronunciationAudio].self, from: $0) } ?? []
+        self.componentSubjectIDs = persistent.componentSubjectIDsJSON.flatMap { try? decoder.decode([Int].self, from: $0) } ?? []
+        self.amalgamationSubjectIDs = persistent.amalgamationSubjectIDsJSON.flatMap { try? decoder.decode([Int].self, from: $0) } ?? []
+        self.visuallySimilarSubjectIDs = persistent.visuallySimilarSubjectIDsJSON.flatMap { try? decoder.decode([Int].self, from: $0) } ?? []
+        self.partsOfSpeech = persistent.partsOfSpeechJSON.flatMap { try? decoder.decode([String].self, from: $0) } ?? []
     }
 }
 
@@ -215,5 +297,29 @@ extension AssignmentSnapshot {
         self.passedAt = persistent.passedAt
         self.burnedAt = persistent.burnedAt
         self.hidden = persistent.hidden
+    }
+}
+
+extension PendingReviewSnapshot {
+    init(from persistent: PersistentPendingReview) {
+        self.assignmentID = persistent.assignmentID
+        self.subjectID = persistent.subjectID
+        self.subjectType = persistent.subjectType
+        self.hasReadings = persistent.hasReadings
+        self.meaningCompleted = persistent.meaningCompleted
+        self.readingCompleted = persistent.readingCompleted
+        self.incorrectMeaningAnswers = persistent.incorrectMeaningAnswers
+        self.incorrectReadingAnswers = persistent.incorrectReadingAnswers
+        self.updatedAt = persistent.updatedAt
+    }
+}
+
+extension StudyMaterialSnapshot {
+    init(from persistent: PersistentStudyMaterial) {
+        self.subjectID = persistent.subjectID
+        self.meaningNote = persistent.meaningNote
+        self.readingNote = persistent.readingNote
+        self.meaningSynonyms = persistent.meaningSynonyms
+        self.updatedAt = persistent.updatedAt
     }
 }
