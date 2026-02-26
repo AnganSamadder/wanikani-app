@@ -29,7 +29,9 @@ struct AppContainer: AppContainerProtocol {
     func makeReviewsViewModel() -> ReviewSessionViewModel {
         ReviewSessionViewModel(
             reviewSessionRepository: reviewSessionRepository,
-            subjectDetailRepository: subjectDetailRepository
+            subjectDetailRepository: subjectDetailRepository,
+            subjectRelationsRepository: subjectRelationsRepository,
+            studyMaterialRepository: studyMaterialRepository
         )
     }
 
@@ -65,7 +67,10 @@ struct AppContainer: AppContainerProtocol {
 
     @MainActor
     private var subjectRepository: SubjectRepositoryProtocol {
-        SubjectRepository(persistenceManager: persistenceManager)
+        SubjectRepository(
+            persistenceManager: persistenceManager,
+            api: api
+        )
     }
 
     @MainActor
@@ -82,7 +87,8 @@ struct AppContainer: AppContainerProtocol {
     private var reviewSessionRepository: ReviewSessionRepositoryProtocol {
         ReviewSessionRepository(
             assignmentRepository: assignmentRepository,
-            reviewRepository: reviewRepository
+            reviewRepository: reviewRepository,
+            persistenceManager: persistenceManager
         )
     }
 
@@ -97,6 +103,19 @@ struct AppContainer: AppContainerProtocol {
     @MainActor
     private var subjectDetailRepository: SubjectDetailRepositoryProtocol {
         SubjectDetailRepository(subjectRepository: subjectRepository)
+    }
+
+    @MainActor
+    private var subjectRelationsRepository: SubjectRelationsRepositoryProtocol {
+        SubjectRelationsRepository(subjectRepository: subjectRepository)
+    }
+
+    @MainActor
+    private var studyMaterialRepository: StudyMaterialRepositoryProtocol {
+        StudyMaterialRepository(
+            api: api,
+            persistenceManager: persistenceManager
+        )
     }
 
     @MainActor

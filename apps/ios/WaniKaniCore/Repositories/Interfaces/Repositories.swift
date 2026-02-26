@@ -13,6 +13,11 @@ public protocol SubjectRepositoryProtocol: Sendable {
     /// - Parameter id: The unique identifier of the subject.
     /// - Returns: A `SubjectSnapshot` if found, otherwise `nil`.
     func fetchSubject(id: Int) async throws -> SubjectSnapshot?
+
+    /// Fetches multiple subjects by IDs.
+    /// - Parameter ids: Unique identifiers of subjects.
+    /// - Returns: Matching subject snapshots.
+    func fetchSubjects(ids: [Int]) async throws -> [SubjectSnapshot]
 }
 
 /// Protocol defining the interface for managing assignment data.
