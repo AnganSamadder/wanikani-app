@@ -9,16 +9,16 @@ public enum WKColor {
     // MARK: - Brand Colors (Semantic Accents)
     
     /// Radical - Blue tones
-    public static let radical = Color(red: 0.00, green: 0.67, blue: 0.89) // #00AACC
-    public static let radicalBackground = Color(red: 0.00, green: 0.67, blue: 0.89).opacity(0.12)
+    public static let radical = Color(red: 0.00, green: 0.67, blue: 1.00) // #00AAFF
+    public static let radicalBackground = Color(red: 0.00, green: 0.67, blue: 1.00).opacity(0.12)
     
     /// Kanji - Pink/Magenta tones
-    public static let kanji = Color(red: 0.91, green: 0.12, blue: 0.39) // #E91E63
-    public static let kanjiBackground = Color(red: 0.91, green: 0.12, blue: 0.39).opacity(0.12)
+    public static let kanji = Color(red: 1.00, green: 0.00, blue: 0.67) // #FF00AA
+    public static let kanjiBackground = Color(red: 1.00, green: 0.00, blue: 0.67).opacity(0.12)
     
     /// Vocabulary - Purple tones
-    public static let vocabulary = Color(red: 0.66, green: 0.31, blue: 0.78) // #A855C8
-    public static let vocabularyBackground = Color(red: 0.66, green: 0.31, blue: 0.78).opacity(0.12)
+    public static let vocabulary = Color(red: 0.67, green: 0.00, blue: 1.00) // #AA00FF
+    public static let vocabularyBackground = Color(red: 0.67, green: 0.00, blue: 1.00).opacity(0.12)
     
     // MARK: - Semantic Colors
     

@@ -43,13 +43,13 @@ struct ReviewHeatmapView: View {
         case 0:
             return Color(.systemGray5)
         case 1...3:
-            return Color.purple.opacity(0.25)
+            return WKColor.kanji.opacity(0.22)
         case 4...9:
-            return Color.purple.opacity(0.45)
+            return WKColor.kanji.opacity(0.44)
         case 10...29:
-            return Color.purple.opacity(0.70)
+            return WKColor.kanji.opacity(0.66)
         default:
-            return Color.purple.opacity(0.95)
+            return WKColor.kanji.opacity(0.88)
         }
     }
 
