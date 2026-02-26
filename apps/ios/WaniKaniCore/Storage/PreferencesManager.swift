@@ -18,6 +18,7 @@ public final class PreferencesManager {
         static let lastSyncDate = "lastSyncDate"
         static let selectedPrototypeMode = "selectedPrototypeMode"
         static let lastReviewHistorySyncDate = "lastReviewHistorySyncDate"
+        static let undoButtonEnabled = "undoButtonEnabled"
     }
     
     // MARK: - Properties
@@ -65,6 +66,14 @@ public final class PreferencesManager {
         set { userDefaults.set(newValue, forKey: Keys.lastReviewHistorySyncDate) }
     }
 
+    public var undoButtonEnabled: Bool {
+        get {
+            guard userDefaults.object(forKey: Keys.undoButtonEnabled) != nil else { return true }
+            return userDefaults.bool(forKey: Keys.undoButtonEnabled)
+        }
+        set { userDefaults.set(newValue, forKey: Keys.undoButtonEnabled) }
+    }
+
     // MARK: - Methods
     
     public func reset() {
@@ -76,7 +85,8 @@ public final class PreferencesManager {
             Keys.enabledScriptIDs,
             Keys.lastSyncDate,
             Keys.selectedPrototypeMode,
-            Keys.lastReviewHistorySyncDate
+            Keys.lastReviewHistorySyncDate,
+            Keys.undoButtonEnabled
         ]
         keys.forEach { userDefaults.removeObject(forKey: $0) }
     }

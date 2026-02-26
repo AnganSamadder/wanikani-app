@@ -46,6 +46,16 @@ public struct StudyMaterialData: Codable, Equatable, Sendable {
         case hidden
     }
 
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt)
+        subjectID = try container.decode(Int.self, forKey: .subjectID)
+        meaningNote = try container.decodeIfPresent(String.self, forKey: .meaningNote)
+        readingNote = try container.decodeIfPresent(String.self, forKey: .readingNote)
+        meaningSynonyms = try container.decodeIfPresent([String].self, forKey: .meaningSynonyms) ?? []
+        hidden = try container.decodeIfPresent(Bool.self, forKey: .hidden) ?? false
+    }
+
     public init(
         createdAt: Date?,
         subjectID: Int,

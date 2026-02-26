@@ -14,7 +14,9 @@ public final class PersistenceManager {
             PersistentSubject.self,
             PersistentMeaning.self,
             PersistentAssignment.self,
-            PersistentReview.self
+            PersistentReview.self,
+            PersistentPendingReview.self,
+            PersistentStudyMaterial.self
         ])
         
         // Ensure Application Support directory exists for SwiftData
@@ -146,6 +148,15 @@ public final class PersistenceManager {
         guard let persistent = fetchSubject(id: id) else { return nil }
         return SubjectSnapshot(from: persistent)
     }
+
+    public func fetchSubjectSnapshots(ids: [Int]) -> [SubjectSnapshot] {
+        let idSet = Set(ids)
+        let descriptor = FetchDescriptor<PersistentSubject>()
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        return persistents
+            .filter { idSet.contains($0.id) }
+            .map { SubjectSnapshot(from: $0) }
+    }
     
     public func fetchAssignmentSnapshot(id: Int) -> AssignmentSnapshot? {
         guard let persistent = fetchAssignment(id: id) else { return nil }
@@ -206,5 +217,146 @@ public final class PersistenceManager {
             counts[dayStart, default: 0] += 1
         }
         return counts
+    }
+
+    // MARK: - Pending Reviews
+
+    public func upsertPendingReview(_ snapshot: PendingReviewSnapshot) throws {
+        let assignmentID = snapshot.assignmentID
+        let descriptor = FetchDescriptor<PersistentPendingReview>(
+            predicate: #Predicate<PersistentPendingReview> { $0.assignmentID == assignmentID }
+        )
+        if let existing = try context.fetch(descriptor).first {
+            existing.subjectID = snapshot.subjectID
+            existing.subjectType = snapshot.subjectType
+            existing.hasReadings = snapshot.hasReadings
+            existing.meaningCompleted = snapshot.meaningCompleted
+            existing.readingCompleted = snapshot.readingCompleted
+            existing.incorrectMeaningAnswers = snapshot.incorrectMeaningAnswers
+            existing.incorrectReadingAnswers = snapshot.incorrectReadingAnswers
+            existing.updatedAt = snapshot.updatedAt
+        } else {
+            context.insert(PersistentPendingReview(
+                assignmentID: snapshot.assignmentID,
+                subjectID: snapshot.subjectID,
+                subjectType: snapshot.subjectType,
+                hasReadings: snapshot.hasReadings,
+                meaningCompleted: snapshot.meaningCompleted,
+                readingCompleted: snapshot.readingCompleted,
+                incorrectMeaningAnswers: snapshot.incorrectMeaningAnswers,
+                incorrectReadingAnswers: snapshot.incorrectReadingAnswers,
+                updatedAt: snapshot.updatedAt
+            ))
+        }
+        try save()
+    }
+
+    public func fetchPendingReviews() -> [PendingReviewSnapshot] {
+        let descriptor = FetchDescriptor<PersistentPendingReview>(
+            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
+        )
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        return persistents.map { PendingReviewSnapshot(from: $0) }
+    }
+
+    public func fetchPendingReview(assignmentID: Int) -> PendingReviewSnapshot? {
+        let descriptor = FetchDescriptor<PersistentPendingReview>(
+            predicate: #Predicate<PersistentPendingReview> { $0.assignmentID == assignmentID }
+        )
+        guard let persistent = try? context.fetch(descriptor).first else { return nil }
+        return PendingReviewSnapshot(from: persistent)
+    }
+
+    public func deletePendingReview(assignmentID: Int) throws {
+        let descriptor = FetchDescriptor<PersistentPendingReview>(
+            predicate: #Predicate<PersistentPendingReview> { $0.assignmentID == assignmentID }
+        )
+        if let existing = try context.fetch(descriptor).first {
+            context.delete(existing)
+            try save()
+        }
+    }
+
+    public func countHalfCompletions() -> Int {
+        fetchPendingReviews().filter(\.isHalfComplete).count
+    }
+
+    public func prunePendingReviews(validAssignmentIDs: Set<Int>) throws {
+        let descriptor = FetchDescriptor<PersistentPendingReview>()
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        var mutated = false
+        for pending in persistents where !validAssignmentIDs.contains(pending.assignmentID) {
+            context.delete(pending)
+            mutated = true
+        }
+        if mutated {
+            try save()
+        }
+    }
+
+    // MARK: - Study Materials
+
+    public func saveStudyMaterials(_ materials: [StudyMaterial]) throws {
+        for material in materials {
+            upsertStudyMaterial(material)
+        }
+        try save()
+    }
+
+    public func saveStudyMaterialSnapshot(_ snapshot: StudyMaterialSnapshot) throws {
+        let subjectID = snapshot.subjectID
+        let descriptor = FetchDescriptor<PersistentStudyMaterial>(
+            predicate: #Predicate<PersistentStudyMaterial> { $0.subjectID == subjectID }
+        )
+        if let existing = try context.fetch(descriptor).first {
+            existing.meaningNote = snapshot.meaningNote
+            existing.readingNote = snapshot.readingNote
+            existing.meaningSynonyms = snapshot.meaningSynonyms
+            existing.updatedAt = snapshot.updatedAt
+        } else {
+            context.insert(PersistentStudyMaterial(
+                subjectID: snapshot.subjectID,
+                meaningNote: snapshot.meaningNote,
+                readingNote: snapshot.readingNote,
+                meaningSynonyms: snapshot.meaningSynonyms,
+                updatedAt: snapshot.updatedAt
+            ))
+        }
+        try save()
+    }
+
+    private func upsertStudyMaterial(_ studyMaterial: StudyMaterial) {
+        let subjectID = studyMaterial.data.subjectID
+        let descriptor = FetchDescriptor<PersistentStudyMaterial>(
+            predicate: #Predicate<PersistentStudyMaterial> { $0.subjectID == subjectID }
+        )
+        if let existing = try? context.fetch(descriptor).first {
+            existing.meaningNote = studyMaterial.data.meaningNote
+            existing.readingNote = studyMaterial.data.readingNote
+            existing.meaningSynonyms = studyMaterial.data.meaningSynonyms
+            existing.updatedAt = studyMaterial.dataUpdatedAt ?? Date()
+        } else {
+            context.insert(PersistentStudyMaterial(from: studyMaterial))
+        }
+    }
+
+    public func fetchStudyMaterial(subjectID: Int) -> StudyMaterialSnapshot? {
+        let descriptor = FetchDescriptor<PersistentStudyMaterial>(
+            predicate: #Predicate<PersistentStudyMaterial> { $0.subjectID == subjectID }
+        )
+        guard let persistent = try? context.fetch(descriptor).first else { return nil }
+        return StudyMaterialSnapshot(from: persistent)
+    }
+
+    public func fetchStudyMaterials(subjectIDs: [Int]? = nil) -> [StudyMaterialSnapshot] {
+        let descriptor = FetchDescriptor<PersistentStudyMaterial>()
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        guard let subjectIDs, !subjectIDs.isEmpty else {
+            return persistents.map { StudyMaterialSnapshot(from: $0) }
+        }
+        let set = Set(subjectIDs)
+        return persistents
+            .filter { set.contains($0.subjectID) }
+            .map { StudyMaterialSnapshot(from: $0) }
     }
 }

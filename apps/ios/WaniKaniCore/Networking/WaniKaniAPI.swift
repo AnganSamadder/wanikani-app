@@ -80,7 +80,8 @@ public final class WaniKaniAPI {
     public func getAllSubjects(
         types: [SubjectType]? = nil,
         levels: [Int]? = nil,
-        updatedAfter: Date? = nil
+        updatedAfter: Date? = nil,
+        subjectIDs: [Int]? = nil
     ) async throws -> [SubjectData] {
         var allSubjects: [SubjectData] = []
         var nextURL: String? = nil
@@ -99,6 +100,11 @@ public final class WaniKaniAPI {
                 }
                 if let levels = levels, !levels.isEmpty {
                     queryParams["levels"] = levels.map { String($0) }.joined(separator: ",")
+                }
+                if let subjectIDs = subjectIDs, !subjectIDs.isEmpty {
+                    // /subjects uses `ids`, not `subject_ids`.
+                    // Using `subject_ids` is ignored by the API and returns the full catalog.
+                    queryParams["ids"] = subjectIDs.map { String($0) }.joined(separator: ",")
                 }
                 if let updatedAfter = updatedAfter {
                     queryParams["updated_after"] = iso8601Formatter.string(from: updatedAfter)
@@ -373,6 +379,76 @@ public final class WaniKaniAPI {
 
         return allReviews
     }
+
+    // MARK: - Study Materials with Pagination
+
+    public func getStudyMaterials(subjectIDs: [Int]? = nil) async throws -> [StudyMaterial] {
+        var allMaterials: [StudyMaterial] = []
+        var nextURL: String? = nil
+        var isFirstRequest = true
+
+        while isFirstRequest || nextURL != nil {
+            let currentEndpoint: Endpoint
+
+            if isFirstRequest {
+                var queryParams: [String: String] = [:]
+                if let subjectIDs, !subjectIDs.isEmpty {
+                    queryParams["subject_ids"] = subjectIDs.map(String.init).joined(separator: ",")
+                }
+                currentEndpoint = endpoint(path: "/study_materials", queryParameters: queryParams)
+            } else if let next = nextURL, let parsed = parseNextURL(next) {
+                currentEndpoint = endpoint(path: parsed.path, queryParameters: parsed.queryParams)
+            } else {
+                break
+            }
+
+            isFirstRequest = false
+
+            let envelope: CollectionEnvelope<StudyMaterial> = try await networkClient.request(currentEndpoint)
+            allMaterials.append(contentsOf: envelope.data)
+            nextURL = envelope.pages.nextURL
+        }
+
+        return allMaterials
+    }
+
+    public func upsertStudyMaterial(
+        subjectID: Int,
+        meaningNote: String?,
+        readingNote: String?,
+        meaningSynonyms: [String]
+    ) async throws -> StudyMaterial {
+        let request = StudyMaterialUpsertWrapper(
+            studyMaterial: StudyMaterialUpsertRequest(
+                subjectID: subjectID,
+                meaningNote: meaningNote,
+                readingNote: readingNote,
+                meaningSynonyms: meaningSynonyms
+            )
+        )
+
+        let encoder = JSONEncoder()
+        let body = try encoder.encode(request)
+
+        var headers = buildHeaders()
+        headers["Content-Type"] = "application/json"
+
+        let createEndpoint = Endpoint(
+            path: "/study_materials",
+            method: .post,
+            headers: headers,
+            body: body
+        )
+        let envelope: ResourceEnvelope<StudyMaterialData> = try await networkClient.request(createEndpoint)
+
+        return StudyMaterial(
+            id: 0,
+            object: envelope.object,
+            url: envelope.url,
+            dataUpdatedAt: envelope.dataUpdatedAt,
+            data: envelope.data
+        )
+    }
 }
 
 // MARK: - Review Request Types
@@ -391,6 +467,28 @@ private struct ReviewRequest: Encodable {
 
 private struct ReviewRequestWrapper: Encodable {
     let review: ReviewRequest
+}
+
+private struct StudyMaterialUpsertRequest: Encodable {
+    let subjectID: Int
+    let meaningNote: String?
+    let readingNote: String?
+    let meaningSynonyms: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case subjectID = "subject_id"
+        case meaningNote = "meaning_note"
+        case readingNote = "reading_note"
+        case meaningSynonyms = "meaning_synonyms"
+    }
+}
+
+private struct StudyMaterialUpsertWrapper: Encodable {
+    let studyMaterial: StudyMaterialUpsertRequest
+
+    enum CodingKeys: String, CodingKey {
+        case studyMaterial = "study_material"
+    }
 }
 
 // MARK: - SubjectData wrapper for heterogeneous subjects
