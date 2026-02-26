@@ -55,4 +55,26 @@ final class LessonSessionViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.state, .complete)
     }
+
+    func test_load_whenCalledConcurrently_fetchesQueueOnce() async {
+        repository.mockQueue = [
+            SubjectSnapshot(
+                id: 101,
+                object: "kanji",
+                characters: "校",
+                slug: "school",
+                level: 1,
+                meanings: [MeaningSnapshot(meaning: "School", primary: true, acceptedAnswer: true)],
+                readings: [ReadingSnapshot(reading: "こう", primary: true, acceptedAnswer: true)]
+            )
+        ]
+        repository.fetchLessonQueueDelayNanoseconds = 50_000_000
+
+        async let firstLoad: Void = sut.load()
+        async let secondLoad: Void = sut.load()
+        _ = await (firstLoad, secondLoad)
+
+        XCTAssertEqual(repository.fetchLessonQueueCallCount, 1)
+        XCTAssertEqual(sut.state, .studying)
+    }
 }
