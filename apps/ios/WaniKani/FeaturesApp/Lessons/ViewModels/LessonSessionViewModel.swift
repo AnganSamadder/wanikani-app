@@ -33,6 +33,7 @@ final class LessonSessionViewModel: ObservableObject {
     private var queue: [SubjectSnapshot] = []
     private var currentIndex = 0
     private var questionType: QuestionType = .meaning
+    private var loadTask: Task<Void, Never>? = nil
 
     init(repository: LessonSessionRepositoryProtocol) {
         self.repository = repository
@@ -57,6 +58,25 @@ final class LessonSessionViewModel: ObservableObject {
     }
 
     func load() async {
+        if let loadTask {
+            await loadTask.value
+            return
+        }
+
+        let task = Task { [self] in
+            await performLoad()
+        }
+        loadTask = task
+        await task.value
+        loadTask = nil
+    }
+
+    func prefetchIfNeeded() async {
+        guard state == .idle else { return }
+        await load()
+    }
+
+    private func performLoad() async {
         state = .loading
         feedback = .none
         userAnswer = ""

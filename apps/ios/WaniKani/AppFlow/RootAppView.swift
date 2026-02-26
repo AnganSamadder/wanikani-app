@@ -8,6 +8,7 @@ struct RootAppFlowView: View {
     @StateObject private var lessonsViewModel: LessonSessionViewModel
     @StateObject private var progressViewModel: ProgressOverviewViewModel
     @State private var selectedTab: AppRoute = .dashboard
+    @State private var didPrefetchQueues = false
 
     init(container: AppContainerProtocol = AppContainer()) {
         self.container = container
@@ -30,6 +31,9 @@ struct RootAppFlowView: View {
             }
         }
         .tint(WKColor.kanji)
+        .task {
+            await prefetchQueuesIfNeeded()
+        }
     }
 
     @ViewBuilder
@@ -56,6 +60,15 @@ struct RootAppFlowView: View {
         case .community:
             CommunityHubView()
         }
+    }
+
+    private func prefetchQueuesIfNeeded() async {
+        guard !didPrefetchQueues else { return }
+        didPrefetchQueues = true
+
+        async let reviewsPrefetch: Void = reviewsViewModel.prefetchIfNeeded()
+        async let lessonsPrefetch: Void = lessonsViewModel.prefetchIfNeeded()
+        _ = await (reviewsPrefetch, lessonsPrefetch)
     }
 
 }

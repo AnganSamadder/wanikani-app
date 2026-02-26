@@ -54,10 +54,12 @@ final class ReviewSessionViewModel: ObservableObject {
 
     private struct SessionItem {
         let assignmentID: Int
-        var incorrectMeaningAnswers: Int = 0
-        var incorrectReadingAnswers: Int = 0
-        var meaningCorrect = false
-        var readingCorrect = false
+        let subjectID: Int
+        let subjectType: String
+        var incorrectMeaningAnswers: Int
+        var incorrectReadingAnswers: Int
+        var meaningCorrect: Bool
+        var readingCorrect: Bool
         let hasReadings: Bool
 
         var isComplete: Bool { meaningCorrect && (readingCorrect || !hasReadings) }
@@ -69,6 +71,7 @@ final class ReviewSessionViewModel: ObservableObject {
         let restoredQueueItem: QueueItem
         let previousAttemptCount: Int
         let wasComplete: Bool
+        let didRequeue: Bool
     }
 
     // MARK: - Published State
@@ -82,6 +85,7 @@ final class ReviewSessionViewModel: ObservableObject {
     @Published private(set) var isSubmitting = false
     @Published private(set) var lastAnswerCorrect: Bool? = nil
     @Published private(set) var currentSubject: SubjectSnapshot?
+    @Published private(set) var pendingHalfCompletionCount: Int = 0
     @Published var userAnswer = ""
     @Published var timerModeEnabled: Bool = false
 
@@ -93,19 +97,25 @@ final class ReviewSessionViewModel: ObservableObject {
     private var sessionItems: [Int: SessionItem] = [:]
     private var pendingCommit: SessionItem? = nil
     private var undoCheckpoint: UndoCheckpoint? = nil
-    private var timerExpired = false
+    private var loadTask: Task<Void, Never>? = nil
 
     // MARK: - Dependencies
 
     private let reviewSessionRepository: ReviewSessionRepositoryProtocol
     private let subjectDetailRepository: SubjectDetailRepositoryProtocol
+    private let subjectRelationsRepository: SubjectRelationsRepositoryProtocol
+    private let studyMaterialRepository: StudyMaterialRepositoryProtocol
 
     init(
         reviewSessionRepository: ReviewSessionRepositoryProtocol,
-        subjectDetailRepository: SubjectDetailRepositoryProtocol
+        subjectDetailRepository: SubjectDetailRepositoryProtocol,
+        subjectRelationsRepository: SubjectRelationsRepositoryProtocol,
+        studyMaterialRepository: StudyMaterialRepositoryProtocol
     ) {
         self.reviewSessionRepository = reviewSessionRepository
         self.subjectDetailRepository = subjectDetailRepository
+        self.subjectRelationsRepository = subjectRelationsRepository
+        self.studyMaterialRepository = studyMaterialRepository
     }
 
     // MARK: - Computed
@@ -119,6 +129,25 @@ final class ReviewSessionViewModel: ObservableObject {
     // MARK: - Load
 
     func load(policy: QueuePolicy = .normal) async {
+        if let loadTask {
+            await loadTask.value
+            return
+        }
+
+        let task = Task { [self] in
+            await performLoad(policy: policy)
+        }
+        loadTask = task
+        await task.value
+        loadTask = nil
+    }
+
+    func prefetchIfNeeded() async {
+        guard state == .idle else { return }
+        await load()
+    }
+
+    private func performLoad(policy: QueuePolicy) async {
         state = .loading
         phase = .answering
         userAnswer = ""
@@ -130,34 +159,85 @@ final class ReviewSessionViewModel: ObservableObject {
         currentItem = nil
         currentSubject = nil
         prompt = nil
-        timerExpired = false
 
         do {
             let assignments = try await reviewSessionRepository.startReviewSession()
             if assignments.isEmpty {
                 state = .empty
+                pendingHalfCompletionCount = 0
                 return
             }
+
+            let assignmentIDs = Set(assignments.map(\.id))
+            try? await reviewSessionRepository.prunePendingReviews(validAssignmentIDs: assignmentIDs)
+
+            var pendingByAssignment = Dictionary(
+                uniqueKeysWithValues: try await reviewSessionRepository
+                    .fetchPendingReviews()
+                    .map { ($0.assignmentID, $0) }
+            )
+
+            // Recover completed-but-not-submitted answers from prior app exit.
+            for pending in pendingByAssignment.values
+            where pending.hasReadings && pending.meaningCompleted && pending.readingCompleted {
+                do {
+                    _ = try await reviewSessionRepository.submitReview(
+                        assignmentId: pending.assignmentID,
+                        incorrectMeaningAnswers: pending.incorrectMeaningAnswers,
+                        incorrectReadingAnswers: pending.incorrectReadingAnswers
+                    )
+                    try? await reviewSessionRepository.deletePendingReview(assignmentId: pending.assignmentID)
+                    pendingByAssignment.removeValue(forKey: pending.assignmentID)
+                } catch {
+                    // Keep persisted pending state for next retry.
+                }
+            }
+
+            try? await studyMaterialRepository.syncStudyMaterials(subjectIDs: assignments.map(\.subjectID))
+            let subjectsByID = try await fetchSubjectsByID(for: assignments)
 
             var loadedItems: [QueueItem] = []
             var loadedSessions: [Int: SessionItem] = [:]
 
             for assignment in assignments {
-                guard let subject = try await subjectDetailRepository.fetchSubjectDetail(id: assignment.subjectID) else {
+                let subject: SubjectSnapshot
+                if let batchedSubject = subjectsByID[assignment.subjectID] {
+                    subject = batchedSubject
+                } else if let fallbackSubject = try await subjectDetailRepository.fetchSubjectDetail(id: assignment.subjectID) {
+                    subject = fallbackSubject
+                } else {
                     continue
                 }
-                loadedSessions[assignment.id] = SessionItem(
+
+                let pending = pendingByAssignment[assignment.id]
+                let session = SessionItem(
                     assignmentID: assignment.id,
+                    subjectID: assignment.subjectID,
+                    subjectType: assignment.subjectType.rawValue,
+                    incorrectMeaningAnswers: pending?.incorrectMeaningAnswers ?? 0,
+                    incorrectReadingAnswers: pending?.incorrectReadingAnswers ?? 0,
+                    meaningCorrect: pending?.meaningCompleted ?? false,
+                    readingCorrect: pending?.readingCompleted ?? false,
                     hasReadings: subject.hasReadings
                 )
-                loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .meaning))
-                if subject.hasReadings {
-                    loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .reading))
+                loadedSessions[assignment.id] = session
+
+                switch policy {
+                case .normal:
+                    if !session.meaningCorrect {
+                        loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .meaning))
+                    }
+                    if session.hasReadings && !session.readingCorrect {
+                        loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .reading))
+                    }
+                case .finishPendingOnly:
+                    guard session.hasReadings, session.meaningCorrect != session.readingCorrect else { continue }
+                    let missingType: QuestionType = session.meaningCorrect ? .reading : .meaning
+                    loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: missingType))
                 }
             }
 
             let shuffled = loadedItems.shuffled()
-
             if policy == .finishPendingOnly {
                 activeQueue = shuffled
                 unseenQueue = []
@@ -167,6 +247,7 @@ final class ReviewSessionViewModel: ObservableObject {
             }
 
             sessionItems = loadedSessions
+            await refreshPendingHalfCompletionCount()
             advanceToNextItem()
             state = currentItem == nil ? .empty : .ready
         } catch {
@@ -187,21 +268,21 @@ final class ReviewSessionViewModel: ObservableObject {
         defer { isSubmitting = false }
 
         let answer = userAnswer
-
-        let isCorrect: Bool
-        switch activeItem.questionType {
-        case .meaning:
-            isCorrect = AnswerChecker.checkMeaning(answer, for: activeItem.subject)
-        case .reading:
-            isCorrect = AnswerChecker.checkReading(answer, for: activeItem.subject)
-        }
-
         guard var sessionItem = sessionItems[activeItem.assignment.id] else {
             state = .failed("Missing session state")
             return
         }
-
+        let previousSessionItem = sessionItem
         let previousAttemptCount = attemptHistory.count
+
+        let isCorrect: Bool
+        switch activeItem.questionType {
+        case .meaning:
+            let synonyms = (try? await studyMaterialRepository.fetchStudyMaterial(subjectID: activeItem.subject.id))?.meaningSynonyms ?? []
+            isCorrect = AnswerChecker.checkMeaning(answer, for: activeItem.subject, userSynonyms: synonyms)
+        case .reading:
+            isCorrect = AnswerChecker.checkReading(answer, for: activeItem.subject)
+        }
 
         attemptHistory.append(ReviewAttemptRecord(
             characters: activeItem.subject.characters ?? activeItem.subject.slug,
@@ -225,22 +306,44 @@ final class ReviewSessionViewModel: ObservableObject {
             activeQueue.append(activeItem)
         }
 
-        let wasComplete = sessionItem.isComplete
         sessionItems[activeItem.assignment.id] = sessionItem
+        let wasComplete = sessionItem.isComplete
+
+        if sessionItem.hasReadings {
+            try? await reviewSessionRepository.upsertPendingReview(
+                PendingReviewSnapshot(
+                    assignmentID: sessionItem.assignmentID,
+                    subjectID: sessionItem.subjectID,
+                    subjectType: sessionItem.subjectType,
+                    hasReadings: true,
+                    meaningCompleted: sessionItem.meaningCorrect,
+                    readingCompleted: sessionItem.readingCorrect,
+                    incorrectMeaningAnswers: sessionItem.incorrectMeaningAnswers,
+                    incorrectReadingAnswers: sessionItem.incorrectReadingAnswers,
+                    updatedAt: Date()
+                )
+            )
+        }
 
         if wasComplete {
             pendingCommit = sessionItem
             sessionItems.removeValue(forKey: sessionItem.assignmentID)
         }
 
-        undoCheckpoint = UndoCheckpoint(
-            previousPrompt: prompt!,
-            previousSessionItem: sessionItem,
-            restoredQueueItem: activeItem,
-            previousAttemptCount: previousAttemptCount,
-            wasComplete: wasComplete
-        )
+        if let existingPrompt = prompt {
+            undoCheckpoint = UndoCheckpoint(
+                previousPrompt: existingPrompt,
+                previousSessionItem: previousSessionItem,
+                restoredQueueItem: activeItem,
+                previousAttemptCount: previousAttemptCount,
+                wasComplete: wasComplete,
+                didRequeue: !isCorrect
+            )
+        } else {
+            undoCheckpoint = nil
+        }
 
+        await refreshPendingHalfCompletionCount()
         lastAnswerCorrect = isCorrect
         phase = .feedback
         canUndo = true
@@ -256,17 +359,21 @@ final class ReviewSessionViewModel: ObservableObject {
                     incorrectMeaningAnswers: commit.incorrectMeaningAnswers,
                     incorrectReadingAnswers: commit.incorrectReadingAnswers
                 )
+                if commit.hasReadings {
+                    try? await reviewSessionRepository.deletePendingReview(assignmentId: commit.assignmentID)
+                }
             } catch {
-                // Non-fatal: log and continue
+                // Keep cached pending progress for retry on next session.
             }
             pendingCommit = nil
         }
 
         undoCheckpoint = nil
         canUndo = false
+        await refreshPendingHalfCompletionCount()
 
         let queuesEmpty = activeQueue.isEmpty && unseenQueue.isEmpty && pendingCommit == nil
-        if timerModeEnabled && timerExpired && queuesEmpty {
+        if timerModeEnabled && queuesEmpty && pendingHalfCompletionCount == 0 {
             navigateToTab = .dashboard
             return
         }
@@ -283,23 +390,48 @@ final class ReviewSessionViewModel: ObservableObject {
 
     // MARK: - Undo
 
-    func undo() {
+    func undo() async {
         guard canUndo, let checkpoint = undoCheckpoint else { return }
 
         attemptHistory = Array(attemptHistory.prefix(checkpoint.previousAttemptCount))
 
+        if checkpoint.didRequeue,
+           let lastIdx = activeQueue.indices.last,
+           activeQueue[lastIdx].assignment.id == checkpoint.restoredQueueItem.assignment.id,
+           activeQueue[lastIdx].questionType == checkpoint.restoredQueueItem.questionType {
+            activeQueue.removeLast()
+        }
+
         if checkpoint.wasComplete {
             pendingCommit = nil
-            sessionItems[checkpoint.previousSessionItem.assignmentID] = checkpoint.previousSessionItem
-        } else {
-            // Item was put back in activeQueue on incorrect answer - remove it
-            if let lastIdx = activeQueue.indices.last,
-               activeQueue[lastIdx].assignment.id == checkpoint.restoredQueueItem.assignment.id,
-               activeQueue[lastIdx].questionType == checkpoint.restoredQueueItem.questionType {
-                activeQueue.removeLast()
+        }
+
+        sessionItems[checkpoint.previousSessionItem.assignmentID] = checkpoint.previousSessionItem
+
+        if checkpoint.previousSessionItem.hasReadings {
+            let hasAnyProgress =
+                checkpoint.previousSessionItem.meaningCorrect ||
+                checkpoint.previousSessionItem.readingCorrect ||
+                checkpoint.previousSessionItem.incorrectMeaningAnswers > 0 ||
+                checkpoint.previousSessionItem.incorrectReadingAnswers > 0
+
+            if hasAnyProgress {
+                try? await reviewSessionRepository.upsertPendingReview(
+                    PendingReviewSnapshot(
+                        assignmentID: checkpoint.previousSessionItem.assignmentID,
+                        subjectID: checkpoint.previousSessionItem.subjectID,
+                        subjectType: checkpoint.previousSessionItem.subjectType,
+                        hasReadings: true,
+                        meaningCompleted: checkpoint.previousSessionItem.meaningCorrect,
+                        readingCompleted: checkpoint.previousSessionItem.readingCorrect,
+                        incorrectMeaningAnswers: checkpoint.previousSessionItem.incorrectMeaningAnswers,
+                        incorrectReadingAnswers: checkpoint.previousSessionItem.incorrectReadingAnswers,
+                        updatedAt: Date()
+                    )
+                )
+            } else {
+                try? await reviewSessionRepository.deletePendingReview(assignmentId: checkpoint.previousSessionItem.assignmentID)
             }
-            // Restore session item to its pre-answer state
-            sessionItems[checkpoint.previousSessionItem.assignmentID] = checkpoint.previousSessionItem
         }
 
         currentItem = checkpoint.restoredQueueItem
@@ -310,12 +442,71 @@ final class ReviewSessionViewModel: ObservableObject {
         undoCheckpoint = nil
         canUndo = false
         phase = .answering
+        await refreshPendingHalfCompletionCount()
     }
 
-    // MARK: - Private
+    // MARK: - Finish-pending mode
 
-    func expireTimer() {
-        timerExpired = true
+    func setTimerModeEnabled(_ enabled: Bool) async {
+        timerModeEnabled = enabled
+        await load(policy: enabled ? .finishPendingOnly : .normal)
+    }
+
+    // MARK: - Subject details dependencies
+
+    func fetchRelatedSubjects(ids: [Int]) async -> [SubjectSnapshot] {
+        guard !ids.isEmpty else { return [] }
+        return (try? await subjectRelationsRepository.fetchSubjectDetails(ids: ids)) ?? []
+    }
+
+    func fetchSubjectDetail(id: Int) async -> SubjectSnapshot? {
+        try? await subjectDetailRepository.fetchSubjectDetail(id: id)
+    }
+
+    func fetchStudyMaterial(subjectID: Int) async -> StudyMaterialSnapshot? {
+        if (try? await studyMaterialRepository.fetchStudyMaterial(subjectID: subjectID)) == nil {
+            try? await studyMaterialRepository.syncStudyMaterials(subjectIDs: [subjectID])
+        }
+        return try? await studyMaterialRepository.fetchStudyMaterial(subjectID: subjectID)
+    }
+
+    func saveStudyMaterial(
+        subjectID: Int,
+        meaningNote: String?,
+        readingNote: String?,
+        meaningSynonyms: [String]
+    ) async -> StudyMaterialSnapshot? {
+        let snapshot = try? await studyMaterialRepository.upsertStudyMaterial(
+            subjectID: subjectID,
+            meaningNote: meaningNote,
+            readingNote: readingNote,
+            meaningSynonyms: meaningSynonyms
+        )
+        return snapshot
+    }
+
+    // MARK: - Private helpers
+
+    private func refreshPendingHalfCompletionCount() async {
+        pendingHalfCompletionCount = (try? await reviewSessionRepository.countHalfCompletions()) ?? 0
+    }
+
+    private func fetchSubjectsByID(for assignments: [AssignmentSnapshot]) async throws -> [Int: SubjectSnapshot] {
+        let subjectIDs = uniqueInOrder(assignments.map(\.subjectID))
+        guard !subjectIDs.isEmpty else { return [:] }
+        let subjects = try await subjectRelationsRepository.fetchSubjectDetails(ids: subjectIDs)
+        return Dictionary(uniqueKeysWithValues: subjects.map { ($0.id, $0) })
+    }
+
+    private func uniqueInOrder(_ ids: [Int]) -> [Int] {
+        var seen: Set<Int> = []
+        var ordered: [Int] = []
+        ordered.reserveCapacity(ids.count)
+
+        for id in ids where seen.insert(id).inserted {
+            ordered.append(id)
+        }
+        return ordered
     }
 
     private func advanceToNextItem() {
@@ -323,11 +514,13 @@ final class ReviewSessionViewModel: ObservableObject {
         prompt = nil
         currentSubject = nil
 
-        if !activeQueue.isEmpty {
-            let next = activeQueue.removeFirst()
-            setCurrentItem(next)
-        } else if !timerExpired, !unseenQueue.isEmpty {
+        // Prioritize unseen prompts so incorrect answers are revisited later
+        // instead of bouncing immediately to the same prompt.
+        if !unseenQueue.isEmpty {
             let next = unseenQueue.removeFirst()
+            setCurrentItem(next)
+        } else if !activeQueue.isEmpty {
+            let next = activeQueue.removeFirst()
             setCurrentItem(next)
         }
     }
