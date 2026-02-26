@@ -20,7 +20,8 @@ public final class LinguisticEnrichmentManager: ObservableObject {
 
     /// Attribution strings for display in Settings.
     public static let attributionEntries: [String] = [
-        "Kanjium (CC BY-SA 4.0)",
+        "JPDict (primary pitch source)",
+        "Kanjium (CC BY-SA 4.0, fallback pitch source)",
         "KanjiVG (CC BY-SA 3.0)"
     ]
 
@@ -52,7 +53,9 @@ public final class LinguisticEnrichmentManager: ObservableObject {
                     try? await self.strokeOrderProvider.strokeOrderSVG(for: firstChar)
                 }
                 group.addTask {
-                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    // Stroke-order network fetches are heavier than pitch lookups.
+                    // Give them more time to complete before timing out.
+                    try? await Task.sleep(nanoseconds: 8_000_000_000)
                     return nil
                 }
                 let result = await group.next() ?? nil
