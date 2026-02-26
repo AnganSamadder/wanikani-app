@@ -17,8 +17,7 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 generate: ## Regenerate the Xcode project using xcodegen
-	xcodegen generate
-	swiftgen config run --config swiftgen.yml
+	./Scripts/generate.sh
 
 open: ## Open the generated project in Xcode
 	xed .

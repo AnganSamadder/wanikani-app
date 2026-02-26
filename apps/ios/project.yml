@@ -48,6 +48,8 @@ targets:
     platform: iOS
     sources:
       - WaniKaniCore
+    resources:
+      - WaniKaniCore/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.angansamadder.wanikani.core
