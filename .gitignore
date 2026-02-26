@@ -1,3 +1,4 @@
+# ─── Xcode ───────────────────────────────────────────────────────────────────
 # XcodeGen generated project
 *.xcodeproj/
 *.xcworkspace/
@@ -7,31 +8,62 @@
 userdata/
 xcuserdata/
 
+# Archives / exports
+*.xcarchive/
+*.ipa
+
 # Build products
 build/
 DerivedData/
 *.dSYM/
-**/.gradle/
-**/build/
-.turbo/
-node_modules/
-**/node_modules/
-apps/android/local.properties
 
-
-# CocoaPods
-Pods/
-
+# ─── Swift ───────────────────────────────────────────────────────────────────
 # Swift Package Manager
 .build/
 .swiftpm/
 
-# macOS
+# ─── Android ─────────────────────────────────────────────────────────────────
+**/build/
+**/.gradle/
+apps/android/local.properties
+apps/android/.kotlin/
+apps/android/node_modules/
+apps/android/.turbo/
+
+# Android release artifacts
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# ─── Node / Bun ──────────────────────────────────────────────────────────────
+node_modules/
+**/node_modules/
+.turbo/
+.bun/
+
+# ─── iOS Large Data Resources ────────────────────────────────────────────────
+# Bundled dictionary payloads can exceed 100k lines and destabilize tooling.
+# Keep only generated/imported TSV payloads ignored (not the whole folder).
+apps/ios/WaniKaniCore/Resources/**/*.tsv
+
+# ─── Design Files ────────────────────────────────────────────────────────────
+*.pen
+
+# ─── Environment ─────────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── CocoaPods ───────────────────────────────────────────────────────────────
+Pods/
+
+# ─── macOS ───────────────────────────────────────────────────────────────────
 .DS_Store
+**/.DS_Store
 
-# Sisyphus
+# ─── Misc tooling ────────────────────────────────────────────────────────────
 .sisyphus/
-
-# Local tooling artifacts
 .playwright-mcp/
 playwright-*.png
+.codex/
