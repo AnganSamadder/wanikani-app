@@ -1,0 +1,20 @@
+{
+  "name": "apps/android",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "@wanikani/design-tokens": "workspace:*",
+    "@wanikani/parity-matrix": "workspace:*"
+  },
+  "scripts": {
+    "android:bootstrap": "./Scripts/bootstrap-android-sdk.sh",
+    "android:build": "./Scripts/run-gradle.sh :app:assembleDebug",
+    "android:test": "./Scripts/run-gradle.sh :app:testDebugUnitTest",
+    "android:lint": "./Scripts/run-gradle.sh :app:lintDebug",
+    "typecheck": "./Scripts/run-gradle.sh :app:compileDebugKotlin",
+    "build": "bun run android:build",
+    "test": "bun run android:test",
+    "lint": "bun run android:lint",
+    "clean": "./gradlew clean"
+  }
+}
