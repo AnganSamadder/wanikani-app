@@ -1,12 +1,16 @@
+import Foundation
 import SwiftUI
 import WaniKaniCore
 
 struct ReviewSessionView: View {
     @StateObject private var viewModel: ReviewSessionViewModel
     @StateObject private var audioService = AudioPlaybackService()
+    @StateObject private var enrichmentManager = LinguisticEnrichmentManager()
+    @AppStorage("undoButtonEnabled") private var undoButtonEnabled: Bool = true
     @State private var showingHistory = false
-    @State private var showingDetails = false
-    @State private var timerSecondsRemaining: Int = 600
+    @State private var enrichmentBySubjectID: [Int: EnrichedDetail] = [:]
+    @State private var enrichmentInFlight: Set<Int> = []
+    @FocusState private var isInputFocused: Bool
     let onNavigateToTab: ((AppRoute) -> Void)?
 
     init(viewModel: ReviewSessionViewModel, onNavigateToTab: ((AppRoute) -> Void)? = nil) {
@@ -25,20 +29,39 @@ struct ReviewSessionView: View {
         return primaryType == "onyomi" ? .katakana : .hiragana
     }
 
-    private var timerFormatted: String {
-        let m = timerSecondsRemaining / 60
-        let s = timerSecondsRemaining % 60
-        return String(format: "%d:%02d", m, s)
+    private var subjectTint: Color {
+        WKColor.forSubjectType(viewModel.currentSubject?.object ?? "")
     }
 
-    private var timerIsLow: Bool { timerSecondsRemaining < 60 }
+    private var actionTint: Color {
+        WKColor.kanji
+    }
+
+    private var headerTint: Color? {
+        guard let type = viewModel.currentSubject?.object ?? viewModel.prompt?.subjectType else {
+            return nil
+        }
+        return WKColor.forSubjectType(type)
+    }
+
+    private var headerTrailingText: String? {
+        guard viewModel.state == .ready else { return nil }
+        return "\(viewModel.remainingCount) left"
+    }
+
+    private func displayReading(_ reading: String, type: String?) -> String {
+        guard type?.lowercased() == "onyomi" else { return reading }
+        return reading.applyingTransform(.hiraganaToKatakana, reverse: false) ?? reading
+    }
 
     // MARK: - Body
 
     var body: some View {
         AppScreen(
             title: viewModel.prompt?.subjectCharacters ?? "Reviews",
-            subtitle: viewModel.prompt?.title ?? "Session"
+            subtitle: viewModel.prompt?.title ?? "Session",
+            headerTint: headerTint,
+            headerTrailingText: headerTrailingText
         ) {
             switch viewModel.state {
             case .idle, .loading:
@@ -80,6 +103,8 @@ struct ReviewSessionView: View {
                 }
             }
         }
+        .scrollDismissesKeyboard(.immediately)
+        .onTapGesture { isInputFocused = false }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbarContent }
         .sheet(isPresented: $showingHistory) {
@@ -89,26 +114,16 @@ struct ReviewSessionView: View {
             if viewModel.state == .idle {
                 await viewModel.load()
             }
-        }
-        // Auto-open details on feedback, close on answering
-        .onChange(of: viewModel.phase) { _, phase in
-            showingDetails = (phase == .feedback)
-        }
-        // Reset countdown when timer mode is switched on
-        .onChange(of: viewModel.timerModeEnabled) { _, enabled in
-            if enabled { timerSecondsRemaining = 600 }
-        }
-        // Tick the countdown every second
-        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
-            guard viewModel.timerModeEnabled, timerSecondsRemaining > 0 else { return }
-            timerSecondsRemaining -= 1
-            if timerSecondsRemaining == 0 {
-                viewModel.expireTimer()
-            }
+            await prefetchEnrichmentIfNeeded(for: viewModel.currentSubject)
         }
         .onChange(of: viewModel.navigateToTab) { _, newRoute in
             if let route = newRoute {
                 onNavigateToTab?(route)
+            }
+        }
+        .onChange(of: viewModel.currentSubject?.id) { _, _ in
+            Task {
+                await prefetchEnrichmentIfNeeded(for: viewModel.currentSubject)
             }
         }
         .environmentObject(audioService)
@@ -119,27 +134,20 @@ struct ReviewSessionView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .navigationBarTrailing) {
-            // Timer toggle — shows countdown when active
             Button {
-                viewModel.timerModeEnabled.toggle()
+                Task { await viewModel.setTimerModeEnabled(!viewModel.timerModeEnabled) }
             } label: {
-                HStack(spacing: 3) {
-                    Image(systemName: viewModel.timerModeEnabled ? "clock.fill" : "clock")
-                    if viewModel.timerModeEnabled {
-                        Text(timerFormatted)
+                HStack(spacing: 6) {
+                    Image(systemName: viewModel.timerModeEnabled ? "forward.fill" : "forward")
+                    if viewModel.timerModeEnabled && viewModel.pendingHalfCompletionCount > 0 {
+                        Text("\(viewModel.pendingHalfCompletionCount)")
                             .font(.caption.monospacedDigit())
-                            .foregroundStyle(timerIsLow ? WKColor.error : .primary)
+                            .fontWeight(.semibold)
                     }
                 }
             }
-
-            // Eye — shows/hides details panel; only active in feedback phase
-            Button {
-                showingDetails.toggle()
-            } label: {
-                Image(systemName: showingDetails ? "eye.fill" : "eye")
-            }
-            .disabled(viewModel.phase != .feedback)
+            .foregroundStyle(viewModel.pendingHalfCompletionCount == 0 ? WKColor.textTertiary : actionTint)
+            .disabled(viewModel.pendingHalfCompletionCount == 0)
 
             // Session history
             Button {
@@ -147,6 +155,7 @@ struct ReviewSessionView: View {
             } label: {
                 Image(systemName: "checkmark.circle")
             }
+            .foregroundStyle(actionTint)
         }
     }
 
@@ -154,25 +163,6 @@ struct ReviewSessionView: View {
 
     @ViewBuilder
     private var readyContent: some View {
-        // Subject card
-        AppCard {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(viewModel.prompt?.title ?? "")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Text("\(viewModel.remainingCount) left")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-                Text(viewModel.prompt?.subjectCharacters ?? "")
-                    .font(.system(size: 48, weight: .medium))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 8)
-            }
-        }
-
         // Answer / feedback card
         AppCard {
             if viewModel.phase == .answering {
@@ -182,13 +172,16 @@ struct ReviewSessionView: View {
             }
         }
 
-        // Details panel — visible when eye is on and in feedback phase
-        if showingDetails, let subject = viewModel.currentSubject {
-            SubjectDetailsPanel(subject: subject)
-        }
-
-        // Action buttons
+        // Keep navigation actions above details so answer flow stays primary.
         actionButtons
+
+        if viewModel.phase == .feedback, let subject = viewModel.currentSubject {
+            SubjectDetailsPanel(
+                subject: subject,
+                reviewViewModel: viewModel,
+                prefetchedEnrichment: enrichmentBySubjectID[subject.id]
+            )
+        }
     }
 
     // MARK: - Answering input
@@ -205,7 +198,8 @@ struct ReviewSessionView: View {
                     RomajiTextField(
                         text: $viewModel.userAnswer,
                         placeholder: viewModel.prompt?.placeholder ?? "Enter reading",
-                        targetScript: readingScript
+                        targetScript: readingScript,
+                        isFocused: $isInputFocused
                     )
                 } else {
                     TextField(
@@ -214,6 +208,8 @@ struct ReviewSessionView: View {
                     )
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .focused($isInputFocused)
+                    .onTapGesture { isInputFocused = true }
                 }
             }
             .font(.title3)
@@ -240,7 +236,11 @@ struct ReviewSessionView: View {
                 let expected: String = {
                     switch viewModel.prompt?.questionType {
                     case .meaning: return viewModel.currentSubject?.primaryMeaning ?? "—"
-                    case .reading: return viewModel.currentSubject?.primaryReading ?? "—"
+                    case .reading:
+                        if let primary = viewModel.currentSubject?.readings.first(where: { $0.primary }) {
+                            return displayReading(primary.reading, type: primary.type)
+                        }
+                        return viewModel.currentSubject?.primaryReading ?? "—"
                     case .none:    return "—"
                     }
                 }()
@@ -259,24 +259,40 @@ struct ReviewSessionView: View {
     private var actionButtons: some View {
         if viewModel.phase == .answering {
             AppPrimaryButton(
-                title: viewModel.isSubmitting ? "Submitting..." : "Submit"
+                title: viewModel.isSubmitting ? "Submitting..." : "Submit",
+                tint: actionTint
             ) {
                 Task { await viewModel.submitCurrentAnswer() }
             }
         } else {
             HStack(spacing: 12) {
-                if viewModel.canUndo {
+                if viewModel.canUndo && undoButtonEnabled {
                     Button("← Undo") {
-                        viewModel.undo()
+                        Task { await viewModel.undo() }
                     }
                     .buttonStyle(.bordered)
                     .tint(WKColor.warning)
                 }
 
-                AppPrimaryButton(title: "Next →") {
+                AppPrimaryButton(title: "Next →", tint: actionTint) {
                     Task { await viewModel.next() }
                 }
             }
         }
+    }
+
+    // MARK: - Enrichment prefetch
+
+    @MainActor
+    private func prefetchEnrichmentIfNeeded(for subject: SubjectSnapshot?) async {
+        guard let subject else { return }
+        let subjectID = subject.id
+        guard enrichmentBySubjectID[subjectID] == nil else { return }
+        guard !enrichmentInFlight.contains(subjectID) else { return }
+
+        enrichmentInFlight.insert(subjectID)
+        let enriched = await enrichmentManager.enrich(subject: subject)
+        enrichmentBySubjectID[subjectID] = enriched
+        enrichmentInFlight.remove(subjectID)
     }
 }

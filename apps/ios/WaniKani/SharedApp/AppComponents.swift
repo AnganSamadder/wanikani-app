@@ -3,23 +3,34 @@ import SwiftUI
 struct AppScreen<Content: View>: View {
     let title: String
     let subtitle: String?
+    let headerTint: Color?
+    let headerTrailingText: String?
     @ViewBuilder let content: () -> Content
     @Environment(\.colorScheme) private var colorScheme
 
     init(
         title: String,
         subtitle: String? = nil,
+        headerTint: Color? = nil,
+        headerTrailingText: String? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.title = title
         self.subtitle = subtitle
+        self.headerTint = headerTint
+        self.headerTrailingText = headerTrailingText
         self.content = content
     }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: AppTheme.spacing) {
-                AppHeroHeader(title: title, subtitle: subtitle)
+                AppHeroHeader(
+                    title: title,
+                    subtitle: subtitle,
+                    tint: headerTint,
+                    trailingText: headerTrailingText
+                )
                 content()
             }
             .padding(AppTheme.screenPadding)
@@ -31,12 +42,37 @@ struct AppScreen<Content: View>: View {
 struct AppHeroHeader: View {
     let title: String
     let subtitle: String?
+    let tint: Color?
+    let trailingText: String?
+
+    private var backgroundGradient: LinearGradient {
+        if let tint {
+            return LinearGradient(
+                colors: [tint.opacity(0.96), tint.opacity(0.82)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        return AppTheme.topGradient
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(size: 34, weight: .bold))
-                .foregroundStyle(.white)
+            HStack(alignment: .top, spacing: 12) {
+                Text(title)
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundStyle(.white)
+                Spacer(minLength: 0)
+                if let trailingText, !trailingText.isEmpty {
+                    Text(trailingText)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.95))
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 5)
+                        .background(Color.white.opacity(0.16))
+                        .clipShape(Capsule())
+                }
+            }
             if let subtitle, !subtitle.isEmpty {
                 Text(subtitle)
                     .font(.subheadline.weight(.medium))
@@ -45,7 +81,7 @@ struct AppHeroHeader: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
-        .background(AppTheme.topGradient)
+        .background(backgroundGradient)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius, style: .continuous))
     }
 }
@@ -115,7 +151,14 @@ struct AppMetricTile: View {
 
 struct AppPrimaryButton: View {
     let title: String
+    let tint: Color
     let action: () -> Void
+
+    init(title: String, tint: Color = AppTheme.accent, action: @escaping () -> Void) {
+        self.title = title
+        self.tint = tint
+        self.action = action
+    }
 
     var body: some View {
         Button(action: action) {
@@ -124,7 +167,7 @@ struct AppPrimaryButton: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .foregroundStyle(.white)
-                .background(AppTheme.accent)
+                .background(tint)
                 .clipShape(RoundedRectangle(cornerRadius: max(10, AppTheme.cardRadius), style: .continuous))
         }
         .buttonStyle(.plain)
