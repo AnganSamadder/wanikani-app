@@ -127,6 +127,7 @@ public final class MockReviewSessionRepository: ReviewSessionRepositoryProtocol,
     public var error: Error?
     public var pendingReviews: [Int: PendingReviewSnapshot] = [:]
     public var studyMaterials: [Int: StudyMaterialSnapshot] = [:]
+    public var activeQueueItems: [String: ActiveQueueItemSnapshot] = [:]  // keyed by "\(assignmentID)-\(questionType)"
     public var submitReviewCalls: [(assignmentId: Int, incorrectMeaningAnswers: Int, incorrectReadingAnswers: Int)] = []
     public var startReviewSessionCallCount = 0
     public var startReviewSessionDelayNanoseconds: UInt64 = 0
@@ -187,6 +188,36 @@ public final class MockReviewSessionRepository: ReviewSessionRepositoryProtocol,
     public func fetchStudyMaterial(subjectID: Int) async throws -> StudyMaterialSnapshot? {
         if let error = error { throw error }
         return studyMaterials[subjectID]
+    }
+
+    public func fetchActiveQueueItems() async throws -> [ActiveQueueItemSnapshot] {
+        if let error = error { throw error }
+        return Array(activeQueueItems.values)
+    }
+
+    public func upsertActiveQueueItem(_ item: ActiveQueueItemSnapshot) async throws {
+        if let error = error { throw error }
+        let key = "\(item.assignmentID)-\(item.questionType)"
+        activeQueueItems[key] = item
+    }
+
+    public func deleteActiveQueueItem(assignmentID: Int, questionType: String) async throws {
+        if let error = error { throw error }
+        activeQueueItems.removeValue(forKey: "\(assignmentID)-\(questionType)")
+    }
+
+    public func clearActiveQueue() async throws {
+        if let error = error { throw error }
+        activeQueueItems.removeAll()
+    }
+
+    public func pruneActiveQueue(validAssignmentIDs: Set<Int>) async throws {
+        if let error = error { throw error }
+        activeQueueItems = activeQueueItems.filter { key, _ in
+            let parts = key.split(separator: "-", maxSplits: 1)
+            guard let idStr = parts.first, let id = Int(idStr) else { return false }
+            return validAssignmentIDs.contains(id)
+        }
     }
 }
 

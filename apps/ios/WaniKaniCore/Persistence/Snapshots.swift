@@ -130,6 +130,21 @@ public struct PendingReviewSnapshot: Sendable, Hashable, Identifiable {
     }
 }
 
+/// Sendable snapshot of an active queue item (a delayed re-queue entry).
+public struct ActiveQueueItemSnapshot: Sendable, Hashable {
+    public let assignmentID: Int
+    public let subjectID: Int
+    public let subjectType: String
+    public let questionType: String   // "Meaning" | "Reading"
+
+    public init(assignmentID: Int, subjectID: Int, subjectType: String, questionType: String) {
+        self.assignmentID = assignmentID
+        self.subjectID = subjectID
+        self.subjectType = subjectType
+        self.questionType = questionType
+    }
+}
+
 /// Sendable snapshot of user study material (synonyms + notes).
 public struct StudyMaterialSnapshot: Sendable, Hashable, Identifiable {
     public let subjectID: Int
@@ -321,5 +336,14 @@ extension StudyMaterialSnapshot {
         self.readingNote = persistent.readingNote
         self.meaningSynonyms = persistent.meaningSynonyms
         self.updatedAt = persistent.updatedAt
+    }
+}
+
+extension ActiveQueueItemSnapshot {
+    init(from persistent: PersistentActiveQueueItem) {
+        self.assignmentID = persistent.assignmentID
+        self.subjectID = persistent.subjectID
+        self.subjectType = persistent.subjectType
+        self.questionType = persistent.questionType
     }
 }

@@ -315,6 +315,27 @@ public final class PersistentPendingReview {
     }
 }
 
+// MARK: - Active Queue
+
+@Model
+public final class PersistentActiveQueueItem {
+    @Attribute(.unique) public var id: String     // "\(assignmentID)-\(questionType)"
+    public var assignmentID: Int
+    public var subjectID: Int
+    public var subjectType: String
+    public var questionType: String               // "Meaning" | "Reading"
+    public var addedAt: Date
+
+    public init(assignmentID: Int, subjectID: Int, subjectType: String, questionType: String) {
+        self.id = "\(assignmentID)-\(questionType)"
+        self.assignmentID = assignmentID
+        self.subjectID = subjectID
+        self.subjectType = subjectType
+        self.questionType = questionType
+        self.addedAt = Date()
+    }
+}
+
 // MARK: - Study Material
 
 @Model

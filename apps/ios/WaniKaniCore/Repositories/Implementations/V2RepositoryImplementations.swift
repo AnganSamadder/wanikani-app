@@ -78,6 +78,31 @@ public final class ReviewSessionRepository: ReviewSessionRepositoryProtocol {
     public func fetchStudyMaterial(subjectID: Int) async throws -> StudyMaterialSnapshot? {
         persistenceManager.fetchStudyMaterial(subjectID: subjectID)
     }
+
+    public func fetchActiveQueueItems() async throws -> [ActiveQueueItemSnapshot] {
+        persistenceManager.fetchActiveQueueItems()
+    }
+
+    public func upsertActiveQueueItem(_ item: ActiveQueueItemSnapshot) async throws {
+        try persistenceManager.upsertActiveQueueItem(
+            assignmentID: item.assignmentID,
+            subjectID: item.subjectID,
+            subjectType: item.subjectType,
+            questionType: item.questionType
+        )
+    }
+
+    public func deleteActiveQueueItem(assignmentID: Int, questionType: String) async throws {
+        try persistenceManager.deleteActiveQueueItem(assignmentID: assignmentID, questionType: questionType)
+    }
+
+    public func clearActiveQueue() async throws {
+        try persistenceManager.clearActiveQueue()
+    }
+
+    public func pruneActiveQueue(validAssignmentIDs: Set<Int>) async throws {
+        try persistenceManager.pruneActiveQueue(validAssignmentIDs: validAssignmentIDs)
+    }
 }
 
 @MainActor

@@ -50,6 +50,7 @@ final class ReviewSessionViewModel: ObservableObject {
         let assignment: AssignmentSnapshot
         let subject: SubjectSnapshot
         let questionType: QuestionType
+        let readyAtStep: Int   // Int.min = always ready (unseen); stepCount+TTL = delayed
     }
 
     private struct SessionItem {
@@ -72,6 +73,9 @@ final class ReviewSessionViewModel: ObservableObject {
         let previousAttemptCount: Int
         let wasComplete: Bool
         let didRequeue: Bool
+        let previousStepCount: Int
+        let addedActiveQueueType: QuestionType?
+        let activeQueueTypeMovedFromUnseen: Bool
     }
 
     // MARK: - Published State
@@ -98,6 +102,7 @@ final class ReviewSessionViewModel: ObservableObject {
     private var pendingCommit: SessionItem? = nil
     private var undoCheckpoint: UndoCheckpoint? = nil
     private var loadTask: Task<Void, Never>? = nil
+    private var stepCount: Int = 0
 
     // MARK: - Dependencies
 
@@ -105,17 +110,20 @@ final class ReviewSessionViewModel: ObservableObject {
     private let subjectDetailRepository: SubjectDetailRepositoryProtocol
     private let subjectRelationsRepository: SubjectRelationsRepositoryProtocol
     private let studyMaterialRepository: StudyMaterialRepositoryProtocol
+    private let reviewTTL: Int
 
     init(
         reviewSessionRepository: ReviewSessionRepositoryProtocol,
         subjectDetailRepository: SubjectDetailRepositoryProtocol,
         subjectRelationsRepository: SubjectRelationsRepositoryProtocol,
-        studyMaterialRepository: StudyMaterialRepositoryProtocol
+        studyMaterialRepository: StudyMaterialRepositoryProtocol,
+        reviewTTL: Int = 5
     ) {
         self.reviewSessionRepository = reviewSessionRepository
         self.subjectDetailRepository = subjectDetailRepository
         self.subjectRelationsRepository = subjectRelationsRepository
         self.studyMaterialRepository = studyMaterialRepository
+        self.reviewTTL = reviewTTL
     }
 
     // MARK: - Computed
@@ -159,6 +167,7 @@ final class ReviewSessionViewModel: ObservableObject {
         currentItem = nil
         currentSubject = nil
         prompt = nil
+        stepCount = 0
 
         do {
             let assignments = try await reviewSessionRepository.startReviewSession()
@@ -222,31 +231,74 @@ final class ReviewSessionViewModel: ObservableObject {
                 )
                 loadedSessions[assignment.id] = session
 
-                switch policy {
-                case .normal:
+                if policy == .normal {
                     if !session.meaningCorrect {
-                        loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .meaning))
+                        loadedItems.append(QueueItem(assignment: assignment, subject: subject,
+                                                     questionType: .meaning, readyAtStep: Int.min))
                     }
                     if session.hasReadings && !session.readingCorrect {
-                        loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: .reading))
+                        loadedItems.append(QueueItem(assignment: assignment, subject: subject,
+                                                     questionType: .reading, readyAtStep: Int.min))
                     }
-                case .finishPendingOnly:
-                    guard session.hasReadings, session.meaningCorrect != session.readingCorrect else { continue }
-                    let missingType: QuestionType = session.meaningCorrect ? .reading : .meaning
-                    loadedItems.append(QueueItem(assignment: assignment, subject: subject, questionType: missingType))
                 }
             }
 
-            let shuffled = loadedItems.shuffled()
+            sessionItems = loadedSessions
+
+            // Load persisted active queue items
+            let persistedCompanions = (try? await reviewSessionRepository.fetchActiveQueueItems()) ?? []
+            let validAssignmentIDs = Set(assignments.map(\.id))
+            let assignmentsByID = Dictionary(uniqueKeysWithValues: assignments.map { ($0.id, $0) })
+
             if policy == .finishPendingOnly {
-                activeQueue = shuffled
+                // Fast-forward: serve all companion items immediately, no unseen queue
                 unseenQueue = []
-            } else {
-                unseenQueue = shuffled
                 activeQueue = []
+                for companion in persistedCompanions where validAssignmentIDs.contains(companion.assignmentID) {
+                    guard let subject = subjectsByID[companion.subjectID],
+                          let assignment = assignmentsByID[companion.assignmentID] else { continue }
+                    let questionType = QuestionType(rawValue: companion.questionType) ?? .meaning
+                    let session = loadedSessions[companion.assignmentID]
+                    let alreadyDone: Bool
+                    switch questionType {
+                    case .meaning: alreadyDone = session?.meaningCorrect ?? false
+                    case .reading: alreadyDone = session?.readingCorrect ?? false
+                    }
+                    guard !alreadyDone else { continue }
+                    activeQueue.append(QueueItem(assignment: assignment, subject: subject,
+                                                 questionType: questionType, readyAtStep: 0))
+                }
+            } else {
+                unseenQueue = loadedItems.shuffled()
+                activeQueue = []
+                // Append companion queue items that aren't already in unseenQueue
+                for companion in persistedCompanions where validAssignmentIDs.contains(companion.assignmentID) {
+                    guard let subject = subjectsByID[companion.subjectID],
+                          let assignment = assignmentsByID[companion.assignmentID] else { continue }
+                    let questionType = QuestionType(rawValue: companion.questionType) ?? .meaning
+                    let session = loadedSessions[companion.assignmentID]
+                    let alreadyDone: Bool
+                    switch questionType {
+                    case .meaning: alreadyDone = session?.meaningCorrect ?? false
+                    case .reading: alreadyDone = session?.readingCorrect ?? false
+                    }
+                    guard !alreadyDone else { continue }
+                    // Remove from unseenQueue if present so the TTL delay applies
+                    if let unseenIdx = unseenQueue.firstIndex(where: {
+                        $0.assignment.id == companion.assignmentID && $0.questionType == questionType
+                    }) {
+                        unseenQueue.remove(at: unseenIdx)
+                    }
+                    // Avoid duplicates in activeQueue
+                    let alreadyActive = activeQueue.contains(where: {
+                        $0.assignment.id == companion.assignmentID && $0.questionType == questionType
+                    })
+                    guard !alreadyActive else { continue }
+                    activeQueue.append(QueueItem(assignment: assignment, subject: subject,
+                                                 questionType: questionType, readyAtStep: reviewTTL))
+                }
             }
 
-            sessionItems = loadedSessions
             await refreshPendingHalfCompletionCount()
             advanceToNextItem()
             state = currentItem == nil ? .empty : .ready
@@ -293,6 +345,12 @@ final class ReviewSessionViewModel: ObservableObject {
             timestamp: Date()
         ))
 
+        // Track step count before incrementing (for undo restore)
+        let previousStepCount = stepCount
+        if !timerModeEnabled {
+            stepCount += 1
+        }
+
         if isCorrect {
             switch activeItem.questionType {
             case .meaning: sessionItem.meaningCorrect = true
@@ -303,7 +361,16 @@ final class ReviewSessionViewModel: ObservableObject {
             case .meaning: sessionItem.incorrectMeaningAnswers += 1
             case .reading: sessionItem.incorrectReadingAnswers += 1
             }
-            activeQueue.append(activeItem)
+            if !timerModeEnabled {
+                // Re-queue with TTL so it comes back after reviewTTL more answers
+                activeQueue.append(QueueItem(
+                    assignment: activeItem.assignment,
+                    subject: activeItem.subject,
+                    questionType: activeItem.questionType,
+                    readyAtStep: stepCount + reviewTTL
+                ))
+            }
+            // Fast-forward: wrong answer removed permanently (item was already popped)
         }
 
         sessionItems[activeItem.assignment.id] = sessionItem
@@ -330,6 +397,55 @@ final class ReviewSessionViewModel: ObservableObject {
             sessionItems.removeValue(forKey: sessionItem.assignmentID)
         }
 
+        // Auto-add companion side with TTL on correct answer (normal mode only)
+        var addedActiveQueueType: QuestionType? = nil
+        var activeQueueTypeMovedFromUnseen: Bool = false
+        if isCorrect && !timerModeEnabled {
+            if let updatedSession = sessionItems[activeItem.assignment.id] {
+                let companionType: QuestionType = activeItem.questionType == .meaning ? .reading : .meaning
+                let companionNeeded: Bool
+                switch companionType {
+                case .reading: companionNeeded = updatedSession.hasReadings && !updatedSession.readingCorrect
+                case .meaning: companionNeeded = !updatedSession.meaningCorrect
+                }
+                let alreadyInActive = activeQueue.contains(where: {
+                    $0.assignment.id == activeItem.assignment.id && $0.questionType == companionType
+                })
+                if companionNeeded && !alreadyInActive {
+                    // Move from unseenQueue to activeQueue if present so TTL delay applies
+                    if let unseenIdx = unseenQueue.firstIndex(where: {
+                        $0.assignment.id == activeItem.assignment.id && $0.questionType == companionType
+                    }) {
+                        unseenQueue.remove(at: unseenIdx)
+                        activeQueueTypeMovedFromUnseen = true
+                    }
+                    activeQueue.append(QueueItem(
+                        assignment: activeItem.assignment,
+                        subject: activeItem.subject,
+                        questionType: companionType,
+                        readyAtStep: stepCount + reviewTTL
+                    ))
+                    addedActiveQueueType = companionType
+                    try? await reviewSessionRepository.upsertActiveQueueItem(
+                        ActiveQueueItemSnapshot(
+                            assignmentID: activeItem.assignment.id,
+                            subjectID: activeItem.assignment.subjectID,
+                            subjectType: activeItem.assignment.subjectType.rawValue,
+                            questionType: companionType.rawValue
+                        )
+                    )
+                }
+            }
+        }
+
+        // When a side is answered correctly, remove its active queue persistence entry
+        if isCorrect {
+            try? await reviewSessionRepository.deleteActiveQueueItem(
+                assignmentID: activeItem.assignment.id,
+                questionType: activeItem.questionType.rawValue
+            )
+        }
+
         if let existingPrompt = prompt {
             undoCheckpoint = UndoCheckpoint(
                 previousPrompt: existingPrompt,
@@ -337,7 +453,10 @@ final class ReviewSessionViewModel: ObservableObject {
                 restoredQueueItem: activeItem,
                 previousAttemptCount: previousAttemptCount,
                 wasComplete: wasComplete,
-                didRequeue: !isCorrect
+                didRequeue: !isCorrect && !timerModeEnabled,
+                previousStepCount: previousStepCount,
+                addedActiveQueueType: addedActiveQueueType,
+                activeQueueTypeMovedFromUnseen: activeQueueTypeMovedFromUnseen
             )
         } else {
             undoCheckpoint = nil
@@ -395,11 +514,37 @@ final class ReviewSessionViewModel: ObservableObject {
 
         attemptHistory = Array(attemptHistory.prefix(checkpoint.previousAttemptCount))
 
+        // Restore step count
+        stepCount = checkpoint.previousStepCount
+
         if checkpoint.didRequeue,
            let lastIdx = activeQueue.indices.last,
            activeQueue[lastIdx].assignment.id == checkpoint.restoredQueueItem.assignment.id,
            activeQueue[lastIdx].questionType == checkpoint.restoredQueueItem.questionType {
             activeQueue.removeLast()
+        }
+
+        // Undo active queue addition (companion side added on correct answer)
+        if let addedType = checkpoint.addedActiveQueueType {
+            if let idx = activeQueue.firstIndex(where: {
+                $0.assignment.id == checkpoint.restoredQueueItem.assignment.id &&
+                $0.questionType == addedType
+            }) {
+                activeQueue.remove(at: idx)
+            }
+            // Restore to unseenQueue if it was moved from there
+            if checkpoint.activeQueueTypeMovedFromUnseen {
+                unseenQueue.append(QueueItem(
+                    assignment: checkpoint.restoredQueueItem.assignment,
+                    subject: checkpoint.restoredQueueItem.subject,
+                    questionType: addedType,
+                    readyAtStep: Int.min
+                ))
+            }
+            try? await reviewSessionRepository.deleteActiveQueueItem(
+                assignmentID: checkpoint.restoredQueueItem.assignment.id,
+                questionType: addedType.rawValue
+            )
         }
 
         if checkpoint.wasComplete {
@@ -433,6 +578,10 @@ final class ReviewSessionViewModel: ObservableObject {
                 try? await reviewSessionRepository.deletePendingReview(assignmentId: checkpoint.previousSessionItem.assignmentID)
             }
         }
+
+        // Restore the companion queue entry for the item being undone (if it was deleted)
+        // (it was answered correctly and its companion persistence entry was deleted)
+        // The companion tracking is the responsibility of the new answer, not the undo.
 
         currentItem = checkpoint.restoredQueueItem
         currentSubject = checkpoint.restoredQueueItem.subject
@@ -514,14 +663,38 @@ final class ReviewSessionViewModel: ObservableObject {
         prompt = nil
         currentSubject = nil
 
-        // Prioritize unseen prompts so incorrect answers are revisited later
-        // instead of bouncing immediately to the same prompt.
-        if !unseenQueue.isEmpty {
-            let next = unseenQueue.removeFirst()
-            setCurrentItem(next)
-        } else if !activeQueue.isEmpty {
+        if timerModeEnabled {
+            // Fast-forward: serve all active items regardless of readyAtStep
+            guard !activeQueue.isEmpty else { return }
             let next = activeQueue.removeFirst()
             setCurrentItem(next)
+            return
+        }
+
+        // Count ready active items (activeQueue is ordered by ascending readyAtStep)
+        let readyCount = activeQueue.prefix(while: { $0.readyAtStep <= stepCount }).count
+        let hasUnseen = !unseenQueue.isEmpty
+        let hasReady = readyCount > 0
+
+        switch (hasUnseen, hasReady) {
+        case (true, true):
+            if Bool.random() {
+                let next = unseenQueue.removeFirst()
+                setCurrentItem(next)
+            } else {
+                let idx = Int.random(in: 0..<readyCount)
+                let next = activeQueue.remove(at: idx)
+                setCurrentItem(next)
+            }
+        case (true, false):
+            let next = unseenQueue.removeFirst()
+            setCurrentItem(next)
+        case (false, true):
+            let idx = Int.random(in: 0..<readyCount)
+            let next = activeQueue.remove(at: idx)
+            setCurrentItem(next)
+        case (false, false):
+            break
         }
     }
 

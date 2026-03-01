@@ -20,7 +20,8 @@ final class ReviewSessionViewModelTests: XCTestCase {
             reviewSessionRepository: reviewRepository,
             subjectDetailRepository: subjectRepository,
             subjectRelationsRepository: subjectRelationsRepository,
-            studyMaterialRepository: studyMaterialRepository
+            studyMaterialRepository: studyMaterialRepository,
+            reviewTTL: 0
         )
     }
 
@@ -270,6 +271,7 @@ final class ReviewSessionViewModelTests: XCTestCase {
             readings: [ReadingSnapshot(reading: "がく", primary: true, acceptedAnswer: true, type: "onyomi")]
         )
         reviewRepository.mockAssignments = [assignment]
+        // Meaning is done, reading is missing — companion queue tracks the pending side
         reviewRepository.pendingReviews[assignment.id] = PendingReviewSnapshot(
             assignmentID: assignment.id,
             subjectID: assignment.subjectID,
@@ -281,7 +283,14 @@ final class ReviewSessionViewModelTests: XCTestCase {
             incorrectReadingAnswers: 0,
             updatedAt: Date()
         )
+        reviewRepository.activeQueueItems["\(assignment.id)-Reading"] = ActiveQueueItemSnapshot(
+            assignmentID: assignment.id,
+            subjectID: assignment.subjectID,
+            subjectType: assignment.subjectType.rawValue,
+            questionType: "Reading"
+        )
         subjectRepository.subjectsByID = [201: subject]
+        subjectRelationsRepository.subjectsByID = [201: subject]
 
         await sut.load(policy: .finishPendingOnly)
 
@@ -324,7 +333,14 @@ final class ReviewSessionViewModelTests: XCTestCase {
             incorrectReadingAnswers: 0,
             updatedAt: Date()
         )
+        reviewRepository.activeQueueItems["\(assignment.id)-Reading"] = ActiveQueueItemSnapshot(
+            assignmentID: assignment.id,
+            subjectID: assignment.subjectID,
+            subjectType: assignment.subjectType.rawValue,
+            questionType: "Reading"
+        )
         subjectRepository.subjectsByID = [202: subject]
+        subjectRelationsRepository.subjectsByID = [202: subject]
         reviewRepository.mockReview = Review(
             id: 2,
             object: "review",
@@ -640,7 +656,8 @@ final class ReviewSessionViewModelTests: XCTestCase {
             reviewSessionRepository: reviewRepository,
             subjectDetailRepository: subjectRepository,
             subjectRelationsRepository: subjectRelationsRepository,
-            studyMaterialRepository: studyMaterialRepository
+            studyMaterialRepository: studyMaterialRepository,
+            reviewTTL: 0
         )
 
         await sut.load()

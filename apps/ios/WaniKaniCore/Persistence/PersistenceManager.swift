@@ -16,7 +16,8 @@ public final class PersistenceManager {
             PersistentAssignment.self,
             PersistentReview.self,
             PersistentPendingReview.self,
-            PersistentStudyMaterial.self
+            PersistentStudyMaterial.self,
+            PersistentActiveQueueItem.self
         ])
         
         // Ensure Application Support directory exists for SwiftData
@@ -287,6 +288,70 @@ public final class PersistenceManager {
         var mutated = false
         for pending in persistents where !validAssignmentIDs.contains(pending.assignmentID) {
             context.delete(pending)
+            mutated = true
+        }
+        if mutated {
+            try save()
+        }
+    }
+
+    // MARK: - Active Queue
+
+    public func upsertActiveQueueItem(assignmentID: Int, subjectID: Int,
+                                       subjectType: String, questionType: String) throws {
+        let itemID = "\(assignmentID)-\(questionType)"
+        let descriptor = FetchDescriptor<PersistentActiveQueueItem>(
+            predicate: #Predicate<PersistentActiveQueueItem> { $0.id == itemID }
+        )
+        if try context.fetch(descriptor).first != nil {
+            // Already exists; nothing to update (addedAt stays from original insert)
+        } else {
+            context.insert(PersistentActiveQueueItem(
+                assignmentID: assignmentID,
+                subjectID: subjectID,
+                subjectType: subjectType,
+                questionType: questionType
+            ))
+        }
+        try save()
+    }
+
+    public func fetchActiveQueueItems() -> [ActiveQueueItemSnapshot] {
+        let descriptor = FetchDescriptor<PersistentActiveQueueItem>(
+            sortBy: [SortDescriptor(\.addedAt)]
+        )
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        return persistents.map { ActiveQueueItemSnapshot(from: $0) }
+    }
+
+    public func deleteActiveQueueItem(assignmentID: Int, questionType: String) throws {
+        let itemID = "\(assignmentID)-\(questionType)"
+        let descriptor = FetchDescriptor<PersistentActiveQueueItem>(
+            predicate: #Predicate<PersistentActiveQueueItem> { $0.id == itemID }
+        )
+        if let existing = try context.fetch(descriptor).first {
+            context.delete(existing)
+            try save()
+        }
+    }
+
+    public func clearActiveQueue() throws {
+        let descriptor = FetchDescriptor<PersistentActiveQueueItem>()
+        let all = (try? context.fetch(descriptor)) ?? []
+        for item in all {
+            context.delete(item)
+        }
+        if !all.isEmpty {
+            try save()
+        }
+    }
+
+    public func pruneActiveQueue(validAssignmentIDs: Set<Int>) throws {
+        let descriptor = FetchDescriptor<PersistentActiveQueueItem>()
+        let persistents = (try? context.fetch(descriptor)) ?? []
+        var mutated = false
+        for item in persistents where !validAssignmentIDs.contains(item.assignmentID) {
+            context.delete(item)
             mutated = true
         }
         if mutated {

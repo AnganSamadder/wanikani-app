@@ -17,6 +17,11 @@ public protocol ReviewSessionRepositoryProtocol: Sendable {
     func countHalfCompletions() async throws -> Int
     func prunePendingReviews(validAssignmentIDs: Set<Int>) async throws
     func fetchStudyMaterial(subjectID: Int) async throws -> StudyMaterialSnapshot?
+    func fetchActiveQueueItems() async throws -> [ActiveQueueItemSnapshot]
+    func upsertActiveQueueItem(_ item: ActiveQueueItemSnapshot) async throws
+    func deleteActiveQueueItem(assignmentID: Int, questionType: String) async throws
+    func clearActiveQueue() async throws
+    func pruneActiveQueue(validAssignmentIDs: Set<Int>) async throws
 }
 
 public protocol LessonSessionRepositoryProtocol: Sendable {
