@@ -107,6 +107,7 @@
 		B01926162E5F9059CC2EBE56 /* CSSInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC21CCCDC30639FF9F66019 /* CSSInjector.swift */; };
 		B0D4F8FAD0D3168FFC1DABE1 /* DeepLinkRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6527B5A195A65AFFCACDCC /* DeepLinkRouterTests.swift */; };
 		B254C924BAD13272F7A20D48 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310F771771E7F6E44819753 /* UserTests.swift */; };
+		B2B1059755E15FACD3A04EBF /* ReviewSessionQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B487F334F9CCEAE20F992141 /* ReviewSessionQueueTests.swift */; };
 		B36A14099C45CABF0729EB93 /* SubjectDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA14F35BC2B6DDED8F9A6C8 /* SubjectDetailsViewModel.swift */; };
 		B3A7BC072BE1E468DA86140E /* WaniKaniAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1751183FAAD9475100813A /* WaniKaniAPI.swift */; };
 		B5C29CA555A46A50F971F95F /* AuthTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6915B39A51F9DEF06B33FA9 /* AuthTokenView.swift */; };
@@ -329,6 +330,7 @@
 		AEB0DCF86224430093FD2A71 /* PlaceholderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderCard.swift; sourceTree = "<group>"; };
 		B08F007519B3E17ACE5F1793 /* LinguisticEnrichmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinguisticEnrichmentManager.swift; sourceTree = "<group>"; };
 		B1809BB5329EC1CFA829171E /* OfflineSyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncView.swift; sourceTree = "<group>"; };
+		B487F334F9CCEAE20F992141 /* ReviewSessionQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionQueueTests.swift; sourceTree = "<group>"; };
 		B4DE9DD41544190084DC14A7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		B50E2A1FD4AEBB0EF35F89CA /* ReviewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsViewModel.swift; sourceTree = "<group>"; };
 		B9D0E35C19A3521259266C18 /* WaniKaniUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaniKaniUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				D899F0A135BA5BE4B7165F06 /* AppContainerTests.swift */,
 				216CA508B7E1D115D0AF83E1 /* DashboardHomeViewModelTests.swift */,
 				5CAC28BCD62F0584330E0E68 /* LessonSessionViewModelTests.swift */,
+				B487F334F9CCEAE20F992141 /* ReviewSessionQueueTests.swift */,
 				D95E019BAF74436FBB2DCCA7 /* ReviewSessionViewModelTests.swift */,
 				BD7A04F41F8E381E43C9ADA7 /* ReviewsViewModelTests.swift */,
 			);
@@ -1529,6 +1532,7 @@
 				76AA6BF02A35B5E7C16EAE21 /* PreferencesManagerTests.swift in Sources */,
 				F9F6C90D6DED962CD2918CC6 /* ResourceEnvelopeTests.swift in Sources */,
 				A534FE15B9C854519A4EDA64 /* ReviewHistoryRepositoryTests.swift in Sources */,
+				B2B1059755E15FACD3A04EBF /* ReviewSessionQueueTests.swift in Sources */,
 				7EDFF7C3AFA98DB175688B4B /* ReviewSessionViewModelTests.swift in Sources */,
 				9F1038451F2581C3A23B4CA1 /* ReviewTests.swift in Sources */,
 				AA987E5EE0B5EB345CC2CCE6 /* ReviewsViewModelTests.swift in Sources */,

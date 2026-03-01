@@ -419,6 +419,37 @@ final class ReviewSessionQueueTests: XCTestCase {
         XCTAssertEqual(sut.phase, .answering)
     }
 
+    func test_undo_afterWrongAnswer_restoresPreexistingActiveEntry() async {
+        // If a key existed in active before submit (TTL-refresh path), undo should
+        // restore that prior entry instead of deleting it.
+        let sut = makeSUT(reviewTTL: 0)
+        let assignment = makeAssignment(id: 601, subjectID: 1601, type: .radical)
+        let subject = makeRadical(id: 1601, characters: "木", meaning: "Tree")
+        reviewRepository.mockAssignments = [assignment]
+        reviewRepository.activeQueueItems["\(assignment.id)-Meaning"] = ActiveQueueItemSnapshot(
+            assignmentID: assignment.id,
+            subjectID: subject.id,
+            subjectType: "radical",
+            questionType: "Meaning"
+        )
+        registerSubject(subject)
+
+        await sut.load()
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
+
+        sut.userAnswer = "wrong"
+        await sut.submitCurrentAnswer()
+        XCTAssertNotNil(reviewRepository.activeQueueItems["\(assignment.id)-Meaning"])
+
+        await sut.undo()
+
+        XCTAssertNotNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
+            "Undo must restore pre-existing active entry; it should not be deleted."
+        )
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
+    }
+
     func test_undo_afterWrongAnswer_deletesPendingReviewRecord() async {
         // Undoing a wrong answer should delete the persisted incorrect-count record.
         let sut = makeSUT()
@@ -465,6 +496,40 @@ final class ReviewSessionQueueTests: XCTestCase {
         XCTAssertEqual(sut.remainingCount, beforeRemaining)
         XCTAssertFalse(sut.canUndo)
         XCTAssertEqual(sut.phase, .answering)
+    }
+
+    func test_undo_afterCorrectAnswer_restoresPreexistingActiveEntry() async {
+        // If the served prompt came from persisted active queue and was consumed on
+        // correct submit, undo should restore that persisted entry.
+        let sut = makeSUT(reviewTTL: 0)
+        let assignment = makeAssignment(id: 602, subjectID: 1602, type: .radical)
+        let subject = makeRadical(id: 1602, characters: "口", meaning: "Mouth")
+        reviewRepository.mockAssignments = [assignment]
+        reviewRepository.activeQueueItems["\(assignment.id)-Meaning"] = ActiveQueueItemSnapshot(
+            assignmentID: assignment.id,
+            subjectID: subject.id,
+            subjectType: "radical",
+            questionType: "Meaning"
+        )
+        registerSubject(subject)
+
+        await sut.load()
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
+
+        sut.userAnswer = "Mouth"
+        await sut.submitCurrentAnswer()
+        XCTAssertNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
+            "Correct submit should consume the served active entry."
+        )
+
+        await sut.undo()
+
+        XCTAssertNotNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
+            "Undo should restore the consumed active entry for the served prompt."
+        )
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
     }
 
     func test_undo_afterWrongAnswer_thenReAnswerWrong_persistsBothSides() async {
@@ -525,12 +590,48 @@ final class ReviewSessionQueueTests: XCTestCase {
         XCTAssertEqual(sut.state, .ready)
         XCTAssertEqual(sut.remainingCount, 1)
 
-        // Wrong answer in fast-forward must NOT increase remaining count
+        // Wrong answer in fast-forward must NOT increase remaining count and the
+        // served active entry should be deleted from persistence.
         sut.userAnswer = "wrong"
         await sut.submitCurrentAnswer()
 
         XCTAssertEqual(sut.remainingCount, 1,
                        "Fast-forward wrong answer must not re-queue; remaining stays at 1 (current held)")
+        XCTAssertNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Reading"],
+            "Served active item should be removed from persistence in fast-forward regardless of correctness."
+        )
+    }
+
+    func test_fastForward_wrongAnswer_undoRestoresServedActiveEntry() async {
+        // Fast-forward consumes the served active entry on submit; undo should
+        // restore that consumed persistence entry.
+        let sut = makeSUT()
+        let assignment = makeAssignment(id: 651, subjectID: 5151, type: .radical)
+        let subject = makeRadical(id: 5151, characters: "火", meaning: "Fire")
+        reviewRepository.mockAssignments = [assignment]
+        reviewRepository.activeQueueItems["\(assignment.id)-Meaning"] = ActiveQueueItemSnapshot(
+            assignmentID: assignment.id,
+            subjectID: subject.id,
+            subjectType: "radical",
+            questionType: "Meaning"
+        )
+        registerSubject(subject)
+
+        await sut.setTimerModeEnabled(true)
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
+
+        sut.userAnswer = "wrong"
+        await sut.submitCurrentAnswer()
+        XCTAssertNil(reviewRepository.activeQueueItems["\(assignment.id)-Meaning"])
+
+        await sut.undo()
+
+        XCTAssertNotNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
+            "Undo should restore consumed active persistence for fast-forward prompts."
+        )
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
     }
 
     func test_fastForward_correctAnswer_deletesActiveQueueEntry() async {
