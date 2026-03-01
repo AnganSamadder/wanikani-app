@@ -316,9 +316,12 @@ public final class PersistentPendingReview {
 }
 
 // MARK: - Active Queue
-
+//
+// NOTE:
+// Keep the legacy model class name for SwiftData schema compatibility with
+// previously persisted stores. Domain/repository APIs use "ActiveQueue".
 @Model
-public final class PersistentActiveQueueItem {
+public final class PersistentCompanionQueueItem {
     @Attribute(.unique) public var id: String     // "\(assignmentID)-\(questionType)"
     public var assignmentID: Int
     public var subjectID: Int

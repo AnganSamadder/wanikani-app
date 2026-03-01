@@ -340,7 +340,7 @@ extension StudyMaterialSnapshot {
 }
 
 extension ActiveQueueItemSnapshot {
-    init(from persistent: PersistentActiveQueueItem) {
+    init(from persistent: PersistentCompanionQueueItem) {
         self.assignmentID = persistent.assignmentID
         self.subjectID = persistent.subjectID
         self.subjectType = persistent.subjectType
