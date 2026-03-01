@@ -38,6 +38,7 @@ xcodebuild build-for-testing \
   -derivedDataPath build/DerivedData \
   -maximum-parallel-testing-workers 1 \
   -parallel-testing-enabled NO \
+  "$@" \
   | tee "${BUILD_LOG}"
 
 XCTESTRUN_PATH="$(find build/DerivedData/Build/Products -maxdepth 1 -name "${SCHEME}_iphonesimulator*.xctestrun" | head -n 1)"
@@ -61,6 +62,7 @@ echo "Step 2/2: test-without-building using ${XCTESTRUN_PATH}"
     -default-test-execution-time-allowance 60 \
     -maximum-test-execution-time-allowance 180 \
     -only-testing:WaniKaniTests \
+    "$@" \
     | tee "${OUTPUT_LOG}"
 ) &
 test_pid=$!

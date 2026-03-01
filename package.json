@@ -28,7 +28,7 @@
     "ios:build": "turbo run ios:build --filter=apps/ios",
     "ios:test": "turbo run ios:test --filter=apps/ios",
     "ios:test:unit": "turbo run ios:test:unit --filter=apps/ios",
-    "ios:test:unit:scheme": "IOS_SCHEME=WaniKani-Unit turbo run ios:test:unit --filter=apps/ios",
+    "ios:test:unit:scheme": "IOS_SCHEME=WaniKani-Unit turbo run ios:test:unit --filter=apps/ios --",
     "ios:lint": "turbo run lint --filter=apps/ios",
     "ios:typecheck": "turbo run typecheck --filter=apps/ios",
     "android:build": "turbo run android:build --filter=apps/android",
