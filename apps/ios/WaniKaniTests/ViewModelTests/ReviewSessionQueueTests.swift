@@ -293,44 +293,34 @@ final class ReviewSessionQueueTests: XCTestCase {
     func test_correctAnswer_deletesActiveQueueEntry() async {
         // When a side is answered correctly, its active queue persistence entry
         // (if any, from a previous wrong answer) is deleted.
-        let sut = makeSUT()
-        let assignment = makeAssignment(id: 57, subjectID: 507)
-        let subject = makeKanji(id: 507, characters: "月", meaning: "Moon", reading: "つき")
-        // Pre-load a meaning active entry (as if a previous session left it from a wrong answer)
+        //
+        // Uses a radical (meaning-only) with TTL=0 so the pre-seeded active item
+        // lands directly in readyPool and is served deterministically as the first prompt.
+        let sut = makeSUT(reviewTTL: 0)
+        let assignment = makeAssignment(id: 57, subjectID: 507, type: .radical)
+        let subject = makeRadical(id: 507, characters: "月", meaning: "Moon")
         reviewRepository.activeQueueItems["\(assignment.id)-Meaning"] = ActiveQueueItemSnapshot(
             assignmentID: assignment.id, subjectID: subject.id,
-            subjectType: "kanji", questionType: "Meaning"
+            subjectType: "radical", questionType: "Meaning"
         )
         reviewRepository.mockAssignments = [assignment]
         registerSubject(subject)
 
         await sut.load()
 
-        // Meaning side is loaded from active (readyAtStep=TTL=5).
-        // Reading is in unseen. With TTL=5 the first served item is from unseen (reading).
-        // After 1 step, meaning becomes ready.
-        // For simplicity: find and answer the meaning side correctly.
-        // Use a loop to find and answer meaning.
-        var answerCount = 0
-        while answerCount < 3 {
-            guard let p = sut.prompt else { break }
-            if p.questionType == .meaning {
-                sut.userAnswer = "Moon"
-                await sut.submitCurrentAnswer()
-                try? await Task.sleep(nanoseconds: 10_000_000)
-                XCTAssertNil(
-                    reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
-                    "Active queue entry for correctly-answered meaning should be deleted"
-                )
-                return
-            } else {
-                sut.userAnswer = "wrong"
-                await sut.submitCurrentAnswer()
-                await sut.next()
-            }
-            answerCount += 1
-        }
-        XCTFail("Meaning side was not served within 3 prompts")
+        // With TTL=0 the active item is immediately in readyPool; unseenQueue is
+        // empty (meaning was removed when the active entry was loaded). First prompt = meaning.
+        XCTAssertEqual(sut.state, .ready)
+        XCTAssertEqual(sut.prompt?.questionType, .meaning)
+
+        sut.userAnswer = "Moon"
+        await sut.submitCurrentAnswer()
+        try? await Task.sleep(nanoseconds: 10_000_000)
+
+        XCTAssertNil(
+            reviewRepository.activeQueueItems["\(assignment.id)-Meaning"],
+            "Active queue entry for correctly-answered meaning should be deleted"
+        )
     }
 
     func test_wrongAnswer_deduped_refreshesTTL() async {
