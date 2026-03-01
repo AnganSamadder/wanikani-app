@@ -24,6 +24,10 @@ final class ReviewSessionViewModel: ObservableObject {
     enum QuestionType: String {
         case meaning = "Meaning"
         case reading = "Reading"
+
+        var opposite: QuestionType {
+            self == .meaning ? .reading : .meaning
+        }
     }
 
     struct Prompt: Equatable {
@@ -44,6 +48,12 @@ final class ReviewSessionViewModel: ObservableObject {
         let userAnswer: String
         let wasCorrect: Bool
         let timestamp: Date
+    }
+
+    /// Stable deduplication key for the active map.
+    struct PromptKey: Hashable {
+        let assignmentID: Int
+        let questionType: QuestionType
     }
 
     private struct QueueItem {
@@ -74,8 +84,10 @@ final class ReviewSessionViewModel: ObservableObject {
         let wasComplete: Bool
         let didRequeue: Bool
         let previousStepCount: Int
-        let addedActiveQueueType: QuestionType?
-        let activeQueueTypeMovedFromUnseen: Bool
+        /// Keys inserted into the active map (both sides on wrong answer).
+        let addedActiveKeys: [PromptKey]
+        /// Items removed from unseenQueue (restored on undo).
+        let removedUnseenItems: [QueueItem]
     }
 
     // MARK: - Published State
@@ -96,7 +108,12 @@ final class ReviewSessionViewModel: ObservableObject {
     // MARK: - Queue
 
     private var unseenQueue: [QueueItem] = []
-    private var activeQueue: [QueueItem] = []
+    /// O(1) lookup/dedup/TTL-refresh map keyed by PromptKey.
+    private var activeMap: [PromptKey: QueueItem] = [:]
+    /// Wake buckets: keys that become ready at a given stepCount value.
+    private var wakeBuckets: [Int: Set<PromptKey>] = [:]
+    /// Items where readyAtStep <= stepCount — eligible for immediate selection.
+    private var readyPool: [PromptKey] = []
     private var currentItem: QueueItem?
     private var sessionItems: [Int: SessionItem] = [:]
     private var pendingCommit: SessionItem? = nil
@@ -110,7 +127,7 @@ final class ReviewSessionViewModel: ObservableObject {
     private let subjectDetailRepository: SubjectDetailRepositoryProtocol
     private let subjectRelationsRepository: SubjectRelationsRepositoryProtocol
     private let studyMaterialRepository: StudyMaterialRepositoryProtocol
-    private let reviewTTL: Int
+    let reviewTTL: Int
 
     init(
         reviewSessionRepository: ReviewSessionRepositoryProtocol,
@@ -129,7 +146,7 @@ final class ReviewSessionViewModel: ObservableObject {
     // MARK: - Computed
 
     var remainingCount: Int {
-        unseenQueue.count + activeQueue.count + (currentItem == nil ? 0 : 1)
+        unseenQueue.count + activeMap.count + (currentItem == nil ? 0 : 1)
     }
 
     var detailsAvailable: Bool { phase == .feedback }
@@ -168,6 +185,9 @@ final class ReviewSessionViewModel: ObservableObject {
         currentSubject = nil
         prompt = nil
         stepCount = 0
+        activeMap = [:]
+        wakeBuckets = [:]
+        readyPool = []
 
         do {
             let assignments = try await reviewSessionRepository.startReviewSession()
@@ -179,6 +199,7 @@ final class ReviewSessionViewModel: ObservableObject {
 
             let assignmentIDs = Set(assignments.map(\.id))
             try? await reviewSessionRepository.prunePendingReviews(validAssignmentIDs: assignmentIDs)
+            try? await reviewSessionRepository.pruneActiveQueue(validAssignmentIDs: assignmentIDs)
 
             var pendingByAssignment = Dictionary(
                 uniqueKeysWithValues: try await reviewSessionRepository
@@ -245,57 +266,48 @@ final class ReviewSessionViewModel: ObservableObject {
 
             sessionItems = loadedSessions
 
-            // Load persisted active queue items
-            let persistedCompanions = (try? await reviewSessionRepository.fetchActiveQueueItems()) ?? []
-            let validAssignmentIDs = Set(assignments.map(\.id))
+            let persistedActive = (try? await reviewSessionRepository.fetchActiveQueueItems()) ?? []
             let assignmentsByID = Dictionary(uniqueKeysWithValues: assignments.map { ($0.id, $0) })
 
             if policy == .finishPendingOnly {
-                // Fast-forward: serve all companion items immediately, no unseen queue
+                // Fast-forward: serve all active items immediately, no unseen queue.
                 unseenQueue = []
-                activeQueue = []
-                for companion in persistedCompanions where validAssignmentIDs.contains(companion.assignmentID) {
-                    guard let subject = subjectsByID[companion.subjectID],
-                          let assignment = assignmentsByID[companion.assignmentID] else { continue }
-                    let questionType = QuestionType(rawValue: companion.questionType) ?? .meaning
-                    let session = loadedSessions[companion.assignmentID]
+                for active in persistedActive where assignmentIDs.contains(active.assignmentID) {
+                    guard let subject = subjectsByID[active.subjectID],
+                          let assignment = assignmentsByID[active.assignmentID] else { continue }
+                    let questionType = QuestionType(rawValue: active.questionType) ?? .meaning
+                    let session = loadedSessions[active.assignmentID]
                     let alreadyDone: Bool
                     switch questionType {
                     case .meaning: alreadyDone = session?.meaningCorrect ?? false
                     case .reading: alreadyDone = session?.readingCorrect ?? false
                     }
                     guard !alreadyDone else { continue }
-                    activeQueue.append(QueueItem(assignment: assignment, subject: subject,
-                                                 questionType: questionType, readyAtStep: 0))
+                    // readyAtStep = 0 with stepCount = 0: goes directly into readyPool.
+                    insertOrRefreshActive(QueueItem(assignment: assignment, subject: subject,
+                                                    questionType: questionType, readyAtStep: 0))
                 }
             } else {
                 unseenQueue = loadedItems.shuffled()
-                activeQueue = []
-                // Append companion queue items that aren't already in unseenQueue
-                for companion in persistedCompanions where validAssignmentIDs.contains(companion.assignmentID) {
-                    guard let subject = subjectsByID[companion.subjectID],
-                          let assignment = assignmentsByID[companion.assignmentID] else { continue }
-                    let questionType = QuestionType(rawValue: companion.questionType) ?? .meaning
-                    let session = loadedSessions[companion.assignmentID]
+                // Load persisted active items with TTL reset to reviewTTL from step 0.
+                for active in persistedActive where assignmentIDs.contains(active.assignmentID) {
+                    guard let subject = subjectsByID[active.subjectID],
+                          let assignment = assignmentsByID[active.assignmentID] else { continue }
+                    let questionType = QuestionType(rawValue: active.questionType) ?? .meaning
+                    let session = loadedSessions[active.assignmentID]
                     let alreadyDone: Bool
                     switch questionType {
                     case .meaning: alreadyDone = session?.meaningCorrect ?? false
                     case .reading: alreadyDone = session?.readingCorrect ?? false
                     }
                     guard !alreadyDone else { continue }
-                    // Remove from unseenQueue if present so the TTL delay applies
-                    if let unseenIdx = unseenQueue.firstIndex(where: {
-                        $0.assignment.id == companion.assignmentID && $0.questionType == questionType
-                    }) {
-                        unseenQueue.remove(at: unseenIdx)
+                    // Remove from unseenQueue if present so TTL delay applies.
+                    unseenQueue.removeAll {
+                        $0.assignment.id == active.assignmentID && $0.questionType == questionType
                     }
-                    // Avoid duplicates in activeQueue
-                    let alreadyActive = activeQueue.contains(where: {
-                        $0.assignment.id == companion.assignmentID && $0.questionType == questionType
-                    })
-                    guard !alreadyActive else { continue }
-                    activeQueue.append(QueueItem(assignment: assignment, subject: subject,
-                                                 questionType: questionType, readyAtStep: reviewTTL))
+                    insertOrRefreshActive(QueueItem(assignment: assignment, subject: subject,
+                                                    questionType: questionType,
+                                                    readyAtStep: reviewTTL))
                 }
             }
 
@@ -345,11 +357,8 @@ final class ReviewSessionViewModel: ObservableObject {
             timestamp: Date()
         ))
 
-        // Track step count before incrementing (for undo restore)
+        // Capture stepCount before any modification (for undo restore).
         let previousStepCount = stepCount
-        if !timerModeEnabled {
-            stepCount += 1
-        }
 
         if isCorrect {
             switch activeItem.questionType {
@@ -361,16 +370,6 @@ final class ReviewSessionViewModel: ObservableObject {
             case .meaning: sessionItem.incorrectMeaningAnswers += 1
             case .reading: sessionItem.incorrectReadingAnswers += 1
             }
-            if !timerModeEnabled {
-                // Re-queue with TTL so it comes back after reviewTTL more answers
-                activeQueue.append(QueueItem(
-                    assignment: activeItem.assignment,
-                    subject: activeItem.subject,
-                    questionType: activeItem.questionType,
-                    readyAtStep: stepCount + reviewTTL
-                ))
-            }
-            // Fast-forward: wrong answer removed permanently (item was already popped)
         }
 
         sessionItems[activeItem.assignment.id] = sessionItem
@@ -397,53 +396,49 @@ final class ReviewSessionViewModel: ObservableObject {
             sessionItems.removeValue(forKey: sessionItem.assignmentID)
         }
 
-        // Auto-add companion side with TTL on correct answer (normal mode only)
-        var addedActiveQueueType: QuestionType? = nil
-        var activeQueueTypeMovedFromUnseen: Bool = false
-        if isCorrect && !timerModeEnabled {
-            if let updatedSession = sessionItems[activeItem.assignment.id] {
-                let companionType: QuestionType = activeItem.questionType == .meaning ? .reading : .meaning
-                let companionNeeded: Bool
-                switch companionType {
-                case .reading: companionNeeded = updatedSession.hasReadings && !updatedSession.readingCorrect
-                case .meaning: companionNeeded = !updatedSession.meaningCorrect
-                }
-                let alreadyInActive = activeQueue.contains(where: {
-                    $0.assignment.id == activeItem.assignment.id && $0.questionType == companionType
-                })
-                if companionNeeded && !alreadyInActive {
-                    // Move from unseenQueue to activeQueue if present so TTL delay applies
-                    if let unseenIdx = unseenQueue.firstIndex(where: {
-                        $0.assignment.id == activeItem.assignment.id && $0.questionType == companionType
-                    }) {
-                        unseenQueue.remove(at: unseenIdx)
-                        activeQueueTypeMovedFromUnseen = true
-                    }
-                    activeQueue.append(QueueItem(
-                        assignment: activeItem.assignment,
-                        subject: activeItem.subject,
-                        questionType: companionType,
-                        readyAtStep: stepCount + reviewTTL
-                    ))
-                    addedActiveQueueType = companionType
-                    try? await reviewSessionRepository.upsertActiveQueueItem(
+        // Wrong answer in normal mode: enqueue both sides with TTL.
+        var addedActiveKeys: [PromptKey] = []
+        var removedUnseenItems: [QueueItem] = []
+        if !isCorrect && !timerModeEnabled {
+            // Capture unseen items for this assignment before removing them (for undo).
+            removedUnseenItems = unseenQueue.filter { $0.assignment.id == activeItem.assignment.id }
+            unseenQueue.removeAll { $0.assignment.id == activeItem.assignment.id }
+
+            let sides: [QuestionType] = activeItem.subject.hasReadings
+                ? [activeItem.questionType, activeItem.questionType.opposite]
+                : [activeItem.questionType]
+
+            for side in sides {
+                let key = PromptKey(assignmentID: activeItem.assignment.id, questionType: side)
+                addedActiveKeys.append(key)
+                let queued = QueueItem(
+                    assignment: activeItem.assignment,
+                    subject: activeItem.subject,
+                    questionType: side,
+                    readyAtStep: stepCount + reviewTTL
+                )
+                insertOrRefreshActive(queued)
+                Task { [weak self] in
+                    try? await self?.reviewSessionRepository.upsertActiveQueueItem(
                         ActiveQueueItemSnapshot(
                             assignmentID: activeItem.assignment.id,
                             subjectID: activeItem.assignment.subjectID,
                             subjectType: activeItem.assignment.subjectType.rawValue,
-                            questionType: companionType.rawValue
+                            questionType: side.rawValue
                         )
                     )
                 }
             }
         }
 
-        // When a side is answered correctly, remove its active queue persistence entry
+        // Correct answer: delete the active queue persistence entry for this side.
         if isCorrect {
-            try? await reviewSessionRepository.deleteActiveQueueItem(
-                assignmentID: activeItem.assignment.id,
-                questionType: activeItem.questionType.rawValue
-            )
+            Task { [weak self] in
+                try? await self?.reviewSessionRepository.deleteActiveQueueItem(
+                    assignmentID: activeItem.assignment.id,
+                    questionType: activeItem.questionType.rawValue
+                )
+            }
         }
 
         if let existingPrompt = prompt {
@@ -455,8 +450,8 @@ final class ReviewSessionViewModel: ObservableObject {
                 wasComplete: wasComplete,
                 didRequeue: !isCorrect && !timerModeEnabled,
                 previousStepCount: previousStepCount,
-                addedActiveQueueType: addedActiveQueueType,
-                activeQueueTypeMovedFromUnseen: activeQueueTypeMovedFromUnseen
+                addedActiveKeys: addedActiveKeys,
+                removedUnseenItems: removedUnseenItems
             )
         } else {
             undoCheckpoint = nil
@@ -491,10 +486,16 @@ final class ReviewSessionViewModel: ObservableObject {
         canUndo = false
         await refreshPendingHalfCompletionCount()
 
-        let queuesEmpty = activeQueue.isEmpty && unseenQueue.isEmpty && pendingCommit == nil
-        if timerModeEnabled && queuesEmpty && pendingHalfCompletionCount == 0 {
-            navigateToTab = .dashboard
-            return
+        // Fast-forward: navigate to dashboard when all active items and half-completions are gone.
+        if timerModeEnabled {
+            let queuesEmpty = activeMap.isEmpty && pendingHalfCompletionCount == 0
+            if queuesEmpty {
+                navigateToTab = .dashboard
+                return
+            }
+        } else {
+            // Normal mode: advance one step and drain the corresponding wake bucket.
+            advanceStep()
         }
 
         advanceToNextItem()
@@ -514,37 +515,26 @@ final class ReviewSessionViewModel: ObservableObject {
 
         attemptHistory = Array(attemptHistory.prefix(checkpoint.previousAttemptCount))
 
-        // Restore step count
+        // Restore step count.
         stepCount = checkpoint.previousStepCount
 
-        if checkpoint.didRequeue,
-           let lastIdx = activeQueue.indices.last,
-           activeQueue[lastIdx].assignment.id == checkpoint.restoredQueueItem.assignment.id,
-           activeQueue[lastIdx].questionType == checkpoint.restoredQueueItem.questionType {
-            activeQueue.removeLast()
+        // Remove all keys that were added to active by this answer (wrong-answer path).
+        for key in checkpoint.addedActiveKeys {
+            if let item = activeMap.removeValue(forKey: key) {
+                wakeBuckets[item.readyAtStep]?.remove(key)
+                readyPool.removeAll { $0 == key }
+            }
+            Task { [weak self] in
+                try? await self?.reviewSessionRepository.deleteActiveQueueItem(
+                    assignmentID: key.assignmentID,
+                    questionType: key.questionType.rawValue
+                )
+            }
         }
 
-        // Undo active queue addition (companion side added on correct answer)
-        if let addedType = checkpoint.addedActiveQueueType {
-            if let idx = activeQueue.firstIndex(where: {
-                $0.assignment.id == checkpoint.restoredQueueItem.assignment.id &&
-                $0.questionType == addedType
-            }) {
-                activeQueue.remove(at: idx)
-            }
-            // Restore to unseenQueue if it was moved from there
-            if checkpoint.activeQueueTypeMovedFromUnseen {
-                unseenQueue.append(QueueItem(
-                    assignment: checkpoint.restoredQueueItem.assignment,
-                    subject: checkpoint.restoredQueueItem.subject,
-                    questionType: addedType,
-                    readyAtStep: Int.min
-                ))
-            }
-            try? await reviewSessionRepository.deleteActiveQueueItem(
-                assignmentID: checkpoint.restoredQueueItem.assignment.id,
-                questionType: addedType.rawValue
-            )
+        // Restore items that were removed from unseenQueue.
+        for item in checkpoint.removedUnseenItems {
+            unseenQueue.append(item)
         }
 
         if checkpoint.wasComplete {
@@ -578,10 +568,6 @@ final class ReviewSessionViewModel: ObservableObject {
                 try? await reviewSessionRepository.deletePendingReview(assignmentId: checkpoint.previousSessionItem.assignmentID)
             }
         }
-
-        // Restore the companion queue entry for the item being undone (if it was deleted)
-        // (it was answered correctly and its companion persistence entry was deleted)
-        // The companion tracking is the responsibility of the new answer, not the undo.
 
         currentItem = checkpoint.restoredQueueItem
         currentSubject = checkpoint.restoredQueueItem.subject
@@ -658,41 +644,72 @@ final class ReviewSessionViewModel: ObservableObject {
         return ordered
     }
 
+    /// Insert or refresh an item in the active map with O(1) dedup and TTL-refresh.
+    private func insertOrRefreshActive(_ item: QueueItem) {
+        let key = PromptKey(assignmentID: item.assignment.id, questionType: item.questionType)
+
+        // Remove from old placement if already present.
+        if let existing = activeMap[key] {
+            wakeBuckets[existing.readyAtStep]?.remove(key)
+            readyPool.removeAll { $0 == key }
+        }
+
+        activeMap[key] = item
+
+        if item.readyAtStep <= stepCount {
+            readyPool.append(key)
+        } else {
+            wakeBuckets[item.readyAtStep, default: []].insert(key)
+        }
+    }
+
+    /// Increment stepCount and drain the corresponding wake bucket into readyPool.
+    private func advanceStep() {
+        stepCount += 1
+        if let waking = wakeBuckets.removeValue(forKey: stepCount) {
+            readyPool.append(contentsOf: waking)
+        }
+    }
+
+    /// Remove and return a random item from readyPool (also removes from activeMap).
+    private func pickReadyItem() -> QueueItem? {
+        guard !readyPool.isEmpty else { return nil }
+        let idx = Int.random(in: 0..<readyPool.count)
+        let key = readyPool.remove(at: idx)
+        return activeMap.removeValue(forKey: key)
+    }
+
     private func advanceToNextItem() {
         currentItem = nil
         prompt = nil
         currentSubject = nil
 
         if timerModeEnabled {
-            // Fast-forward: serve all active items regardless of readyAtStep
-            guard !activeQueue.isEmpty else { return }
-            let next = activeQueue.removeFirst()
-            setCurrentItem(next)
+            // Fast-forward: pick any item from activeMap (TTL is irrelevant).
+            guard !activeMap.isEmpty else { return }
+            let key = activeMap.keys.randomElement()!
+            let item = activeMap.removeValue(forKey: key)!
+            wakeBuckets[item.readyAtStep]?.remove(key)
+            readyPool.removeAll { $0 == key }
+            setCurrentItem(item)
             return
         }
 
-        // Count ready active items (activeQueue is ordered by ascending readyAtStep)
-        let readyCount = activeQueue.prefix(while: { $0.readyAtStep <= stepCount }).count
+        // Normal mode: step has already been advanced by next(). Pick from ready pool / unseen.
         let hasUnseen = !unseenQueue.isEmpty
-        let hasReady = readyCount > 0
+        let hasReady = !readyPool.isEmpty
 
         switch (hasUnseen, hasReady) {
         case (true, true):
             if Bool.random() {
-                let next = unseenQueue.removeFirst()
-                setCurrentItem(next)
+                setCurrentItem(unseenQueue.removeFirst())
             } else {
-                let idx = Int.random(in: 0..<readyCount)
-                let next = activeQueue.remove(at: idx)
-                setCurrentItem(next)
+                setCurrentItem(pickReadyItem()!)
             }
         case (true, false):
-            let next = unseenQueue.removeFirst()
-            setCurrentItem(next)
+            setCurrentItem(unseenQueue.removeFirst())
         case (false, true):
-            let idx = Int.random(in: 0..<readyCount)
-            let next = activeQueue.remove(at: idx)
-            setCurrentItem(next)
+            setCurrentItem(pickReadyItem()!)
         case (false, false):
             break
         }
