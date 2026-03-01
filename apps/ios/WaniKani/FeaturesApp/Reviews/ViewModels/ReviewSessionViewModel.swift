@@ -63,6 +63,17 @@ final class ReviewSessionViewModel: ObservableObject {
         let readyAtStep: Int   // Int.min = always ready (unseen); stepCount+TTL = delayed
     }
 
+    private struct ActiveMutation {
+        let key: PromptKey
+        let previousItem: QueueItem?
+        let hadPersistedEntry: Bool
+    }
+
+    private enum PromptSource {
+        case unseen
+        case active
+    }
+
     private struct SessionItem {
         let assignmentID: Int
         let subjectID: Int
@@ -82,10 +93,11 @@ final class ReviewSessionViewModel: ObservableObject {
         let restoredQueueItem: QueueItem
         let previousAttemptCount: Int
         let wasComplete: Bool
-        let didRequeue: Bool
         let previousStepCount: Int
-        /// Keys inserted into the active map (both sides on wrong answer).
-        let addedActiveKeys: [PromptKey]
+        let previousPromptSource: PromptSource?
+        let restoreServedActivePersistence: Bool
+        /// Active-map mutations performed while handling submit.
+        let activeMutations: [ActiveMutation]
         /// Items removed from unseenQueue (restored on undo).
         let removedUnseenItems: [QueueItem]
     }
@@ -115,6 +127,7 @@ final class ReviewSessionViewModel: ObservableObject {
     /// Items where readyAtStep <= stepCount — eligible for immediate selection.
     private var readyPool: [PromptKey] = []
     private var currentItem: QueueItem?
+    private var currentItemSource: PromptSource?
     private var sessionItems: [Int: SessionItem] = [:]
     private var pendingCommit: SessionItem? = nil
     private var undoCheckpoint: UndoCheckpoint? = nil
@@ -182,6 +195,7 @@ final class ReviewSessionViewModel: ObservableObject {
         undoCheckpoint = nil
         navigateToTab = nil
         currentItem = nil
+        currentItemSource = nil
         currentSubject = nil
         prompt = nil
         stepCount = 0
@@ -359,6 +373,7 @@ final class ReviewSessionViewModel: ObservableObject {
 
         // Capture stepCount before any modification (for undo restore).
         let previousStepCount = stepCount
+        let previousPromptSource = currentItemSource
 
         if isCorrect {
             switch activeItem.questionType {
@@ -397,8 +412,13 @@ final class ReviewSessionViewModel: ObservableObject {
         }
 
         // Wrong answer in normal mode: enqueue both sides with TTL.
-        var addedActiveKeys: [PromptKey] = []
+        var activeMutations: [ActiveMutation] = []
         var removedUnseenItems: [QueueItem] = []
+        let currentKey = PromptKey(
+            assignmentID: activeItem.assignment.id,
+            questionType: activeItem.questionType
+        )
+        let servedFromActive = previousPromptSource == .active
         if !isCorrect && !timerModeEnabled {
             // Capture unseen items for this assignment before removing them (for undo).
             removedUnseenItems = unseenQueue.filter { $0.assignment.id == activeItem.assignment.id }
@@ -410,7 +430,15 @@ final class ReviewSessionViewModel: ObservableObject {
 
             for side in sides {
                 let key = PromptKey(assignmentID: activeItem.assignment.id, questionType: side)
-                addedActiveKeys.append(key)
+                let previousItem = activeMap[key]
+                let hadPersistedEntry = previousItem != nil || (servedFromActive && key == currentKey)
+                activeMutations.append(
+                    ActiveMutation(
+                        key: key,
+                        previousItem: previousItem,
+                        hadPersistedEntry: hadPersistedEntry
+                    )
+                )
                 let queued = QueueItem(
                     assignment: activeItem.assignment,
                     subject: activeItem.subject,
@@ -418,27 +446,26 @@ final class ReviewSessionViewModel: ObservableObject {
                     readyAtStep: stepCount + reviewTTL
                 )
                 insertOrRefreshActive(queued)
-                Task { [weak self] in
-                    try? await self?.reviewSessionRepository.upsertActiveQueueItem(
-                        ActiveQueueItemSnapshot(
-                            assignmentID: activeItem.assignment.id,
-                            subjectID: activeItem.assignment.subjectID,
-                            subjectType: activeItem.assignment.subjectType.rawValue,
-                            questionType: side.rawValue
-                        )
+                try? await reviewSessionRepository.upsertActiveQueueItem(
+                    ActiveQueueItemSnapshot(
+                        assignmentID: activeItem.assignment.id,
+                        subjectID: activeItem.assignment.subjectID,
+                        subjectType: activeItem.assignment.subjectType.rawValue,
+                        questionType: side.rawValue
                     )
-                }
+                )
             }
         }
 
-        // Correct answer: delete the active queue persistence entry for this side.
-        if isCorrect {
-            Task { [weak self] in
-                try? await self?.reviewSessionRepository.deleteActiveQueueItem(
-                    assignmentID: activeItem.assignment.id,
-                    questionType: activeItem.questionType.rawValue
-                )
-            }
+        // Delete persistence entry for the served side when it is consumed:
+        // - always in fast-forward (correct or wrong), because items are drained
+        // - on correct answers in normal mode
+        let restoreServedActivePersistence = servedFromActive && (timerModeEnabled || isCorrect)
+        if timerModeEnabled || isCorrect {
+            try? await reviewSessionRepository.deleteActiveQueueItem(
+                assignmentID: activeItem.assignment.id,
+                questionType: activeItem.questionType.rawValue
+            )
         }
 
         if let existingPrompt = prompt {
@@ -448,9 +475,10 @@ final class ReviewSessionViewModel: ObservableObject {
                 restoredQueueItem: activeItem,
                 previousAttemptCount: previousAttemptCount,
                 wasComplete: wasComplete,
-                didRequeue: !isCorrect && !timerModeEnabled,
                 previousStepCount: previousStepCount,
-                addedActiveKeys: addedActiveKeys,
+                previousPromptSource: previousPromptSource,
+                restoreServedActivePersistence: restoreServedActivePersistence,
+                activeMutations: activeMutations,
                 removedUnseenItems: removedUnseenItems
             )
         } else {
@@ -518,18 +546,50 @@ final class ReviewSessionViewModel: ObservableObject {
         // Restore step count.
         stepCount = checkpoint.previousStepCount
 
-        // Remove all keys that were added to active by this answer (wrong-answer path).
-        for key in checkpoint.addedActiveKeys {
-            if let item = activeMap.removeValue(forKey: key) {
-                wakeBuckets[item.readyAtStep]?.remove(key)
-                readyPool.removeAll { $0 == key }
-            }
-            Task { [weak self] in
-                try? await self?.reviewSessionRepository.deleteActiveQueueItem(
-                    assignmentID: key.assignmentID,
-                    questionType: key.questionType.rawValue
+        // Revert active-map changes from submit.
+        for mutation in checkpoint.activeMutations {
+            if let previousItem = mutation.previousItem {
+                insertOrRefreshActive(previousItem)
+                try? await reviewSessionRepository.upsertActiveQueueItem(
+                    ActiveQueueItemSnapshot(
+                        assignmentID: previousItem.assignment.id,
+                        subjectID: previousItem.assignment.subjectID,
+                        subjectType: previousItem.assignment.subjectType.rawValue,
+                        questionType: previousItem.questionType.rawValue
+                    )
                 )
+            } else {
+                if let item = activeMap.removeValue(forKey: mutation.key) {
+                    wakeBuckets[item.readyAtStep]?.remove(mutation.key)
+                    readyPool.removeAll { $0 == mutation.key }
+                }
+                if mutation.hadPersistedEntry {
+                    try? await reviewSessionRepository.upsertActiveQueueItem(
+                        ActiveQueueItemSnapshot(
+                            assignmentID: mutation.key.assignmentID,
+                            subjectID: checkpoint.previousSessionItem.subjectID,
+                            subjectType: checkpoint.previousSessionItem.subjectType,
+                            questionType: mutation.key.questionType.rawValue
+                        )
+                    )
+                } else {
+                    try? await reviewSessionRepository.deleteActiveQueueItem(
+                        assignmentID: mutation.key.assignmentID,
+                        questionType: mutation.key.questionType.rawValue
+                    )
+                }
             }
+        }
+
+        if checkpoint.restoreServedActivePersistence {
+            try? await reviewSessionRepository.upsertActiveQueueItem(
+                ActiveQueueItemSnapshot(
+                    assignmentID: checkpoint.previousSessionItem.assignmentID,
+                    subjectID: checkpoint.previousSessionItem.subjectID,
+                    subjectType: checkpoint.previousSessionItem.subjectType,
+                    questionType: checkpoint.previousPrompt.questionType.rawValue
+                )
+            )
         }
 
         // Restore items that were removed from unseenQueue.
@@ -570,6 +630,7 @@ final class ReviewSessionViewModel: ObservableObject {
         }
 
         currentItem = checkpoint.restoredQueueItem
+        currentItemSource = checkpoint.previousPromptSource
         currentSubject = checkpoint.restoredQueueItem.subject
         prompt = checkpoint.previousPrompt
         userAnswer = ""
@@ -681,6 +742,7 @@ final class ReviewSessionViewModel: ObservableObject {
 
     private func advanceToNextItem() {
         currentItem = nil
+        currentItemSource = nil
         prompt = nil
         currentSubject = nil
 
@@ -691,7 +753,7 @@ final class ReviewSessionViewModel: ObservableObject {
             let item = activeMap.removeValue(forKey: key)!
             wakeBuckets[item.readyAtStep]?.remove(key)
             readyPool.removeAll { $0 == key }
-            setCurrentItem(item)
+            setCurrentItem(item, source: .active)
             return
         }
 
@@ -702,21 +764,22 @@ final class ReviewSessionViewModel: ObservableObject {
         switch (hasUnseen, hasReady) {
         case (true, true):
             if Bool.random() {
-                setCurrentItem(unseenQueue.removeFirst())
+                setCurrentItem(unseenQueue.removeFirst(), source: .unseen)
             } else {
-                setCurrentItem(pickReadyItem()!)
+                setCurrentItem(pickReadyItem()!, source: .active)
             }
         case (true, false):
-            setCurrentItem(unseenQueue.removeFirst())
+            setCurrentItem(unseenQueue.removeFirst(), source: .unseen)
         case (false, true):
-            setCurrentItem(pickReadyItem()!)
+            setCurrentItem(pickReadyItem()!, source: .active)
         case (false, false):
             break
         }
     }
 
-    private func setCurrentItem(_ item: QueueItem) {
+    private func setCurrentItem(_ item: QueueItem, source: PromptSource) {
         currentItem = item
+        currentItemSource = source
         currentSubject = item.subject
         prompt = Prompt(
             subjectCharacters: item.subject.characters ?? item.subject.slug,
