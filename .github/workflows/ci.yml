@@ -6,6 +6,12 @@ on:
   push:
     branches: ["main"]
 
+# Cancel in-progress runs for the same workflow+ref combination so
+# a force-push or rapid PR update doesn't pile up expensive macOS runners.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -16,6 +22,23 @@ env:
   TURBO_API: ${{ secrets.TURBO_API }}
 
 jobs:
+  # Detect which parts of the repo changed.
+  # Used to skip the macOS iOS job on PRs that touch no iOS files.
+  filter:
+    name: Changed Files
+    runs-on: ubuntu-latest
+    outputs:
+      ios: ${{ steps.paths.outputs.ios }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: paths
+        with:
+          filters: |
+            ios:
+              - 'apps/ios/**'
+              - '.github/workflows/ci.yml'
+
   packages:
     name: Packages
     runs-on: ubuntu-latest
@@ -23,6 +46,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -60,6 +91,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -114,10 +153,20 @@ jobs:
     name: iOS
     runs-on: macos-15
     timeout-minutes: 45
-    needs: [packages]
+    needs: [packages, filter]
+    # Always run on push to main; on PRs only run when iOS files changed.
+    if: github.event_name == 'push' || needs.filter.outputs.ios == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -170,4 +219,65 @@ jobs:
         with:
           name: turbo-summaries-ios
           path: .turbo/runs/**
+          if-no-files-found: ignore
+
+  # Runs tests with code-coverage collection only on pushes to main.
+  # Separated so PRs don't pay the extra cost of coverage instrumentation.
+  ios-coverage:
+    name: iOS Coverage
+    runs-on: macos-15
+    timeout-minutes: 60
+    needs: [ios]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.9"
+
+      - name: Install iOS toolchain helpers
+        run: brew install xcodegen swiftgen
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Pick simulator destination
+        run: |
+          UDID="$(xcrun simctl list devices available -j | python3 - <<'PY'
+          import json, sys
+          data=json.load(sys.stdin)
+          for runtime in data.get("devices",{}).values():
+              for device in runtime:
+                  if device.get("isAvailable") and "iPhone" in device.get("name",""):
+                      print(device["udid"])
+                      raise SystemExit(0)
+          raise SystemExit(1)
+          PY
+          )"
+          echo "IOS_DESTINATION=platform=iOS Simulator,id=${UDID}" >> "$GITHUB_ENV"
+
+      - name: Generate iOS project
+        run: bun run ios:generate
+
+      - name: Test iOS app with coverage
+        run: bun run ios:test:unit:scheme -- -enableCodeCoverage YES
+
+      - name: Upload iOS coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-coverage
+          path: |
+            apps/ios/build/*.xcresult
+            apps/ios/build/**/*.xcresult
           if-no-files-found: ignore
