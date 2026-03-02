@@ -690,6 +690,144 @@ final class ReviewSessionQueueTests: XCTestCase {
                        "Fast-forward serves active item immediately regardless of TTL")
     }
 
+    func test_fastForward_halfCompletion_correctAnswer_submitsReviewAndNavigatesToDashboard() async {
+        // End-to-end: ff mode with one half-completion (meaning done, reading pending).
+        // Answering the reading correctly must submit the full review and navigate to dashboard.
+        let sut = makeSUT()
+        let assignment = makeAssignment(id: 800, subjectID: 8001)
+        let subject = makeKanji(id: 8001, characters: "月", meaning: "Moon", reading: "つき")
+        reviewRepository.mockAssignments = [assignment]
+        reviewRepository.pendingReviews[assignment.id] = PendingReviewSnapshot(
+            assignmentID: assignment.id, subjectID: subject.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: true, readingCompleted: false,
+            incorrectMeaningAnswers: 0, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        registerSubject(subject)
+        reviewRepository.mockReview = makeReview(id: 200, assignmentID: assignment.id, subjectID: subject.id)
+
+        await sut.setTimerModeEnabled(true)
+
+        XCTAssertEqual(sut.state, .ready, "ff mode must be ready when a half-completion exists")
+        XCTAssertEqual(sut.prompt?.questionType, .reading, "Only the uncompleted reading side should be served")
+        XCTAssertEqual(sut.pendingHalfCompletionCount, 1)
+
+        sut.userAnswer = "つき"
+        await sut.submitCurrentAnswer()
+
+        XCTAssertTrue(sut.lastAnswerCorrect == true)
+        // After correct answer the pending review is upserted as both-done (isHalfComplete = false)
+        XCTAssertEqual(sut.pendingHalfCompletionCount, 0,
+                       "Half-completion count must drop to 0 once both sides are marked done")
+
+        await sut.next()
+
+        XCTAssertEqual(sut.navigateToTab, .dashboard,
+                       "Completing the last half-completion in ff mode must navigate to dashboard")
+        XCTAssertEqual(reviewRepository.submitReviewCalls.count, 1,
+                       "Review must be submitted via next()")
+        XCTAssertEqual(reviewRepository.submitReviewCalls.first?.incorrectMeaningAnswers, 0)
+        XCTAssertEqual(reviewRepository.submitReviewCalls.first?.incorrectReadingAnswers, 0)
+        XCTAssertNil(reviewRepository.pendingReviews[assignment.id],
+                     "Pending review must be deleted after successful submission")
+    }
+
+    func test_fastForward_halfCompletion_correctAnswer_preservesPriorIncorrectCounts() async {
+        // When a half-completion's meaning side had prior wrong answers, those incorrect
+        // counts must be preserved and submitted along with the newly-completed reading.
+        let sut = makeSUT()
+        let assignment = makeAssignment(id: 805, subjectID: 8006)
+        let subject = makeKanji(id: 8006, characters: "木", meaning: "Tree", reading: "き")
+        reviewRepository.mockAssignments = [assignment]
+        // Meaning was answered wrong 3 times before getting it right; reading still pending
+        reviewRepository.pendingReviews[assignment.id] = PendingReviewSnapshot(
+            assignmentID: assignment.id, subjectID: subject.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: true, readingCompleted: false,
+            incorrectMeaningAnswers: 3, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        registerSubject(subject)
+        reviewRepository.mockReview = makeReview(id: 205, assignmentID: assignment.id, subjectID: subject.id)
+
+        await sut.setTimerModeEnabled(true)
+        XCTAssertEqual(sut.prompt?.questionType, .reading)
+
+        sut.userAnswer = "き"
+        await sut.submitCurrentAnswer()
+        await sut.next()
+
+        XCTAssertEqual(reviewRepository.submitReviewCalls.count, 1)
+        XCTAssertEqual(reviewRepository.submitReviewCalls.first?.incorrectMeaningAnswers, 3,
+                       "Prior incorrect meaning count from pendingReview must be preserved on submit")
+        XCTAssertEqual(reviewRepository.submitReviewCalls.first?.incorrectReadingAnswers, 0)
+    }
+
+    func test_fastForward_halfCompletion_wrongAnswer_discardsItemAndEndsSession() async {
+        // Wrong answer in ff mode discards the item. Session ends as .complete (not .dashboard)
+        // because the item was not finished. The pending review persists for the next normal session.
+        let sut = makeSUT()
+        let assignment = makeAssignment(id: 801, subjectID: 8002)
+        let subject = makeKanji(id: 8002, characters: "日", meaning: "Sun", reading: "ひ")
+        reviewRepository.mockAssignments = [assignment]
+        reviewRepository.pendingReviews[assignment.id] = PendingReviewSnapshot(
+            assignmentID: assignment.id, subjectID: subject.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: true, readingCompleted: false,
+            incorrectMeaningAnswers: 0, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        registerSubject(subject)
+
+        await sut.setTimerModeEnabled(true)
+        XCTAssertEqual(sut.state, .ready)
+        XCTAssertEqual(sut.prompt?.questionType, .reading)
+
+        sut.userAnswer = "wrong"
+        await sut.submitCurrentAnswer()
+
+        XCTAssertFalse(sut.lastAnswerCorrect == true)
+
+        await sut.next()
+
+        // Item was discarded; ff session has no more items. State is .complete, not .dashboard,
+        // because the review was not submitted (half-completion still unfinished).
+        XCTAssertEqual(sut.state, .complete,
+                       "Session must end as complete when all ff items are exhausted by wrong answers")
+        XCTAssertNil(sut.navigateToTab,
+                     "Must not navigate to dashboard — the review was not completed")
+        XCTAssertEqual(reviewRepository.submitReviewCalls.count, 0,
+                       "Incomplete review must not be submitted")
+        XCTAssertNotNil(reviewRepository.pendingReviews[assignment.id],
+                        "Pending review must persist so the item can be re-attempted in normal mode")
+    }
+
+    func test_fastForward_mixedActiveQueueAndHalfCompletion_bothServed() async {
+        // ff mode must serve both active-queue items (wrong-answer re-queues) and half-completion
+        // items (one side already done). Both should appear in the ff queue simultaneously.
+        let sut = makeSUT()
+        let a1 = makeAssignment(id: 802, subjectID: 8003)
+        let s1 = makeKanji(id: 8003, characters: "火", meaning: "Fire", reading: "ひ")
+        let a2 = makeAssignment(id: 803, subjectID: 8004)
+        let s2 = makeKanji(id: 8004, characters: "水", meaning: "Water", reading: "みず")
+        reviewRepository.mockAssignments = [a1, a2]
+        // a1: wrong-answer re-queued into active queue
+        reviewRepository.activeQueueItems["\(a1.id)-Meaning"] = ActiveQueueItemSnapshot(
+            assignmentID: a1.id, subjectID: s1.id, subjectType: "kanji", questionType: "Meaning"
+        )
+        // a2: half-completion — reading done, meaning still pending
+        reviewRepository.pendingReviews[a2.id] = PendingReviewSnapshot(
+            assignmentID: a2.id, subjectID: s2.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: false, readingCompleted: true,
+            incorrectMeaningAnswers: 0, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        registerSubject(s1)
+        registerSubject(s2)
+
+        await sut.setTimerModeEnabled(true)
+
+        XCTAssertEqual(sut.state, .ready)
+        XCTAssertEqual(sut.remainingCount, 2,
+                       "Both the active-queue item (a1) and the half-completion (a2) must be queued")
+        XCTAssertEqual(sut.pendingHalfCompletionCount, 1,
+                       "Only a2 is a half-completion; a1 is an active-queue item without a pendingReview")
+    }
+
     func test_fastForward_onlyServesActiveAndHalfCompletions_notUnseenQueue() async {
         // Fast-forward mode serves active queue items and half-completion items,
         // but NOT items that are purely unseen (no active entry, no pending progress).
