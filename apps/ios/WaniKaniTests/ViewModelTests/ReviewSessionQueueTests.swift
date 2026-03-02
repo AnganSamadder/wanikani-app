@@ -690,16 +690,16 @@ final class ReviewSessionQueueTests: XCTestCase {
                        "Fast-forward serves active item immediately regardless of TTL")
     }
 
-    func test_fastForward_onlyServesActiveItems_notUnseenQueue() async {
-        // Fast-forward mode should serve only active queue items,
-        // never items from the unseenQueue. unseenQueue is emptied on load.
+    func test_fastForward_onlyServesActiveAndHalfCompletions_notUnseenQueue() async {
+        // Fast-forward mode serves active queue items and half-completion items,
+        // but NOT items that are purely unseen (no active entry, no pending progress).
         let sut = makeSUT()
         let a1 = makeAssignment(id: 67, subjectID: 517)
         let s1 = makeKanji(id: 517, characters: "鉄", meaning: "Iron", reading: "てつ")
         let a2 = makeAssignment(id: 68, subjectID: 518)
         let s2 = makeKanji(id: 518, characters: "銅", meaning: "Copper", reading: "どう")
         reviewRepository.mockAssignments = [a1, a2]
-        // Only a1 has an active item; a2 has no active entry
+        // Only a1 has an active item; a2 has no active entry and no pending progress
         reviewRepository.activeQueueItems["\(a1.id)-Reading"] = ActiveQueueItemSnapshot(
             assignmentID: a1.id, subjectID: s1.id, subjectType: "kanji", questionType: "Reading"
         )
@@ -709,9 +709,55 @@ final class ReviewSessionQueueTests: XCTestCase {
         await sut.setTimerModeEnabled(true)
 
         // Only 1 item should be in the queue (a1's reading active entry)
-        // a2 has no active entry so it should not appear in fast-forward
+        // a2 has no active entry and no half-completion so it should not appear
         XCTAssertEqual(sut.remainingCount, 1,
-                       "Fast-forward should only serve items from the active queue")
+                       "Fast-forward must not pull purely unseen items into the queue")
+    }
+
+    func test_fastForward_servesHalfCompletions_whenNoActiveQueueItems() async {
+        // Regression: pressing fast-forward with 0 active queue entries but N
+        // half-completed reviews (one side done, other pending) must NOT show empty.
+        // Each half-completion contributes exactly one remaining question.
+        let sut = makeSUT()
+        let a1 = makeAssignment(id: 700, subjectID: 7001)
+        let s1 = makeKanji(id: 7001, characters: "山", meaning: "Mountain", reading: "やま")
+        let a2 = makeAssignment(id: 701, subjectID: 7002)
+        let s2 = makeKanji(id: 7002, characters: "川", meaning: "River", reading: "かわ")
+        reviewRepository.mockAssignments = [a1, a2]
+        // a1: meaning done, reading still pending — half-completion, no active queue entry
+        reviewRepository.pendingReviews[a1.id] = PendingReviewSnapshot(
+            assignmentID: a1.id, subjectID: s1.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: true, readingCompleted: false,
+            incorrectMeaningAnswers: 0, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        // a2: reading done, meaning still pending — half-completion, no active queue entry
+        reviewRepository.pendingReviews[a2.id] = PendingReviewSnapshot(
+            assignmentID: a2.id, subjectID: s2.id, subjectType: "kanji",
+            hasReadings: true, meaningCompleted: false, readingCompleted: true,
+            incorrectMeaningAnswers: 0, incorrectReadingAnswers: 0, updatedAt: Date()
+        )
+        registerSubject(s1)
+        registerSubject(s2)
+
+        await sut.setTimerModeEnabled(true)
+
+        XCTAssertEqual(sut.state, .ready,
+                       "Fast-forward must be ready when half-completions exist")
+        // 2 half-completions: 1 current + 1 in queue
+        XCTAssertEqual(sut.remainingCount, 2,
+                       "Each half-completion contributes one remaining question")
+        // The served prompt must be the uncompleted side
+        if let prompt = sut.prompt {
+            if prompt.questionType == .reading {
+                XCTAssertEqual(prompt.subjectCharacters, s1.characters,
+                               "Reading prompt must be for a1 (meaning was already done)")
+            } else {
+                XCTAssertEqual(prompt.questionType, .meaning,
+                               "Meaning prompt must be for a2 (reading was already done)")
+            }
+        } else {
+            XCTFail("Expected a prompt after fast-forward with half-completions")
+        }
     }
 
     // MARK: - Active Queue — Loading from Persistence

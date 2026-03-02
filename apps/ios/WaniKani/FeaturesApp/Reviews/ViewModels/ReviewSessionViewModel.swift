@@ -286,6 +286,8 @@ final class ReviewSessionViewModel: ObservableObject {
             if policy == .finishPendingOnly {
                 // Fast-forward: serve all active items immediately, no unseen queue.
                 unseenQueue = []
+
+                // 1. Load wrong-answer items from the active queue.
                 for active in persistedActive where assignmentIDs.contains(active.assignmentID) {
                     guard let subject = subjectsByID[active.subjectID],
                           let assignment = assignmentsByID[active.assignmentID] else { continue }
@@ -300,6 +302,21 @@ final class ReviewSessionViewModel: ObservableObject {
                     // readyAtStep = 0 with stepCount = 0: goes directly into readyPool.
                     insertOrRefreshActive(QueueItem(assignment: assignment, subject: subject,
                                                     questionType: questionType, readyAtStep: 0))
+                }
+
+                // 2. Load the uncompleted side of half-completed reviews (one side answered
+                //    correctly in a prior session but the other side still pending).
+                //    insertOrRefreshActive deduplicates with items already loaded above.
+                for (assignmentID, pending) in pendingByAssignment where pending.hasReadings {
+                    guard let assignment = assignmentsByID[assignmentID],
+                          let subject = subjectsByID[assignment.subjectID] else { continue }
+                    if pending.meaningCompleted && !pending.readingCompleted {
+                        insertOrRefreshActive(QueueItem(assignment: assignment, subject: subject,
+                                                        questionType: .reading, readyAtStep: 0))
+                    } else if !pending.meaningCompleted && pending.readingCompleted {
+                        insertOrRefreshActive(QueueItem(assignment: assignment, subject: subject,
+                                                        questionType: .meaning, readyAtStep: 0))
+                    }
                 }
             } else {
                 unseenQueue = loadedItems.shuffled()
