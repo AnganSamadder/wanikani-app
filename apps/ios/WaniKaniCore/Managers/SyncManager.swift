@@ -40,10 +40,20 @@ public actor SyncManager {
     public func syncSubjects(updatedAfter: Date? = nil, progress: ((SyncProgress) -> Void)? = nil) async throws {
         progress?(.syncingSubjects(0))
         do {
-            let subjects = try await api.getAllSubjects(updatedAfter: updatedAfter)
-            progress?(.syncingSubjects(subjects.count))
-            await MainActor.run {
-                persistence.saveSubjects(subjects)
+            let isFullSync = updatedAfter == nil
+            _ = try await api.getAllSubjects(updatedAfter: updatedAfter) { [self] pageSubjects, totalFetched in
+                await MainActor.run {
+                    if isFullSync {
+                        if totalFetched == pageSubjects.count {
+                            self.persistence.replaceAllSubjects(with: pageSubjects)
+                        } else {
+                            self.persistence.insertSubjects(pageSubjects)
+                        }
+                    } else {
+                        self.persistence.saveSubjects(pageSubjects)
+                    }
+                }
+                progress?(.syncingSubjects(totalFetched))
             }
         } catch {
             SmartLogger.shared.error("Subjects sync failed: \(error.localizedDescription)")
