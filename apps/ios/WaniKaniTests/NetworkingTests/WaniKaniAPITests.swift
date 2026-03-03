@@ -168,6 +168,29 @@ final class WaniKaniAPITests: XCTestCase {
         let queryParams = mockClient.capturedEndpoints[0].queryParameters
         XCTAssertEqual(queryParams["ids"], "11,22,33")
     }
+
+    func test_getAllSubjects_onPageFetched_reportsRunningTotal() async throws {
+        // Given
+        let page1 = makeSubjectCollectionEnvelope(
+            subjects: [makeTestSubjectData(id: 1)],
+            nextURL: "https://api.wanikani.com/v2/subjects?page_after_id=1"
+        )
+        let page2 = makeSubjectCollectionEnvelope(
+            subjects: [makeTestSubjectData(id: 2)],
+            nextURL: nil
+        )
+        mockClient.responses = [page1, page2]
+        var runningTotals: [Int] = []
+
+        // When
+        let subjects = try await sut.getAllSubjects { _, totalFetched in
+            runningTotals.append(totalFetched)
+        }
+
+        // Then
+        XCTAssertEqual(subjects.count, 2)
+        XCTAssertEqual(runningTotals, [1, 2])
+    }
     
     // MARK: - getAssignments Tests
     
