@@ -59,27 +59,38 @@ public final class PersistenceManager {
     // MARK: - Subjects
     
     public func saveSubjects(_ subjects: [SubjectData]) {
+        guard !subjects.isEmpty else { return }
+
+        // Fetch existing subjects once to avoid N per-subject fetches during large syncs.
+        let existingSubjects = (try? context.fetch(FetchDescriptor<PersistentSubject>())) ?? []
+        var existingByID: [Int: PersistentSubject] = [:]
+        existingByID.reserveCapacity(existingSubjects.count)
+        for existing in existingSubjects {
+            existingByID[existing.id] = existing
+        }
+
         for subject in subjects {
-            upsertSubject(subject)
+            if let existing = existingByID[subject.id] {
+                context.delete(existing)
+            }
+            context.insert(PersistentSubject(from: subject))
         }
         try? save()
     }
-    
-    private func upsertSubject(_ subject: SubjectData) {
-        let subjectID = subject.id
-        // Check if subject already exists
-        let descriptor = FetchDescriptor<PersistentSubject>(
-            predicate: #Predicate<PersistentSubject> { $0.id == subjectID }
-        )
-        if let existing = try? context.fetch(descriptor).first {
-            // Delete and replace (SwiftData doesn't have a direct update, so delete + insert)
-            context.delete(existing)
+
+    public func insertSubjects(_ subjects: [SubjectData]) {
+        guard !subjects.isEmpty else { return }
+        for subject in subjects {
+            context.insert(PersistentSubject(from: subject))
         }
-        // Insert new
-        let persistentSubject = PersistentSubject(from: subject)
-        context.insert(persistentSubject)
+        try? save()
     }
-    
+
+    public func replaceAllSubjects(with subjects: [SubjectData]) {
+        try? context.delete(model: PersistentSubject.self)
+        insertSubjects(subjects)
+    }
+
     public func fetchSubject(id: Int) -> PersistentSubject? {
         let descriptor = FetchDescriptor<PersistentSubject>(
             predicate: #Predicate<PersistentSubject> { $0.id == id }
