@@ -67,3 +67,4 @@ Pods/
 .playwright-mcp/
 playwright-*.png
 .codex/
+.simulator-artifacts/
