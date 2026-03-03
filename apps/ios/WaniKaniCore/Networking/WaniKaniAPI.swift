@@ -81,7 +81,8 @@ public final class WaniKaniAPI {
         types: [SubjectType]? = nil,
         levels: [Int]? = nil,
         updatedAfter: Date? = nil,
-        subjectIDs: [Int]? = nil
+        subjectIDs: [Int]? = nil,
+        onPageFetched: ((_ pageSubjects: [SubjectData], _ totalFetched: Int) async -> Void)? = nil
     ) async throws -> [SubjectData] {
         var allSubjects: [SubjectData] = []
         var nextURL: String? = nil
@@ -121,6 +122,9 @@ public final class WaniKaniAPI {
             
             let envelope: CollectionEnvelope<SubjectData> = try await networkClient.request(currentEndpoint)
             allSubjects.append(contentsOf: envelope.data)
+            if let onPageFetched {
+                await onPageFetched(envelope.data, allSubjects.count)
+            }
             nextURL = envelope.pages.nextURL
         }
         
