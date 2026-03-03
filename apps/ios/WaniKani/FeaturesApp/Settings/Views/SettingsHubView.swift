@@ -7,6 +7,12 @@ struct SettingsHubView: View {
     var body: some View {
         AppScreen(title: "Settings", subtitle: "App and account controls") {
             AppSectionTitle(icon: "gearshape.fill", text: "Configuration")
+            AppCard {
+                Toggle(isOn: $undoButtonEnabled) {
+                    Label("Undo Button", systemImage: "arrow.uturn.backward.circle")
+                }
+            }
+
             AppSectionTitle(icon: "square.grid.2x2.fill", text: "Feature Routes")
             AppCard {
                 NavigationLink("Subjects") { SubjectCatalogView() }
@@ -15,19 +21,6 @@ struct SettingsHubView: View {
                 NavigationLink("Community") { CommunityHubView() }
                 NavigationLink("Authentication") { AuthTokenView() }
                 NavigationLink("Onboarding") { OnboardingFlowView() }
-            }
-
-            AppSectionTitle(icon: "checkmark.circle.fill", text: "Reviews")
-            AppCard {
-                Toggle(isOn: $undoButtonEnabled) {
-                    Label("Undo Button", systemImage: "arrow.uturn.backward.circle")
-                }
-            }
-
-            AppCard {
-                Text("Settings sections (App/Account/Tokens/Danger Zone) are scaffolded for full implementation.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
             }
 
             AppCard {
